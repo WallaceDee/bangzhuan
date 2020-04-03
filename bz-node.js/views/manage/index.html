@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/reset.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="/easyUI/themes/material/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/easyUI/themes/icon.css">
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/javascripts/default.js"></script>
+</head>
+
+<body class="easyui-layout">
+    <div class="header" data-options="region:'north'">
+        <div class="login-info">
+            当前管理员：<span class="username"></span>
+        </div>
+    </div>
+    <div class="aside" data-options="region:'west',title:'菜单'" style="width:180px;">
+        <div class="easyui-accordion">
+        </div>
+    </div>
+    <div class="footer" data-options="region:'south'">Designed & Powerd by Wallace Chan Copyright© 2018 粤ICP备18130827号</div>
+    <div class="easyui-tabs" data-options="region:'center'">
+        <div title="About">
+            首页
+        </div>
+    </div>
+    <script type="text/javascript">
+    function logout() {
+        localStorage.removeItem('loginInfo')
+        window.location.reload()
+    }
+    var loginInfo = $.getCache({ key: 'loginInfo' })
+    if (loginInfo) {
+        console.log(loginInfo)
+        $(".login-info .username").html(loginInfo.userNickName)
+    } else {
+        window.location.href = '/manage/login'
+    }
+
+    function openTab(tab) {
+        if ($('.easyui-tabs').tabs('exists', tab.text)) {
+            $('.easyui-tabs').tabs('select', tab.text);
+            return false
+        }
+        $('.easyui-tabs').tabs('add', {
+            title: tab.text,
+            content: '<iframe src="' + tab.url + '" style="width: 100%;height: 100%; display:block;" frameborder="0"></iframe>',
+            closable: true,
+            tools: [{
+                iconCls: 'icon-mini-refresh',
+                handler: function(z) {
+                    var current = $('.easyui-tabs').tabs('getSelected');
+                    $('.easyui-tabs').tabs('update', {
+                        tab: current,
+                        options: {
+                            content: '<iframe src="' + tab.url + '" style="width: 100%;height: 100%;display:block;" frameborder="0"></iframe>'
+                        }
+                    });
+                }
+            }]
+        });
+    }
+    var menuData = [{
+        text: '用户管理',
+        icon: 'icon-pic1',
+        children: [{
+            text: '用户管理',
+            iconCls: 'icon-pic2',
+            url: '/manage/users'
+        }]
+    }, {
+        text: '文章管理',
+        icon: 'icon-pic29',
+        children: [{
+            text: '文章类别',
+            iconCls: 'icon-pic51',
+            url: '/manage/article/category'
+        }, {
+            text: '文章管理',
+            iconCls: 'icon-pic30',
+            url: '/manage/article'
+        }, {
+            text: '测试3',
+            url: '/manage/users'
+        }]
+    }];
+    $(document).ready(function() {
+        $.each(menuData, function(index, element) {
+            $('.easyui-accordion').accordion('add', {
+                title: element.text,
+                content: "<ul id='category" + index + "' ></ul>",
+                selected: element.selected ? true : false,
+                iconCls: element.icon //e.Icon
+            });
+            $('#category' + index).tree({
+                data: element.children,
+                onClick: function(node) {
+                    openTab(node);
+                }
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

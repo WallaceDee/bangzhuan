@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <% for (var i in htmlWebpackPlugin.options.cdn
+    &&htmlWebpackPlugin.options.cdn.css) { %>
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" />
+    <% } %>
+    <meta name="keywords" content="广州专利代理机构、广州专利申请、广州专利代理、广东专利代理机构、广州专利资助、广州专利减缓、广州专利缴费、广州专利代办处、国内专利申请、国际专利申请、商标检索、商标注册、版权登记、高新技术企业认定、专利运营、专利技术评估">
+    <meta name="description" content="帮专网是基于互联网的一站式知识产权服务平台，让客户与代理人直接对接，实现客户直接挑选自己中意的代理人，免除中间服务机构繁琐流程，沟通更透明，操作更快捷。">
+    <title>帮专网-一站式知识产权智能服务平台</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <% for (var i in htmlWebpackPlugin.options.cdn
+    &&htmlWebpackPlugin.options.cdn.js) { %>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+    <% } %>
+</body>
+
+</html>
