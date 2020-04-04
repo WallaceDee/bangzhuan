@@ -13,6 +13,7 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(item,index) in list" :key="item.id">
             <span class="cover" :style=" `background-image:url(${item.cover})`"></span>
+               <em></em>
             <transition name="fade">
               <div class="info">
                 <img :src="item.icon" alt />
@@ -31,7 +32,7 @@
       <ul class="solution-list">
         <li v-for="(item,index) in list" :key="item.id">
           <span class="cover" :style=" `background-image:url(${item.cover})`"></span>
-          <div class="info">
+          <div class="info" :style="`height:${height}px`">
             <img :src="item.icon" alt />
             <h1>{{item.label}}</h1>
             <p>{{item.description}}</p>
@@ -54,7 +55,9 @@ export default {
     }
   },
   computed: {
-
+    height(){
+      return this.$store.state.width/2
+    },
     blockInfo() {
       return this.$store.state.productMenu[0]
     },
@@ -165,7 +168,7 @@ export default {
       height: 100%;
       overflow: hidden;
       opacity: 0;
-      padding: 40px;
+      padding: 30px;
       background-repeat: no-repeat;
       img {
         height: 40%;
@@ -206,6 +209,18 @@ export default {
   .swiper-slide-duplicate-active {
     z-index: 99;
     transform: translateX(-28%);
+    >em{
+    display: block;
+    position: absolute;
+    width: 65%;
+    height: 0;
+    padding-bottom: 60%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background-image: linear-gradient(45deg, #0099ff, #07cbd4);
+    opacity: .5;
+    }
     > div {
       opacity: 1;
       left: 65%;
@@ -251,6 +266,12 @@ export default {
     }
   }
 }
+
+@media screen and (min-width: 641px) {
+  .solution-list{
+    display: none;
+  }
+}
 @media screen and (max-width: 640px) {
   .solution-title-list,
   .solution-swiper {
@@ -285,25 +306,33 @@ export default {
       }
       > div {
         position: relative;
+        overflow: hidden;
         background-color: #f8f8f8;
         top: 0;
         left: 0;
         width: 50%;
-        height: 100%;
         background-repeat: no-repeat;
+        padding: 5%;
         img {
-          height: 40%;
+          height: 45%;
         }
         h1 {
+          white-space: nowrap;
           color: #212121;
-          font-size: 16px;
-          margin-top: 5px;
-          margin-bottom: 10px;
+          font-size: 14px;
+          margin-top: 3px;
+          margin-bottom: 3px;
         }
         > p,
         h1 {
           position: relative;
           z-index: 1;
+        }
+        >p::after{
+          content:"→MORE";
+          display: block;
+          font-size: 12px;
+          margin-top: 5px;
         }
         em.bg {
           display: block;
@@ -315,8 +344,8 @@ export default {
           z-index: 0;
           opacity: 0.2;
           background-repeat: no-repeat;
-          background-position: 120% 150%;
-          background-size: 60%;
+background-position: 200% 120%;
+    background-size: 70%;
         }
       }
     }

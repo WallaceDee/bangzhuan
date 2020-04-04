@@ -45,7 +45,7 @@ export default {
   > p {
     text-align: center;
   }
-  h1 {
+  >h1 {
     color: #202020;
     letter-spacing: 2px;
     font-size: 32px;
