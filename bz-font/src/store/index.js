@@ -2,8 +2,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    description:'',
+    data:[],
     productMenu:[],
-    width:document.body.clientWidth
+    setting:{},
+    width:document.body.clientWidth,
+    wechatQrCode:''
   },
   mutations: {
     setProductMenu(state, payload) {
@@ -11,6 +15,12 @@ export default new Vuex.Store({
     },
     setWidth(state,payload){
       state.width=payload
+    },
+    setSetting(state,payload){
+      state.setting=payload
+      state.data=payload.data
+      state.description=payload.description
+      state.wechatQrCode=payload.wechatQrCode
     }
   },
   actions: {},

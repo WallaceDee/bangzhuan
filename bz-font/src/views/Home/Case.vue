@@ -1,5 +1,4 @@
 <template>
-  <div>
     <Block :value="blockInfo">
       <div class="case">
         <div class="main">
@@ -38,7 +37,6 @@
         </div>
       </div>
     </Block>
-  </div>
 </template>
 <script>
 import Swiper from 'swiper'
@@ -110,7 +108,7 @@ export default {
 </script>
 <style lang="less">
 .case {
-  background-color: #F8F8F8;
+
   .main {
     position: relative;
     .case-swiper {

@@ -1,30 +1,28 @@
 <template>
-  <div>
     <Block :value="blockInfo">
       <div class="news">
-        <div class="latest">
+        <div class="latest" @click="go2Detail(latest.id)">
           <div class="inner">
             <h4>{{getDate(latest.createTime,'mmdd','-')}}</h4>
             <h3>{{latest.title}}</h3>
-            <p v-html="latest.content"></p>
+            <p class="article" v-html="latest.content"></p>
             <span :style="`background-image:url(${latest.cover})`"></span>
             <em class="more">→ MORE</em>
           </div>
         </div>
         <div class="list">
           <ul>
-            <li v-for="(item,index) in list" v-if="index" :key="item.id">
+            <li @click="go2Detail(item.id)" v-for="(item,index) in list" v-if="index" :key="item.id">
               <h3>
                 {{item.title}}
                 <span>{{getDate(item.createTime,'mmdd','-')}}</span>
               </h3>
-              <p v-html="latest.content"></p>
+              <p class="article" v-html="latest.content"></p>
             </li>
           </ul>
         </div>
       </div>
     </Block>
-  </div>
 </template>
 <script>
 import { getNewsList } from '../../api/'
@@ -52,6 +50,14 @@ export default {
     }
   },
   methods: {
+        go2Detail(id) {
+      this.$router.push({
+        name: 'NewsDetail',
+        params: {
+          id
+        }
+      })
+    },
     getDate,
     getNewsList() {
       getNewsList({
@@ -70,8 +76,8 @@ export default {
 }
 </script>
 <style lang="less">
-.news {
-  .latest .inner > p {
+ .article {
+    line-height: 21px;
     font-weight: normal !important;
     color: #858585 !important;
     font-size: 14px !important;
@@ -81,21 +87,16 @@ export default {
     h4,
     h5,
     h6,
-    b {
+    b,span ,strong{
       color: #858585 !important;
       font-size: 14px !important;
-      font-weight: normal;
+      font-weight: normal!important;
     }
     img {
-      display: none;
+      display: none!important;
     }
   }
-  .list {
-    img {
-      display: none;
-    }
-  }
-}
+
 </style>
 <style lang="less" scoped>
 .news {
@@ -232,6 +233,7 @@ export default {
           height: 42px;
           position: relative;
           padding-left: 20px;
+
         }
       }
       &:hover {
@@ -276,6 +278,8 @@ export default {
         }
         > p {
           padding-right: 100px;
+                   overflow: hidden;
+                   height: 44px;
           &:after {
             content: "→";
             position: absolute;

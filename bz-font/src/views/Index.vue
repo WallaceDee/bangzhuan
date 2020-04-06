@@ -6,37 +6,41 @@
   </div>
 </template>
 <script>
-import { getSetting, getProductMenu } from "../api/";
+import { getSetting, getProductMenu } from '../api/'
 export default {
-  name: "Index",
+  name: 'Index',
   data() {
     return {
-      setting: {},
+      setting: {
+        address:[],
+        relatedLinks:[]
+      },
       productMenu: []
-    };
+    }
   },
   methods: {
     getProductMenu() {
       getProductMenu().then(res => {
         if (res.status) {
-          this.productMenu = res.data;
-          this.$store.commit("setProductMenu", this.productMenu);
+          this.productMenu = res.data
+          this.$store.commit('setProductMenu', this.productMenu)
         }
-      });
+      })
     },
     getSetting() {
       getSetting().then(res => {
         if (res.status) {
-          this.setting = res.data;
+          this.setting = res.data
+           this.$store.commit('setSetting', this.setting)
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getSetting();
-    this.getProductMenu();
+    this.getSetting()
+    this.getProductMenu()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 </style>

@@ -8,7 +8,7 @@
             v-for="(item,index) in list"
             v-if="index>=rowIndex*col&&index<(rowIndex+1)*col"
           >
-            <span :key="item.name" :style="`background-image:url(${href+item.url})`"></span>
+            <span :key="item.name" :style="`background-image:url(${item.url})`"></span>
           </Col>
         </Row>
       </div>
@@ -21,10 +21,6 @@ export default {
   name: 'OverseaBusiness',
   data() {
     return {
-      href: window.location.origin.substr(
-        0,
-        window.location.origin.lastIndexOf(':')
-      ),
       col: 8,
       list: []
     }

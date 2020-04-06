@@ -6,7 +6,7 @@
       <BreadcrumbItem>专利情报管理</BreadcrumbItem>
     </Breadcrumb>
     <Divider />
-    <Button type="primary" @click="openCreateDrawer">创建案例</Button>
+    <Button type="primary" @click="openCreateDrawer">创建专利情报</Button>
     <Divider />
     <Form inline>
       <FormItem label="标题">

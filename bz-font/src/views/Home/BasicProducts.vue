@@ -1,5 +1,4 @@
 <template>
-  <div>
     <Block :value="blockInfo">
       <div class="basic-products">
         <ul>
@@ -12,7 +11,6 @@
         </ul>
       </div>
     </Block>
-  </div>
 </template>
 <script>
 export default {
@@ -45,6 +43,7 @@ export default {
   }
 
   li {
+    cursor: pointer;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;

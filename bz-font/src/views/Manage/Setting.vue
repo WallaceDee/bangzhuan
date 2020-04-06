@@ -130,8 +130,8 @@
         v-for="(item, index) in form.dataItems"
         :key="'dataItems'+item.index"
         :label="`数据${index+1}`"
-        :prop="'dataItems.'+index + '.value'"
-        :rules="{required: true, message: `地址${index+1}不能为空`, trigger: 'blur'}"
+        :prop="'dataItems.'+index + '.description'"
+        :rules="{required: true, message: `数据${index+1}不能为空`, trigger: 'blur'}"
       >
         <Row>
           <Col span="3">
@@ -186,13 +186,9 @@ export default {
             JSON.stringify(Object.assign(this.form, res.data))
           )
           this.form = temp
-          this.$set(this.form, 'addressItems', JSON.parse(temp.address || []))
-            this.$set(this.form, 'dataItems', JSON.parse(temp.data || []))
-          this.$set(
-            this.form,
-            'linkItems',
-            JSON.parse(temp.relatedLinks || [])
-          )
+          this.$set(this.form, 'addressItems', temp.address)
+            this.$set(this.form, 'dataItems',temp.data)
+          this.$set(this.form,'linkItems',temp.relatedLinks)
         }
       })
     },
@@ -215,7 +211,9 @@ export default {
     },
         addData() {
       this.form.dataItems.push({
-        value: '',
+        number: '',
+        unit:'',
+        description:'',
         index: this.form.dataItems.length
       })
     },

@@ -1,5 +1,4 @@
 <template>
-  <div>
     <Block :value="blockInfo">
       <ul class="solution-title-list">
         <li
@@ -41,7 +40,6 @@
         </li>
       </ul>
     </Block>
-  </div>
 </template>
 <script>
 import Swiper from 'swiper'
@@ -95,7 +93,7 @@ export default {
           on: {
             init: function() {
               setTimeout(() => {
-                this.slideTo(2)
+                this.slideTo(1)
               }, 0)
             },
             slideChange: () => {
@@ -106,7 +104,9 @@ export default {
       })
     }
   },
-  mounted() {}
+  mounted() {
+        this.init()
+  }
 }
 </script>
 <style lang="less" >

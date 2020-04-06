@@ -10,19 +10,36 @@
       <div class="nav" v-show="!collapsed">
         <div id="slider"></div>
         <ul>
-          <li :class="{'active':currentIndex[0]===index}" @click="onClick(index)" @mouseenter="onMouseenter(index)" @mouseleave="onMouseleave" v-for="(item,index) in navs" :key="item.subLabel">
+          <li
+            :class="{'active':currentIndex[0]===index}"
+            @click="onClick(index)"
+            @mouseenter="onMouseenter(index)"
+            @mouseleave="onMouseleave"
+            v-for="(item,index) in navs"
+            :key="item.subLabel"
+          >
             <h1>{{item.label}}</h1>
             <p>{{item.subLabel}}</p>
-              <transition name="fade">
-            <ul class="sub-list" v-if="item.children" v-show="lastIndex===index&&over" >
-              <li :class="{'active':currentIndex[1]===index1}"  v-for="(subNav,index1) in item.children" :key="subNav.label">
-                <h2>{{subNav.label}}</h2>
-                <ul>
-                  <li  :class="{'active':currentIndex[1]===index1&&currentIndex[2]===index2}"  @click.stop="onSubMenuClick(`${index}-${index1}-${index2}`)" v-for="(subItem,index2) in subNav.children" :key="subItem.label">{{subItem.label}}</li>
-                </ul>
-              </li>
-            </ul>
-              </transition>
+            <transition name="fade">
+              <ul class="sub-list" v-if="item.children" v-show="lastIndex===index&&over">
+                <li
+                  :class="{'active':currentIndex[1]===index1}"
+                  v-for="(subNav,index1) in item.children"
+                  :key="subNav.label"
+                  @click.stop="onSubTitleClick(`${index}-${index1}`)"
+                >
+                  <h2>{{subNav.label}}</h2>
+                  <ul>
+                    <li
+                      :class="{'active':currentIndex[1]===index1&&currentIndex[2]===index2}"
+                      @click.stop="onSubMenuClick(`${index}-${index1}-${index2}`)"
+                      v-for="(subItem,index2) in subNav.children"
+                      :key="subItem.label"
+                    >{{subItem.label}}</li>
+                  </ul>
+                </li>
+              </ul>
+            </transition>
           </li>
         </ul>
       </div>
@@ -47,36 +64,39 @@ export default {
   },
   data() {
     return {
-      scrollTop:0,
-      currentName:'0',
+      scrollTop: 0,
+      currentName: '0',
       collapsed: true,
       lastIndex: 0,
-      over:false,
+      over: false,
       navs: [
         {
           label: '首页',
-          subLabel: 'HOME'
+          subLabel: 'HOME',
+          name: 'Home'
         },
         {
           label: '产品与服务',
           subLabel: 'PRODUCTS',
+          name: 'Products',
           children: []
         },
         {
           label: '专利情报',
-          subLabel: 'NEWS'
+          subLabel: 'NEWS',
+          name: 'NewsList'
         },
         {
           label: '关于我们',
-          subLabel: 'ABOUT US'
+          subLabel: 'ABOUT US',
+          name: 'AboutUs'
         }
       ]
     }
   },
   watch: {
-    productMenu(val){
-      console.log(val)
-      this.navs[1].children=val
+    productMenu(val) {
+      this.navs[1].children = val
     },
     lastIndex(val) {
       let lis = document.querySelectorAll('.nav>ul>li')
@@ -84,50 +104,103 @@ export default {
       slider.style.width = lis[val].offsetWidth + 'px'
     }
   },
-  computed:{
-    currentIndex(){
-      let temp=this.currentName.split('-')
-      let index=[]
+  computed: {
+    nameList(){
+      let list=[]
+      this.navs.map(item => {
+        list.push(item.name)
+      })
+      return list
+    },
+    currentIndex() {
+      let temp = this.currentName.split('-')
+      let index = []
       temp.map(item => {
-        index.push(item*1)
+        index.push(item * 1)
       })
       return index
     }
   },
   mounted() {
     this.$nextTick(() => {
-      document.body.onscroll=() => {
-        this.scrollTop=window.pageYOffset
+      document.body.onscroll = () => {
+        this.scrollTop = window.pageYOffset
       }
+         let current
+      if(this.$route.name==='NewsDetail'){
+          current=2
+      }else{
+       current=this.nameList.indexOf(this.$route.name)
+      }
+      this.lastIndex=current
+      let nameList=[current.toString()]
+      if(this.$route.params.type!==undefined){
+        nameList.push(this.$route.params.type*1-1)
+      }
+        if(this.$route.query.activeId!==undefined){
+        nameList.push(this.$route.query.activeId)
+      }
+      this.currentName=nameList.join('-')
     })
   },
   methods: {
-    onSubMenuClick(name){
-      this.over=false
-      this.currentName=name
-      this.collapsed=true
+    onSubTitleClick(name){
+        this.over = false
+      this.currentName = name
+      this.collapsed = true
+      this.$router.push({
+        name:'Products',
+        params:{
+          type:name.split('-')[1]*1+1
+        }
+      })
     },
-    onClick(index){
-      this.currentName=index.toString()
-      if(this.navs[index].children&&this.navs[index].children.length){
-
-        }else{
-      this.collapsed=true
-  }
-},
-    onMouseleave(){
+    onSubMenuClick(name) {
+      this.over = false
+      this.currentName = name
+      this.collapsed = true
+      this.$router.push({
+        name:'Products',
+        params:{
+          type:name.split('-')[1]*1+1
+        },
+        query:{
+          activeId:name.split('-')[2]
+        }
+      })
+    },
+    onClick(index) {
+      this.currentName = index.toString()
+      if (this.navs[index].children && this.navs[index].children.length) {
+      } else {
+        this.collapsed = true
+      }
+      if(index!==1){
+      this.$router.push({
+        name: this.navs[index].name
+      })
+}else{
+        this.$router.push({
+        name: this.navs[index].name,
+        params:{
+          type:1
+        }
+      })
+      }
+    },
+    onMouseleave() {
       let lis = document.querySelectorAll('.nav>ul>li')
       slider.style.left = lis[this.currentIndex[0]].offsetLeft + 'px'
       slider.style.width = lis[this.currentIndex[0]].offsetWidth + 'px'
-        this.lastIndex=this.currentIndex[0]
-        this.over=false
+      this.lastIndex = this.currentIndex[0]
+      this.over = false
     },
     onMouseenter(index) {
       this.lastIndex = index
-      this.over=true
+      this.over = true
     },
     handelNavCollapse() {
-      this.collapsed=!this.collapsed
+      this.collapsed = !this.collapsed
     }
   }
 }
@@ -163,7 +236,7 @@ export default {
       }
     }
     .nav {
-      display: block!important;
+      display: block !important;
       position: absolute;
       right: 50px;
       top: 0;
@@ -192,8 +265,10 @@ export default {
           height: 99px;
           &.active {
             // background-color: rgba(0, 0, 0, .5);
-            >h1,>p{
-            color: @mainColor;}
+            > h1,
+            > p {
+              color: @mainColor;
+            }
           }
           h1 {
             font-weight: normal;
@@ -230,7 +305,7 @@ export default {
             line-height: 40px;
             padding-left: 15px;
           }
-          &.active h2{
+          &.active h2 {
             border-bottom-color: @mainColor;
           }
           > ul {
@@ -243,7 +318,8 @@ export default {
               line-height: 32px;
               padding-left: 15px;
               padding-right: 15px;
-              &:hover,&.active {
+              &:hover,
+              &.active {
                 background-color: @mainColor;
               }
             }
@@ -251,7 +327,7 @@ export default {
         }
       }
     }
-    .navbar-toggler{
+    .navbar-toggler {
       display: none;
     }
   }
@@ -275,7 +351,7 @@ export default {
       height: 1px;
       content: "";
       transform-origin: 50% 0;
-      background-color:rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.5);
     }
     .content {
       width: 100%;
@@ -287,55 +363,56 @@ export default {
     }
     .nav {
       position: absolute;
-          height: calc(~"100vh - 50px");
-          overflow: auto;
+      height: calc(~"100vh - 50px");
+      overflow: auto;
       width: 100%;
       top: 50px;
-      #slider{
+      #slider {
         display: none;
       }
-      ul,li{
+      ul,
+      li {
         list-style: none;
         color: #fff;
       }
-      >ul{
+      > ul {
         width: 100%;
         background-color: #000;
-        >li{
+        > li {
           // display: flex;
           overflow: auto;
           padding-left: 40px;
           align-items: center;
-          >h1{
+          > h1 {
             float: left;
             height: 60px;
-          line-height: 60px;
+            line-height: 60px;
             font-size: 18px;
             font-weight: normal;
             margin-right: 15px;
           }
-          >p{
+          > p {
             float: left;
 
             height: 60px;
-              line-height: 60px;
+            line-height: 60px;
             font-size: 16px;
           }
-          .sub-list{
+          .sub-list {
             clear: both;
 
-            h2{
+            h2 {
               line-height: 40px;
               padding-left: 10px;
               font-size: 15px;
-              color:rgba(255, 255, 255, .5);
-               font-weight: normal;
+              color: rgba(255, 255, 255, 0.5);
+              font-weight: normal;
             }
-            ul>li{
-                line-height: 40px;
+            ul > li {
+              line-height: 40px;
               font-size: 15px;
-                   padding-left: 30px;
-              color:rgba(255, 255, 255, .5);
+              padding-left: 30px;
+              color: rgba(255, 255, 255, 0.5);
             }
           }
         }
@@ -343,7 +420,7 @@ export default {
     }
     .logo-wrapper {
       height: 22px;
-            padding-left: 20px;
+      padding-left: 20px;
       a {
         display: inline-block;
         height: 22px;
@@ -385,12 +462,10 @@ export default {
       }
       &:not(.collapsed) {
         .togler-icon-inner > span:nth-child(1) {
-
           transform: rotate(-45deg) translate(-5px, 7px);
         }
 
         .togler-icon-inner > span:nth-child(3) {
-
           transform: rotate(45deg) translate(-3px, -5px);
         }
 

@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-  name: "Block",
+  name: 'Block',
   props: {
     value: {
       type: Object,
@@ -20,22 +20,22 @@ export default {
   data() {
     return {
       currentValue: {}
-    };
+    }
   },
   watch: {
     currentValue(val) {
-      this.$emit("input", val);
+      this.$emit('input', val)
     },
     value(val) {
-      this.currentValue = val;
+      this.currentValue = val
     }
   },
   mounted() {
     if (this.value) {
-      this.currentValue = this.value;
+      this.currentValue = this.value
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .block .content {
@@ -63,8 +63,11 @@ export default {
   }
 }
 @media screen and (min-width: 641px) {
-  .block .content {
+  .block {
+      min-width: 1180px;
+      .content {
     min-width: 1180px;
+  }
   }
 }
 @media screen and (max-width: 640px) {

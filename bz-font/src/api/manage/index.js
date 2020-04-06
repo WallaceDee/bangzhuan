@@ -202,6 +202,7 @@ export const getProductList = (params) => {
         method: 'get'
     })
 }
+
 export const publicProduct = (data) => {
     return axios.request({
         data,

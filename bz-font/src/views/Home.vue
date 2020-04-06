@@ -18,7 +18,7 @@ import Case from './Home/Case'
 import Partners from './Home/Partners'
 import News from './Home/News'
 export default {
-  name: "Home",
+  name: 'Home',
   components:{
     Banner,
     Solution,
@@ -30,10 +30,10 @@ export default {
   },
   data() {
     return {
-    };
+    }
   },
   mounted() {
 
   }
-};
+}
 </script>

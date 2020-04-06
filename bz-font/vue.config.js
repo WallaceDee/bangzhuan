@@ -3,7 +3,7 @@ const proxyTable = require('./src/config/proxy.js')
 const CompressionPlugin = require('compression-webpack-plugin')
 const platform = process.env.VUE_APP_CURRENTMODE
 const isProduction = process.env.NODE_ENV === 'production'
-
+console.log(platform)
 const resolve = dir => {
   return path.join(__dirname, dir)
 }

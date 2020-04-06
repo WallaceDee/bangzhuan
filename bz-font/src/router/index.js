@@ -7,12 +7,39 @@ const routes = [
     path: '/',
     name: 'Index',
     component: Index,
-    redirect: '/Home',
+    redirect: '/',
     children:[ {
-      path: 'Home',
+      path: '/',
       name: 'Home',
       component: () =>
         import('../views/Home.vue')
+    },{
+      path: 'products/:type',
+      name: 'Products',
+      component: () =>
+        import('../views/Products.vue')
+    },{
+      path: 'news',
+      name: 'News',
+      redirect:'news/list',
+      component: () =>
+      import('../views/News.vue'),
+      children:[ {
+        path:'list',
+        name: 'NewsList',
+        component: () =>
+        import('../views/News/List.vue')
+      },{
+        path:'detail/:id',
+        name: 'NewsDetail',
+        component: () =>
+        import('../views/News/Detail.vue')
+      }]
+    },{
+      path: 'aboutus',
+      name: 'AboutUs',
+      component: () =>
+        import('../views/AboutUs.vue')
     }]
   }
 ]

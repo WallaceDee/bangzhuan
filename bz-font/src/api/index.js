@@ -46,3 +46,18 @@ export const getNewsList = (params) => {
       method: 'get'
   })
 }
+export const getNewsDetail = (params) => {
+  return axios.request({
+      params,
+      url: '/news/detail',
+      method: 'get'
+  })
+}
+
+export const getProductList = (params) => {
+  return axios.request({
+      params,
+      url: '/product',
+      method: 'get'
+  })
+}

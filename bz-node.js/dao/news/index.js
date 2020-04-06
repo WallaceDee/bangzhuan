@@ -51,5 +51,12 @@ module.exports = {
         }).catch(error => {
             print.error(res, error)
         })
+    },
+    getNewsById:(req,res)=>{
+        query($sql.detail, req.query).then(result => {
+            print.success(res,result[0])
+        }).catch(error => {
+            print.error(res, error)
+        })
     }
 }

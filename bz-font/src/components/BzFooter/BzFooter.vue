@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" v-show="visible">
     <div class="contact-us">
       <div class="content">
         <div class="form-wrapper">
@@ -35,15 +35,15 @@
         <div class="info">
           <div class="tel">
             <img src="../../assets/images/icon_tel.svg" width="32px" alt />
-            <h1>{{currentValue.tel}}</h1>
+            <h1>{{value.tel}}</h1>
           </div>
-          <p class="service-time">{{currentValue.serviceHours}}</p>
+          <p class="service-time">{{value.serviceHours}}</p>
           <div class="address">
             <div>
               <img src="../../assets/images/icon_location.svg" width="32px" alt />
             </div>
             <ul>
-              <li v-for="item in address" :key="item.index">{{item.value}}</li>
+              <li v-for="item in value.address" :key="item.index">{{item.value}}</li>
             </ul>
           </div>
         </div>
@@ -55,10 +55,10 @@
           <h1>SITEMAP</h1>
           <div>
             <div v-for="item in sitemap" :key="item.label">
-              <h2 :class="{'underline':item.children}"><a href="">{{item.label}}</a></h2>
+              <h2 :class="{'underline':item.children}"><a @click="onTitleClick(item)" href="javascript:void 0">{{item.label}}</a></h2>
               <ul v-if="item.children">
-                <li v-for="site in item.children" :key="site.label">
-                  <a href="">{{site.label}}</a>
+                <li v-for="(site,index) in item.children" :key="site.label">
+                  <a @click.stop="onSubItmeClick(site,index)" href="javascript:void 0">{{site.label}}</a>
                   </li>
               </ul>
             </div>
@@ -66,21 +66,21 @@
         </div>
         <div class="qr-code">
           <div>
-            <img :src="currentValue.wechatQrCode" alt />
+            <img :src="value.wechatQrCode" alt />
             <p>帮专网公众号</p>
           </div>
           <div>
-            <img :src="currentValue.wechatMiniProgramQrCode" alt />
+            <img :src="value.wechatMiniProgramQrCode" alt />
             <p>帮专网小程序</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="related-links" v-if="relatedLinks.length">
+    <div class="related-links" v-if="value.relatedLinks.length">
       <div class="content">
         <p>
           友情链接:
-          <template v-for="(item,index) in relatedLinks">
+          <template v-for="(item,index) in value.relatedLinks">
             <Divider :key="`d${item.index}`" v-if="index" type="vertical" />
             <a
               target="_blank"
@@ -91,12 +91,12 @@
         </p>
       </div>
     </div>
-    <div class="copyright" v-html="currentValue.copyright"></div>
+    <div class="copyright" v-html="value.copyright"></div>
   </div>
 </template>
 <script>
 export default {
-  name: "BzFooter",
+  name: 'BzFooter',
   props: {
     value: {
       type: Object,
@@ -109,80 +109,97 @@ export default {
   },
   data() {
     return {
-      currentValue: {},
       form: {},
       formRule: {},
       defaultSitemap: [
         {
-          label: "专利情报",
-          path: "News"
+          label: '专利情报',
+          name: 'News'
         },
         {
-          label: "关于我们",
-          path: "AboutUs",
+          label: '关于我们',
+          name: 'AboutUs',
           children: [
             {
-              label: "公司简介"
+              name:'AboutUs',
+              label: '公司简介',
+              activeId:0
             },
             {
-              label: "团队介绍"
+                  name:'AboutUs',
+              label: '团队介绍',
+              activeId:1
             }
           ]
         }
       ]
-    };
-  },
-  watch: {
-    currentValue(val) {
-      this.$emit("input", val);
-    },
-    value(val) {
-      this.currentValue = val;
     }
   },
   computed: {
-    relatedLinks() {
-      if (this.currentValue.relatedLinks) {
-        return JSON.parse(this.currentValue.relatedLinks);
-      } else {
-        return [];
-      }
-    },
-    address() {
-      if (this.currentValue.address) {
-        return JSON.parse(this.currentValue.address);
-      } else {
-        return [];
-      }
+    visible(){
+      return this.$store.state.width>640||this.$route.name==='Home'
     },
     sitemap() {
-      return this.productMenu.concat(this.defaultSitemap);
+      return this.productMenu.concat(this.defaultSitemap)
+    }
+  },
+  methods:{
+    onTitleClick(item){
+      if(item.name){
+        this.$router.push({
+          name:item.name
+        })
+      }else{
+        this.$router.push({
+          name:'Products',
+          params:{
+            type:item.type
+          }
+        })
+      }
+    },
+    onSubItmeClick(item,index){
+         if(item.name){
+        this.$router.push({
+          name:item.name,
+          query:{
+            activeId:item.activeId
+          }
+        })
+      }else{
+        this.$router.push({
+          name:'Products',
+          params:{
+            type:item.type
+          },
+          query:{
+            activeId:index
+          }
+        })
+      }
     }
   },
   mounted() {
-    if (this.value) {
-      this.currentValue = this.value;
-    }
     this.$nextTick(() => {
-      document.querySelectorAll(".footer input").forEach(function(inputEl) {
-        if (inputEl.value !== "") {
-          inputEl.parentNode.parentNode.classList.add("filled");
-          inputEl.parentNode.classList.add("filled");
+      document.querySelectorAll('.footer input').forEach(function(inputEl) {
+        if (inputEl.value !== '') {
+          inputEl.parentNode.parentNode.classList.add('filled')
+          inputEl.parentNode.classList.add('filled')
         }
-        inputEl.addEventListener("focus", event => {
-          event.target.parentNode.parentNode.classList.add("filled");
-          event.target.parentNode.classList.add("filled");
-        });
-        inputEl.addEventListener("blur", event => {
-          if (event.target.value === "") {
-            event.target.parentNode.parentNode.classList.remove("filled");
-            event.target.parentNode.classList.remove("filled");
+        inputEl.addEventListener('focus', event => {
+          event.target.parentNode.parentNode.classList.add('filled')
+          event.target.parentNode.classList.add('filled')
+        })
+        inputEl.addEventListener('blur', event => {
+          if (event.target.value === '') {
+            event.target.parentNode.parentNode.classList.remove('filled')
+            event.target.parentNode.classList.remove('filled')
           }
-        });
-      });
-    });
+        })
+      })
+    })
   }
-};
+}
 </script>
 
 <style lang="less"  scoped>
@@ -203,6 +220,8 @@ a{
     .info {
       .tel {
         display: flex;
+            height: 42px;
+              align-items: center;
         img {
           margin-right: 20px;
         }
@@ -466,6 +485,10 @@ label {
           padding-right: 30px;
           .service-time {
             padding-left: 30px;
+          }
+          .tel{
+              height: 30px;
+              align-items: center;
           }
           .tel img,
           .address img {
