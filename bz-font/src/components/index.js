@@ -1,10 +1,10 @@
-import { Button, Table,FormItem ,Form,Divider,Row,Col,Page } from 'view-design'
+import { Button, Table,FormItem ,Form,Divider,Row,Col,Page,Modal,Card,Input,Spin } from 'view-design'
 import BzHeader from './BzHeader/'
 import BzFooter from './BzFooter/'
 import Block from './Block/'
 import Arrow from './Arrow/'
 import Title from './Title/'
-import 'view-design/dist/styles/iview.css'
+import '../assets/less/theme.less'
 export default {
   install(Vue) {
     Vue.component('Row', Row)
@@ -20,5 +20,10 @@ export default {
     Vue.component('Arrow', Arrow)
     Vue.component('Title', Title)
     Vue.component('Page', Page)
+    Vue.component('Modal', Modal)
+    Vue.component('Card', Card)
+    Vue.component('Input', Input)
+    Vue.component('Spin', Spin)
+    Vue.prototype.$Modal = Modal
   }
 }

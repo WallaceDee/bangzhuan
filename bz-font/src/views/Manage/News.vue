@@ -24,11 +24,11 @@
       </span>
     </Form>
     <Divider />
-    <Table :columns="columns" :data="data"></Table>
+    <Table :columns="columns" :data="data" stripe :loading="loading"></Table>
     <Divider />
     <Page :current="page" :total="total" show-total @on-change="onPageChange" />
     <Drawer :title="drawerTitle" v-model="drawerVisible" width="100%">
-      <Form :model="form" :label-width="120" ref="form" :rules="rule">
+      <Form :model="form" :label-width="120" ref="form" :rules="rules">
         <FormItem label="标题" prop="title">
           <Input v-model="form.title" placeholder="请输入标题..."></Input>
         </FormItem>
@@ -74,6 +74,7 @@ export default {
   name: 'News',
   data() {
     return {
+      loading:false,
       ueditor: null,
       popupMode: 0,
       drawerVisible: false,
@@ -82,9 +83,9 @@ export default {
         cover: '',
         content: ''
       },
-      rule: {
+      rules: {
         title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-        content: [{ required: true, message: '请输入标题', trigger: 'blur' }]
+        content: [{ required: true, message: '请输入内容', trigger: 'blur' }]
       },
       searchForm: {
         title: '',
@@ -124,7 +125,7 @@ export default {
         {
           title: '标题',
           align: 'center',
-          width: 120,
+          minWidth: 120,
           key: 'title'
         },
         // {
@@ -214,6 +215,8 @@ export default {
         {
           title: '操作',
           align: 'center',
+          width:150,
+          fixed:'right',
           render: (h, params) => {
             return [
               h(
@@ -352,11 +355,13 @@ export default {
       })
     },
     getData() {
+      this.loading=true
       getNewsList({
         page: this.page,
         ...this.searchRule
       }).then(res => {
         if (res.status) {
+          this.loading=false
           this.data = res.data.rows
           this.total = res.data.total
         }

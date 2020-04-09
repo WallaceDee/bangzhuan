@@ -49,5 +49,14 @@ module.exports = {
         }).catch(error => {
             print.error(res, error)
         })
+    },
+    top:(req,res)=>{
+        query($sql.setIndexTime, req.body).then(result => {
+            print.success(res, {
+                message: '置顶成功！'
+            })
+        }).catch(error => {
+            print.error(res, error)
+        })
     }
 }

@@ -96,7 +96,6 @@ export default {
       display: none!important;
     }
   }
-
 </style>
 <style lang="less" scoped>
 .news {

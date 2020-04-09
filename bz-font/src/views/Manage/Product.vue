@@ -25,7 +25,7 @@
       </span>
     </Form>
     <Divider />
-    <Table :columns="columns" :data="data"></Table>
+    <Table :columns="columns" :data="data" stripe :loading="loading"></Table>
     <Divider />
     <Page :current="page" :total="total" show-total @on-change="onPageChange" />
     <Drawer :title="drawerTitle" v-model="drawerVisible" width="720">
@@ -176,6 +176,7 @@ export default {
   name: 'Product',
   data() {
     return {
+      loading:false,
       subType: 0,
       colors: ['#DEEEFD', '#F8F8F8', '#ffffff'],
       types: [],
@@ -228,7 +229,7 @@ export default {
         {
           title: '产品/服务',
           align: 'center',
-          width: 120,
+          minWidth: 120,
           key: 'title'
         },
         {
@@ -239,7 +240,7 @@ export default {
         },
         {
           title: '简介',
-          width: 135,
+          minWidth: 135,
           align: 'center',
           key: 'description'
         },
@@ -264,6 +265,8 @@ export default {
         {
           title: '操作',
           align: 'center',
+          fixed:'right',
+          width:200,
           render: (h, params) => {
             return [
              h(
@@ -355,6 +358,7 @@ export default {
             title: '提示',
             desc: res.data.message
           })
+          this.getData()
         }
       })
     },
@@ -478,11 +482,13 @@ export default {
       })
     },
     getData() {
+      this.loading=true
       getProductList({
         page: this.page,
         ...this.searchRule
       }).then(res => {
         if (res.status) {
+          this.loading=false
           this.data = res.data.rows
           this.total = res.data.total
         }

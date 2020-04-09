@@ -38,8 +38,9 @@ import { login } from '@/api/manage/'
             password:md5Password
             }).then(res => {
               if(res.status){
-                sessionStorage.setItem('token',res.data.token)
-                sessionStorage.setItem('rawUserInfo',JSON.stringify(res.data))
+                localStorage.setItem('token',res.data.token)
+                localStorage.setItem('rawUserInfo',JSON.stringify(res.data))
+                this.$store.commit('setUserInfo',res.data)
                 this.$router.replace({
                   name:'Workbench'
                 })

@@ -2,7 +2,7 @@
  * @Author: wallace 
  * @Date: 2019-08-13 14:55:17 
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2020-03-30 01:07:46
+ * @Last Modified time: 2020-04-09 10:43:50
  */
 const mysql = require('mysql')
 const jwt = require('jsonwebtoken') //用来创建和确认用户信息摘要
@@ -10,6 +10,7 @@ const fs = require('fs')
 const cert = fs.readFileSync('config/public.key') // get private key
 const dbConfig = require('../config/db.js') // get private key
 const pool = mysql.createPool(dbConfig)
+const nodemailer = require('nodemailer')
 
 module.exports = {
 /**
@@ -148,5 +149,31 @@ module.exports = {
     })
     console.log(tree)
     return tree //返回树形数据
+  },
+  sendMail:({subject,text,html,recipient})=>{
+    const transporter = nodemailer.createTransport({
+      //https://github.com/andris9/nodemailer-wellknown#supported-services 支持列表
+      host: 'smtp.mxhichina.com',
+      port: 465, // SMTP 端口
+      secureConnection: true, // 使用 SSL
+      auth: {
+          user: 'wzy@bzwip.com',
+          pass: 'CICI7774love'
+      }
+    })
+    let mailOptions = {
+      from: '"帮专网 🤖" <wzy@bzwip.com>', // 发件地址
+      to: recipient, // 收件列表
+      subject,
+      text,
+      html
+    }
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+          return console.log(error)
+      }
+      console.log('Message sent: ' + info.response);
+    })
   }
 }

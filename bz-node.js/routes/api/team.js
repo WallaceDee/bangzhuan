@@ -6,5 +6,6 @@ const teamDao = require('../../dao/team/index')
 router.get('/',teamDao.list)
 router.post('/',util.ensureAuthorized, teamDao.insertOrUpdate)
 router.delete('/',util.ensureAuthorized, teamDao.delete)
+router.post('/top',util.ensureAuthorized, teamDao.top)
 
 module.exports = router

@@ -16,7 +16,7 @@ class HttpRequest {
             title:'错误',
             desc:'登录失效，请重新登录！'
           })
-          sessionStorage.removeItem('token')
+          localStorage.removeItem('token')
           router.push({
             name:'Index'
           })
@@ -29,7 +29,7 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        Authorization:sessionStorage.getItem('token')
+        Authorization:localStorage.getItem('token')
       }
     }
     return config

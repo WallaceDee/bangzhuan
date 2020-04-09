@@ -40,6 +40,15 @@ const routes = [
       name: 'AboutUs',
       component: () =>
         import('../views/AboutUs.vue')
+    },{
+      path: '/consult',
+      name: 'Consult',
+      meta:{
+        hideNav:true,
+        hideFooter:true
+      },
+      component: () =>
+        import('../views/Consult.vue')
     }]
   }
 ]

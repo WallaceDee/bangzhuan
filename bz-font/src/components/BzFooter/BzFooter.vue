@@ -6,30 +6,32 @@
           <h1>CONTACT US</h1>
           <h2>立即咨询</h2>
           <p>成功提交后，客服会在2小时内与您取得联系。</p>
-          <Form ref="form" :model="form" :rules="formRule">
-            <FormItem>
-              <Input type="text" :maxlength="11" v-model="form.username"></Input>
+          <Form ref="form" :model="form" :rules="formRule" @on-validate="onValidate">
+            <FormItem prop="name">
+              <input type="text" :maxlength="11" v-model="form.name" />
               <label>
                 <span title="请输入您的姓名" data-filled-title="姓名"></span>
               </label>
             </FormItem>
-            <FormItem>
+            <FormItem prop="phone">
               <span class="input-wrapper">
-                <Input type="text" v-model="form.password"></Input>
+                <input type="text" v-model="form.phone" maxlength="11" />
                 <label>
                   <span title="请输入您的手机号码" data-filled-title="手机号码"></span>
                 </label>
               </span>
             </FormItem>
-            <FormItem>
+            <FormItem prop="content">
               <span class="input-wrapper">
-                <Input type="text" v-model="form.password"></Input>
+                <input type="text" v-model="form.content" />
                 <label>
                   <span title="请输入您的要咨询的内容" data-filled-title="内容"></span>
                 </label>
               </span>
             </FormItem>
-            <button class="submit-btn">确认提交</button>
+            <Button :loading="loading" class="submit-btn" @click="getConsult">
+                   <span v-if="!loading">确认提交</span>
+                   <span v-else>提交中...</span></Button>
           </Form>
         </div>
         <div class="info">
@@ -55,11 +57,16 @@
           <h1>SITEMAP</h1>
           <div>
             <div v-for="item in sitemap" :key="item.label">
-              <h2 :class="{'underline':item.children}"><a @click="onTitleClick(item)" href="javascript:void 0">{{item.label}}</a></h2>
+              <h2 :class="{'underline':item.children}">
+                <a @click="onTitleClick(item)" href="javascript:void 0">{{item.label}}</a>
+              </h2>
               <ul v-if="item.children">
                 <li v-for="(site,index) in item.children" :key="site.label">
-                  <a @click.stop="onSubItmeClick(site,index)" href="javascript:void 0">{{site.label}}</a>
-                  </li>
+                  <a
+                    @click.stop="onSubItmeClick(site,index)"
+                    href="javascript:void 0"
+                  >{{site.label}}</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -95,6 +102,7 @@
   </div>
 </template>
 <script>
+import { getConsult } from '../../api/'
 export default {
   name: 'BzFooter',
   props: {
@@ -109,8 +117,26 @@ export default {
   },
   data() {
     return {
-      form: {},
-      formRule: {},
+      loading:false,
+      hasModalOpen: false,
+      form: {
+        name: '',
+        phone: '',
+        content: ''
+      },
+      formRule: {
+        name: { required: true, message: '请输入您的姓名', trigger: 'blur' },
+        phone: {
+          required: true,
+          message: '请输入您的手机号码',
+          trigger: 'blur'
+        },
+        content: {
+          required: true,
+          message: '请输入您的要咨询的内容',
+          trigger: 'blur'
+        }
+      },
       defaultSitemap: [
         {
           label: '专利情报',
@@ -121,14 +147,14 @@ export default {
           name: 'AboutUs',
           children: [
             {
-              name:'AboutUs',
+              name: 'AboutUs',
               label: '公司简介',
-              activeId:0
+              activeId: 0
             },
             {
-                  name:'AboutUs',
+              name: 'AboutUs',
               label: '团队介绍',
-              activeId:1
+              activeId: 1
             }
           ]
         }
@@ -136,44 +162,76 @@ export default {
     }
   },
   computed: {
-    visible(){
-      return this.$store.state.width>640||this.$route.name==='Home'
+    visible() {
+      return (this.$store.state.width > 640 || this.$route.name === 'Home')&&!this.$route.meta.hideFooter
     },
     sitemap() {
       return this.productMenu.concat(this.defaultSitemap)
     }
   },
-  methods:{
-    onTitleClick(item){
-      if(item.name){
-        this.$router.push({
-          name:item.name
-        })
-      }else{
-        this.$router.push({
-          name:'Products',
-          params:{
-            type:item.type
+  methods: {
+    onValidate(prop, status, error) {
+      if (!status && !this.hasModalOpen) {
+        this.hasModalOpen = true
+        this.$Modal.warning({
+          title: '提示',
+          content: error,
+          onOk: () => {
+            this.hasModalOpen = false
           }
         })
       }
     },
-    onSubItmeClick(item,index){
-         if(item.name){
+    getConsult() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.loading=true
+          getConsult(this.form).then(res => {
+            if (res.status) {
+               this.loading=false
+                 this.$refs.form.resetFields()
+                 document.querySelectorAll('.filled').forEach(item => {
+                  item.classList.remove('filled')
+                  })
+              this.$Modal.success({
+                title: '提交成功',
+                content: '客服会在2小时内与您取得联系。'
+              })
+            }
+          })
+        }
+      })
+    },
+    onTitleClick(item) {
+      if (item.name) {
         this.$router.push({
-          name:item.name,
-          query:{
-            activeId:item.activeId
+          name: item.name
+        })
+      } else {
+        this.$router.push({
+          name: 'Products',
+          params: {
+            type: item.type
           }
         })
-      }else{
+      }
+    },
+    onSubItmeClick(item, index) {
+      if (item.name) {
         this.$router.push({
-          name:'Products',
-          params:{
-            type:item.type
+          name: item.name,
+          query: {
+            activeId: item.activeId
+          }
+        })
+      } else {
+        this.$router.push({
+          name: 'Products',
+          params: {
+            type: item.type
           },
-          query:{
-            activeId:index
+          query: {
+            activeId: index
           }
         })
       }
@@ -201,12 +259,26 @@ export default {
   }
 }
 </script>
-
+<style lang="less" >
+.footer{  
+  .copyright {
+     a {
+      color: #fff;
+    }
+  }}
+.ivu-modal-body {
+  .ivu-btn-primary {
+    background-color: @mainColor;
+    border-color: @mainColor;
+  }
+}
+</style>
 <style lang="less"  scoped>
-a{
+a {
   color: #fff;
 }
-.footer .related-links a:hover,.footer .site-list a:hover{
+.footer .related-links a:hover,
+.footer .site-list a:hover {
   color: @mainColor;
 }
 
@@ -220,8 +292,8 @@ a{
     .info {
       .tel {
         display: flex;
-            height: 42px;
-              align-items: center;
+        height: 42px;
+        align-items: center;
         img {
           margin-right: 20px;
         }
@@ -264,6 +336,9 @@ a{
     width: 100%;
     line-height: 40px;
     text-align: center;
+     a {
+      color: #fff;
+    }
   }
 }
 .ivu-form-item {
@@ -470,7 +545,7 @@ label {
 }
 @media screen and (max-width: 640px) {
   .footer {
-      min-width: auto;
+    min-width: auto;
     .content {
     }
     .contact-us {
@@ -486,9 +561,9 @@ label {
           .service-time {
             padding-left: 30px;
           }
-          .tel{
-              height: 30px;
-              align-items: center;
+          .tel {
+            height: 30px;
+            align-items: center;
           }
           .tel img,
           .address img {

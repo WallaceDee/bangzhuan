@@ -1,7 +1,9 @@
 <template>
   <div>
     <BzHeader :productMenu="productMenu"></BzHeader>
+    <keep-alive>
     <router-view />
+    </keep-alive>
     <BzFooter :value="setting" :productMenu="productMenu"></BzFooter>
   </div>
 </template>

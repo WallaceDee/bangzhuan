@@ -8,7 +8,7 @@
     <Divider />
     <Button type="primary" @click="openCreate">添加轮播图</Button>
     <Divider />
-    <Table :columns="columns" :data="data" stripe></Table>
+    <Table :columns="columns" :data="data" stripe :loading="loading"></Table>
     <Drawer :title="drawerTitle" v-model="drawerVisible" width="720">
       <Form :model="form" :label-width="120" ref="form" :rules="rule">
         <FormItem label="Banner图片" prop="url">
@@ -62,6 +62,7 @@ export default {
   name: 'Banner',
   data() {
     return {
+      loading:false,
       form: {
         url: '',
         thumbnail: '',
@@ -101,7 +102,8 @@ export default {
         {
           title: '描述',
           align: 'center',
-          key: 'description'
+          key: 'description',
+           minWidth: 100,
         },
         {
           title: '状态',
@@ -133,6 +135,7 @@ export default {
         {
           title: '操作',
           align: 'center',
+          width:250,
           render: (h, params) => {
             return [
               h(
@@ -314,8 +317,10 @@ export default {
       this.drawerVisible = status
     },
     getData() {
+      this.loading=true
       getBannerList().then(res => {
         if (res.status) {
+          this.loading=false
           this.data = res.data
         }
       })

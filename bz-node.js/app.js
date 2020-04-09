@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const favicon = require('serve-favicon')
-const logger = require('morgan')
+// const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 
@@ -17,7 +17,9 @@ const product = require('./routes/api/product')
 const setting = require('./routes/api/setting')
 const app = express()
 const ejs = require('ejs')
-
+const log4js = require('log4js');
+var logger = require('./lib/log4js');
+app.use(log4js.connectLogger(logger, {level:'auto', format:':method :url  :status  :response-time ms'}));
 // var app = require('express')()
 app.use('*', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
@@ -37,7 +39,7 @@ app.set('view engine', 'html') //app.set('view engine', 'ejs')
 
 // uncases after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
-app.use(logger('dev'))
+// app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())

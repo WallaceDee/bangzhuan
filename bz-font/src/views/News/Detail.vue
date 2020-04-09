@@ -42,8 +42,9 @@ export default{
       })
     }
   },
-  mounted(){
+  activated(){
     this.getData()
+    document.scrollingElement.scrollTop = 0
   }
 }
 </script>

@@ -16,4 +16,6 @@ module.exports = {
   insert:'INSERT INTO bz_consult(name,phone,content,createTime,updateTime) VALUES({{name}},{{phone}},{{content}},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)',
   setRemarkAndStatus:'UPDATE bz_consult SET remark={{remark}},status={{status}},updateBy={{userId}},updateTime=CURRENT_TIMESTAMP WHERE id={{id}}',
   delete:'DELETE FROM bz_consult WHERE id={{id}}',
+  getSubscribeEmail:'SELECT email FROM bz_user WHERE isSubscribe=1',
+  setSubscribeStatus:'UPDATE bz_user SET isSubscribe={{isSubscribe}} WHERE id={{userId}}'
 }

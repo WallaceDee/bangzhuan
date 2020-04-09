@@ -81,6 +81,13 @@ const routes = [
         title: '产品与服务'
       },
       component: resolve => require(['@/views/Manage/Product'], resolve)
+    },{
+      path: 'UserInfo',
+      name: 'UserInfo',
+      meta: {
+        title: '用户信息'
+      },
+      component: resolve => require(['@/views/Manage/UserInfo'], resolve)
     }]
   }
 ]

@@ -61,3 +61,19 @@ export const getProductList = (params) => {
       method: 'get'
   })
 }
+
+export const getTeamList = (params) => {
+  return axios.request({
+      params,
+      url: '/team',
+      method: 'get'
+  })
+}
+
+export const getConsult = (data) => {
+  return axios.request({
+      data,
+      url: '/consult',
+      method: 'post'
+  })
+}

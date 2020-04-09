@@ -1,5 +1,34 @@
 import axios from '@/libs/api.request'
 
+export const createUser = (data) => {
+    return axios.request({
+        data,
+        url: '/users',
+        method: 'post'
+    })
+}
+export const getUserAvailable = (params) => {
+    return axios.request({
+        params,
+        url: '/users/getUserAvailable',
+        method: 'get'
+    })
+}
+export const updateUserInfo = (data) => {
+    return axios.request({
+        data,
+        url: '/users/updateUserInfo',
+        method: 'post'
+    })
+}
+export const getUserInfo = (data) => {
+    return axios.request({
+        data,
+        url: '/users/getUserInfo',
+        method: 'get'
+    })
+}
+
 export const login = (data) => {
     return axios.request({
         data,
@@ -89,6 +118,13 @@ export const setConsultRemarkAndStatus = (data) => {
     return axios.request({
         data,
         url: '/consult/setRemarkAndStatus',
+        method: 'post'
+    })
+}
+export const setSubscribeStatus = (data) => {
+    return axios.request({
+        data,
+        url: '/consult/setSubscribeStatus',
         method: 'post'
     })
 }
@@ -185,6 +221,13 @@ export const deleteTeam = (data) => {
         data,
         url: '/team',
         method: 'delete'
+    })
+}
+export const setMember2Top = (data) => {
+    return axios.request({
+        data,
+        url: '/team/top',
+        method: 'post'
     })
 }
 

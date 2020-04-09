@@ -1,5 +1,5 @@
 <template>
-  <div class="header" :style="`background-color:rgba(0,0,0,${scrollTop/100})`">
+  <div class="header" :style="`background-color:rgba(0,0,0,${scrollTop/100});${navsVisible?'':'border-bottom:none;'}`" >
     <div class="content">
       <div class="logo-wrapper">
         <a href="/">
@@ -7,7 +7,7 @@
           <img src="../../assets/images/slogan.png" alt />
         </a>
       </div>
-      <div class="nav" v-show="!collapsed">
+      <div class="nav" v-show="!collapsed" v-if="navsVisible">
         <div id="slider"></div>
         <ul>
           <li
@@ -100,13 +100,18 @@ export default {
     },
     lastIndex(val) {
       let lis = document.querySelectorAll('.nav>ul>li')
-      slider.style.left = lis[val].offsetLeft + 'px'
-      slider.style.width = lis[val].offsetWidth + 'px'
+          if(val!==-1&&lis.length>val){
+          slider.style.left = lis[val].offsetLeft + 'px'
+          slider.style.width = lis[val].offsetWidth + 'px'
+      }
     }
   },
   computed: {
-    nameList(){
-      let list=[]
+    navsVisible(){
+      return !this.$route.meta.hideNav||this.$store.state.width<640
+    },
+    nameList() {
+      let list = []
       this.navs.map(item => {
         list.push(item.name)
       })
@@ -126,32 +131,32 @@ export default {
       document.body.onscroll = () => {
         this.scrollTop = window.pageYOffset
       }
-         let current
-      if(this.$route.name==='NewsDetail'){
-          current=2
-      }else{
-       current=this.nameList.indexOf(this.$route.name)
+      let current
+      if (this.$route.name === 'NewsDetail') {
+        current = 2
+      } else {
+        current = this.nameList.indexOf(this.$route.name)
       }
-      this.lastIndex=current
-      let nameList=[current.toString()]
-      if(this.$route.params.type!==undefined){
-        nameList.push(this.$route.params.type*1-1)
+      this.lastIndex = current
+      let nameList = [current.toString()]
+      if (this.$route.params.type !== undefined) {
+        nameList.push(this.$route.params.type * 1 - 1)
       }
-        if(this.$route.query.activeId!==undefined){
+      if (this.$route.query.activeId !== undefined) {
         nameList.push(this.$route.query.activeId)
       }
-      this.currentName=nameList.join('-')
+      this.currentName = nameList.join('-')
     })
   },
   methods: {
-    onSubTitleClick(name){
-        this.over = false
+    onSubTitleClick(name) {
+      this.over = false
       this.currentName = name
       this.collapsed = true
       this.$router.push({
-        name:'Products',
-        params:{
-          type:name.split('-')[1]*1+1
+        name: 'Products',
+        params: {
+          type: name.split('-')[1] * 1 + 1
         }
       })
     },
@@ -160,12 +165,12 @@ export default {
       this.currentName = name
       this.collapsed = true
       this.$router.push({
-        name:'Products',
-        params:{
-          type:name.split('-')[1]*1+1
+        name: 'Products',
+        params: {
+          type: name.split('-')[1] * 1 + 1
         },
-        query:{
-          activeId:name.split('-')[2]
+        query: {
+          activeId: name.split('-')[2]
         }
       })
     },
@@ -175,17 +180,17 @@ export default {
       } else {
         this.collapsed = true
       }
-      if(index!==1){
-      this.$router.push({
-        name: this.navs[index].name
-      })
-}else{
+      if (index !== 1) {
         this.$router.push({
-        name: this.navs[index].name,
-        params:{
-          type:1
-        }
-      })
+          name: this.navs[index].name
+        })
+      } else {
+        this.$router.push({
+          name: this.navs[index].name,
+          params: {
+            type: 1
+          }
+        })
       }
     },
     onMouseleave() {
@@ -209,7 +214,7 @@ export default {
 @media screen and (min-width: 641px) {
   .header {
     position: absolute;
-    z-index: 2;
+    z-index: 999999;
     top: 0;
     left: 0;
     width: 100%;
@@ -337,7 +342,7 @@ export default {
     position: fixed;
     width: 100%;
     min-width: auto;
-    z-index: 3;
+    z-index: 99999;
 
     &:after {
       position: absolute;

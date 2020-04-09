@@ -1,7 +1,9 @@
 <template>
   <div class="news">
     <div class="banner"></div>
+        <keep-alive>
          <router-view />
+             </keep-alive>
   </div>
 </template>
 <style lang="less" scoped>

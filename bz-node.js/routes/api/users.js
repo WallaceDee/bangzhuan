@@ -4,12 +4,10 @@ const userDao = require('../../dao/user/index')
 const util = require('../../lib/util.js')
 
 router.get('/', util.ensureAuthorized, userDao.list)
-router.post('/deleteUser', util.ensureAuthorized,   userDao.delete)
-router.post('/updateUser', util.ensureAuthorized,userDao.update)
-router.post('/register',  userDao.register)
-router.post('/login',  userDao.login)
-router.get('/getAdminUserInfo',  userDao.getAdminUserInfo)
-router.post('/modify', userDao.modify)
-router.post('/getUserAvailable',  userDao.getUserAvailable)
+router.post('/', util.ensureAuthorized, userDao.create)
+router.post('/login',userDao.login)
+router.get('/getUserInfo',util.ensureAuthorized,userDao.getUserInfoById)
+router.post('/updateUserInfo',util.ensureAuthorized,userDao.updateUserInfo)
+router.get('/getUserAvailable',util.ensureAuthorized,userDao.getUserAvailable)
 
 module.exports = router

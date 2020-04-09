@@ -7,5 +7,6 @@ router.get('/',util.ensureAuthorized,consultDao.list)
 router.post('/', consultDao.createConsult)
 router.delete('/',util.ensureAuthorized, consultDao.delete)
 router.post('/setRemarkAndStatus',util.ensureAuthorized, consultDao.setRemarkAndStatus)
+router.post('/setSubscribeStatus',util.ensureAuthorized, consultDao.setSubscribeStatus)
 
 module.exports = router

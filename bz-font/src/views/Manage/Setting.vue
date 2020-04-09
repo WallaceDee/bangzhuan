@@ -1,22 +1,23 @@
 <template>
   <div>
+    <Spin v-if="loading" fix></Spin>
     <Breadcrumb>
       <BreadcrumbItem to="/">首页</BreadcrumbItem>
       <BreadcrumbItem>基础设置</BreadcrumbItem>
       <BreadcrumbItem>网站配置</BreadcrumbItem>
     </Breadcrumb>
     <Divider />
-    <Form :model="form" :label-width="100">
-      <FormItem label="公司名称">
-        <Input v-model="form.name" placeholder="请输入公司名称..."></Input>
+    <Form :model="form" :label-width="100" ref="form" :rules="rules">
+      <FormItem label="网站名称">
+        <Input v-model="form.name" placeholder="请输入公司名称..." readonly></Input>
       </FormItem>
-      <FormItem label="Copyright">
+      <FormItem label="Copyright" prop="copyright">
         <Input v-model="form.copyright" placeholder="请输入公司copyright信息..."></Input>
       </FormItem>
-      <FormItem label="服务时间">
+      <FormItem label="服务时间" prop="serviceHours">
         <Input v-model="form.serviceHours" placeholder="请输入服务时间t信息..."></Input>
       </FormItem>
-      <FormItem label="联系电话">
+      <FormItem label="联系电话" prop="tel">
         <Input v-model="form.tel" placeholder="请输入公司copyright信息..."></Input>
       </FormItem>
       <FormItem label="联系地址"></FormItem>
@@ -91,8 +92,8 @@
         v-for="(item, index) in form.linkItems"
         :key="'linkItems'+item.index"
         :label="`链接${index+1}`"
-        :prop="'linkItems.'+index + '.value'"
-        :rules="{required: true, message: `链接名${index+1}不能为空`, trigger: 'blur'}"
+        :prop="'linkItems.'+index + '.url'"
+        :rules="{required: true, message: `链接${index+1}不能为空`, trigger: 'blur'}"
       >
         <Row>
           <Col span="4">
@@ -123,8 +124,13 @@
           </Col>
         </Row>
       </FormItem>
-      <FormItem label="认识帮专">
-        <Input v-model="form.description" placeholder="请输入介绍..." type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+      <FormItem label="认识帮专" prop="description">
+        <Input
+          v-model="form.description"
+          placeholder="请输入介绍..."
+          type="textarea"
+          :autosize="{minRows: 2,maxRows: 5}"
+        ></Input>
       </FormItem>
       <FormItem
         v-for="(item, index) in form.dataItems"
@@ -135,13 +141,13 @@
       >
         <Row>
           <Col span="3">
-          <InputNumber  :min="1" v-model="item.number"></InputNumber>
+            <InputNumber :min="1" v-model="item.number"></InputNumber>
           </Col>
-           <Col span="2" offset="1">
+          <Col span="2" offset="1">
             <Input type="text" v-model="item.unit" placeholder="单位"></Input>
-            </Col>
-             <Col span="12" offset="1">
-              <Input type="text" v-model="item.description" placeholder="描述"></Input>
+          </Col>
+          <Col span="12" offset="1">
+            <Input type="text" v-model="item.description" placeholder="描述"></Input>
           </Col>
           <Col span="4" offset="1">
             <Button @click="removeData(index)">删除</Button>
@@ -162,90 +168,109 @@
   </div>
 </template>
 <script>
-import { getSetting, updateSetting } from '@/api/manage/'
+import { getSetting, updateSetting } from "@/api/manage/";
 export default {
-  name: 'Setting',
+  name: "Setting",
   data() {
     return {
+      rules: {
+        copyright: [
+          { required: true, message: `Copyright不能为空`, trigger: "blur" }
+        ],
+        description: [
+          { required: true, message: `认识帮专不能为空`, trigger: "blur" }
+        ],
+        serviceHours: [
+          { required: true, message: `服务时间不能为空`, trigger: "blur" }
+        ],
+        tel: [{ required: true, message: `联系电话不能为空`, trigger: "blur" }]
+      },
+      loading: false,
       form: {
-        description:'',
-        name: '',
-        copyright: '',
-        tel: '',
+        description: "",
+        name: "",
+        copyright: "",
+        tel: "",
         linkItems: [],
         addressItems: [],
-        dataItems:[]
+        dataItems: []
       }
-    }
+    };
   },
   methods: {
     getData() {
+      this.loading = true;
       getSetting().then(res => {
         if (res.status) {
+          this.loading = false;
           let temp = JSON.parse(
             JSON.stringify(Object.assign(this.form, res.data))
-          )
-          this.form = temp
-          this.$set(this.form, 'addressItems', temp.address)
-            this.$set(this.form, 'dataItems',temp.data)
-          this.$set(this.form,'linkItems',temp.relatedLinks)
+          );
+          this.form = temp;
+          this.$set(this.form, "addressItems", temp.address);
+          this.$set(this.form, "dataItems", temp.data);
+          this.$set(this.form, "linkItems", temp.relatedLinks);
         }
-      })
+      });
     },
     handleSuccess(res, file, type) {
-      this.$set(this.form, type, res.url)
+      this.$set(this.form, type, res.url);
     },
     addLink() {
       this.form.linkItems.push({
-        protocol: 'http://',
-        last: '.com',
-        value: '',
+        protocol: "http://",
+        last: ".com",
+        value: "",
         index: this.form.linkItems.length
-      })
+      });
     },
     addAddress() {
       this.form.addressItems.push({
-        value: '',
+        value: "",
         index: this.form.addressItems.length
-      })
+      });
     },
-        addData() {
+    addData() {
       this.form.dataItems.push({
-        number: '',
-        unit:'',
-        description:'',
+        number: 0,
+        unit: "",
+        description: "",
         index: this.form.dataItems.length
-      })
+      });
     },
     removeData(index) {
-      this.form.dataItems.splice(index, 1)
+      this.form.dataItems.splice(index, 1);
     },
     removeLink(index) {
-      this.form.linkItems.splice(index, 1)
+      this.form.linkItems.splice(index, 1);
     },
     removeAddress(index) {
-      this.form.addressItems.splice(index, 1)
+      this.form.addressItems.splice(index, 1);
     },
     handleSubmit() {
-      let param = Object.assign({}, this.form)
-      param.address = JSON.stringify(param.addressItems)
-      delete param.addressItems
-      param.relatedLinks = JSON.stringify(param.linkItems)
-      delete param.linkItems
-        param.data = JSON.stringify(param.dataItems)
-      delete param.dataItems
-      updateSetting(param).then(res => {
-        if (res.status) {
-          this.$Notice.success({
-            title: '提示',
-            desc: res.data.message
-          })
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          let param = Object.assign({}, this.form);
+          param.address = JSON.stringify(param.addressItems);
+          delete param.addressItems;
+          param.relatedLinks = JSON.stringify(param.linkItems);
+          delete param.linkItems;
+          param.data = JSON.stringify(param.dataItems);
+          delete param.dataItems;
+          updateSetting(param).then(res => {
+            if (res.status) {
+              this.$Notice.success({
+                title: "提示",
+                desc: res.data.message
+              });
+            }
+          });
         }
-      })
+      });
     }
   },
   mounted() {
-    this.getData()
+    this.getData();
   }
-}
+};
 </script>

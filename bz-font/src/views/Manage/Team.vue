@@ -18,7 +18,7 @@
       </span>
     </Form>
     <Divider />
-    <Table :columns="columns" :data="data"></Table>
+    <Table :columns="columns" :data="data" stripe :loading="loading"></Table>
     <Divider />
     <Page :current="page" :total="total" show-total @on-change="onPageChange" />
     <Drawer :title="drawerTitle" v-model="drawerVisible" width="720">
@@ -26,7 +26,7 @@
         <FormItem label="名字" prop="name">
           <Input v-model="form.name" placeholder="请输入名字..."></Input>
         </FormItem>
-        <FormItem label="照片">
+        <FormItem label="照片" prop="photo">
           <Upload
             ref="upload"
             :on-exceeded-size="handleMaxSize"
@@ -39,10 +39,10 @@
             :on-success="handleSuccess"
             style="display: inline-block;width:192px;"
           >
-            <div style="width: 200px;height:200px;line-height: 200px;">
+            <div style="width: 200px;height:133px;line-height: 133px;">
               <img v-if="form.photo" :src="form.photo" alt="照片" style="width:200px;" />
               <template v-else>
-                <Icon type="ios-image" size="20"></Icon>(size:200px*200px)
+                <Icon type="ios-image" size="20"></Icon>(size:900px*600px)
               </template>
             </div>
           </Upload>
@@ -90,10 +90,10 @@
             :before-upload="handleBeforeUpload"
             type="drag"
             action="api/ue?action=uploadimage&path=upload/team"
-            style="display: inline-block;width:58px;"
+            style="display: inline-block;width:120px;"
           >
-            <div style="width: 58px;height:58px;line-height: 58px;">
-              <Icon type="ios-camera" size="20"></Icon>
+            <div style="width: 120px;height:42.5px;line-height:15px;">
+              <Icon type="ios-camera" size="20"></Icon>(size:240px*85px)
             </div>
           </Upload>
         </FormItem>
@@ -107,11 +107,12 @@
 </template>
 <script>
 import { getDate } from '@/libs/tools.js'
-import { getTeamList, deleteTeam, publicTeam } from '@/api/manage/'
+import { getTeamList, deleteTeam, publicTeam,setMember2Top } from '@/api/manage/'
 export default {
   name: 'Team',
   data() {
     return {
+      loading:false,
       uploadList: [],
       defaultList: [],
       popupMode: 0,
@@ -126,8 +127,10 @@ export default {
         customer: ''
       },
       rule: {
-        title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-        education: [{ required: true, message: '请输入标题', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入名字', trigger: 'blur' }],
+        title: [{ required: true, message: '请输入称谓', trigger: 'blur' }],
+        education: [{ required: true, message: '请输入教育背景', trigger: 'blur' }],
+        experience: [{ required: true, message: '请输入工作经历', trigger: 'blur' }]
       },
       searchForm: {
         name: ''
@@ -168,7 +171,7 @@ export default {
         {
           title: '称谓',
           align: 'center',
-          width: 120,
+          minWidth: 120,
           key: 'title'
         },
         {
@@ -180,7 +183,7 @@ export default {
         {
           title: '教育背景',
           align: 'center',
-          width: 150,
+          minWidth: 150,
          key: 'education'
         },
         {
@@ -204,8 +207,24 @@ export default {
         {
           title: '操作',
           align: 'center',
+          fixed:'right',
+          width:200,
           render: (h, params) => {
             return [
+                           h(
+                'Button',
+                {
+                  props: {
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.setMember2Top(params.row.id)
+                    }
+                  }
+                },
+                '置顶'
+              ),
               h(
                 'Button',
                 {
@@ -265,13 +284,26 @@ export default {
     this.getData()
   },
   methods: {
+    setMember2Top(id){
+      setMember2Top({
+        id
+      }).then(res=>{
+        if (res.status) {
+            this.$Notice.success({
+            title: '提示',
+            desc: res.data.message
+          })
+          this.getData()
+        }
+      })
+    },
     handleRemove(file) {
       const fileList = this.$refs.customerUpload.fileList
       this.$refs.customerUpload.fileList.splice(fileList.indexOf(file), 1)
     },
     handleCustomerSuccess(res, file) {
       file.url = file.response.url
-      this.uploadList.push(file)
+      // this.uploadList.push(file)
     },
     handleBeforeUpload() {
       const check = this.uploadList.length < 5
@@ -301,12 +333,14 @@ export default {
       this.popupMode = 1
       this.form = JSON.parse(JSON.stringify(news))
       let defaultList = []
-      this.form.customer.split(',').map(item => {
-        defaultList.push({
-          url: item,
-          name: item.substring(item.lastIndexOf('/') + 1)
-        })
-      })
+        if(this.form.customer){
+                this.form.customer.split(',').map(item => {
+                defaultList.push({
+                  url: item,
+                  name: item.substring(item.lastIndexOf('/') + 1)
+                })
+              })
+        }
       this.defaultList = defaultList
       this.$nextTick(() => {
         this.uploadList = this.$refs.customerUpload.fileList
@@ -386,11 +420,13 @@ export default {
       })
     },
     getData() {
+      this.loading=true
       getTeamList({
         page: this.page,
         ...this.searchRule
       }).then(res => {
         if (res.status) {
+          this.loading=false
           this.data = res.data.rows
           this.total = res.data.total
         }
@@ -412,10 +448,10 @@ export default {
 }
 .demo-upload-list {
   display: inline-block;
-  width: 60px;
-  height: 60px;
+  width: 120px;
+  height: 42.5px;
   text-align: center;
-  line-height: 60px;
+  line-height: 42.5px;
   border: 1px solid transparent;
   border-radius: 4px;
   overflow: hidden;

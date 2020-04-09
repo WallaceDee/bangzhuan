@@ -281,7 +281,7 @@ export default {
     li {
       overflow: auto;
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       &:nth-child(odd) {
         > .cover,
         > div {

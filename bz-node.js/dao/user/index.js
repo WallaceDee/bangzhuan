@@ -12,21 +12,68 @@ const crypto = require('crypto')
 
 module.exports = {
     getUserAvailable: (req, res) => {
-        query($sql.getUserByUserName, {username:req.body.username}).then(result => {
+        query($sql.getUserByUserName, req.query).then(result => {
             if (result.length === 0) {
-                print.success(res, {
-                    message: '用户名可用'
+                print.success(res,{
+                    exist:false
                 })
             } else {
                 print.error(res, {
-                    message: '用户名已存在'
+                    exist:true
                 })
             }
         }).catch(error => {
             print.error(res, error)
         })
     },
+    updatePassword: (req, res) => {
+        query($sql.updatePassword,req.body).then(result => {
+            print.success(res, {
+                userInfo:req.body,
+                message: '修改成功！'
+            })
+        }).catch(e => {
+            print.error(res, e)
+        })
+    },
+    create: (req, res) => {
+        const {
+            isAdmin
+        } = req.userInfo
+        if(!isAdmin){
+            res.status(401).send({
+              status: 0,
+              data: {
+                message: 'No permission.'
+              }
+            })
+            return false
+        }
+        query($sql.insert, {
+            nickname:'帮专用户',
+            password: crypto.createHash('md5').update('bz123456').digest("hex"),
+            username:req.body.username
+        }).then(result => {
+            print.success(res,{
+                message:'新建成功！'
+            })
+        }).catch(error => {
+            print.error(res, error)
+        })
+    },
     list: (req, res) => {
+        const {
+            isAdmin
+        } = req.userInfo
+        if(!isAdmin){
+            res.status(401).send({
+              status: 0,
+              data: {
+                message: 'No permission.'
+              }
+            })
+            return false
+        }
         const {
             keyword,
             page,
@@ -37,7 +84,7 @@ module.exports = {
             keyword: ''
         }, Object.assign(req.body, req.query))
         let params = {keyword, ...getSqlPageParmas(page, rows)}
-
+        
         query($sql.list, params).then(result => {
             print.success(res,{
                 rows: result[0],
@@ -45,40 +92,6 @@ module.exports = {
             })
         }).catch(error => {
             print.error(res, error)
-        })
-    },
-    register: (req, res) => {
-        let {password,username} = req.body
-        //随机名字
-        let name = ''
-        for (let i = 0; i < 4; i++) {
-            name += '\\u' + (Math.round(Math.random() * 20901) + 19968).toString(16)
-        }
-        name = unescape(name.replace(/\\u/g, '%u'))
-        let params = {username, name, password}
-        query($sql.insert, params).then( result=>{
-           print.success(res, {message: '注册成功'})
-        }).catch(error => {
-            print.error(res, error)
-        })
-    },
-    delete: (req, res) => {
-        query($sql.delete, {userId:req.body.userId}).then( result=> {
-            print.success(res,{
-                message: '删除成功'
-            })
-        }).catch(error => {
-            print.error(res, error)
-        })
-    },
-    update: (req, res) => {
-        // update: 'UPDATE table_user SET userNickName=?,userAvatar=? ,userPhone=? ,userGender=?,updateTime=CURRENT_TIMESTAMP WHERE userId=?'
-        let {userNickName,userAvatar,userPhone,userGender,userId} = req.body
-        let params = {userNickName, userAvatar, userPhone, userGender, userId}
-        query($sql.update, params).then( result=> {
-            print.success(res, {
-                message: '修改成功'
-            })
         })
     },
     login: (req, res) => {
@@ -91,9 +104,10 @@ module.exports = {
                 let currentUser=result[0]
                 let token = jwt.sign({
                     userName: currentUser.username,
-                    userId: currentUser.id
+                    userId: currentUser.id,
+                    isAdmin:currentUser.isAdmin
                 }, cert, {
-                    expiresIn: "2h",
+                    expiresIn: "2d",
                     algorithm: 'RS256'
                 })
                 currentUser['token'] = token
@@ -107,115 +121,24 @@ module.exports = {
             print.error(res, error)
         })
     },
-    modify: function (req, res) {
-        var query = req.body;
-        var type = query.type;
-        var params = [];
-        $util.checkToken(query.token, query.userName, res, function () {
-            switch (type) {
-                case "userAvatar": {
-                    //过滤data:URL
-                    var base64Data = query.base64.replace(/^data:image\/\w+;base64,/, "");
-                    var dataBuffer = new Buffer(base64Data, 'base64');
-                    var path = "public/upload/user_avatar/" + uuid.v1() + ".png";
-                    params = [path.replace("public/", ""), query.userName];
-                    query($sql.updateAvatar, params, function (error, result) {
-                        if (error) {
-                            $util.print(res, {
-                                error,
-                                result
-                            });
-                        } else {
-                            fs.writeFile(path, dataBuffer, function (err, res) {
-                                if (err) {
-                                    res.send(err);
-                                } else {
-                                    res = {
-                                        code: 200,
-                                        msg: '修改头像成功'
-                                    };
-                                    $util.print(res, {
-                                        err,
-                                        result: res
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-                break;
-            case "userNickName": {
-                params = [query.userNickName, query.userName];
-                query($sql.updateNickName, params, function (error, result) {
-                    if (result) {
-                        result = {
-                            code: 200,
-                            msg: '修改昵称成功'
-                        };
-                    }
-                    $util.print(res, {
-                        error,
-                        result
-                    });
-                });
-            }
-            break;
-            case "userPhone": {
-                params = [query.userPhone, query.userName];
-                query($sql.updatePhone, params, function (error, result) {
-                    if (result) {
-                        result = {
-                            code: 200,
-                            msg: '修改手机成功'
-                        };
-                    }
-                    $util.print(res, {
-                        error,
-                        result
-                    });
-                });
-            }
-            break;
-            case "userGender": {
-                params = [query.userGender, query.userName];
-                query($sql.updateGender, params, function (error, result) {
-                    if (result) {
-                        result = {
-                            code: 200,
-                            msg: '修改性别成功'
-                        };
-                    }
-                    $util.print(res, {
-                        error,
-                        result
-                    });
-                });
-            }
-            break;
-            case "userBirthday": {
-                params = [query.userBirthday, query.userName];
-                query($sql.updateBirthday, params, function (error, result) {
-                    console.log(err);
-                    console.log(result);
-                    if (result) {
-                        result = {
-                            code: 200,
-                            msg: '修改生日成功'
-                        };
-                    }
-                    $util.print(res, {
-                        error,
-                        result
-                    });
-                });
-            }
-            break;
-            }
-        });
+    getUserInfoById: (req, res) => {
+        const {
+            userId
+        } = req.userInfo
+        query($sql.getUserInfoById, {id:userId}).then(result => {
+            print.success(res, result[0])
+        }).catch(e => {
+            print.error(res, e)
+        })
     },
-    getAdminUserInfo: (req, res) => {
-        query($sql.getAdminUserInfo).then(  result=> {
-           print.success(res, result[0])
+    updateUserInfo: (req, res) => {
+        query($sql.updateUserInfo,req.body).then(result => {
+            print.success(res, {
+                userInfo:req.body,
+                message: '修改成功！'
+            })
+        }).catch(e => {
+            print.error(res, e)
         })
     }
 }

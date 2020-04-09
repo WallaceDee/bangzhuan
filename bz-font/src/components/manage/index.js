@@ -1,5 +1,5 @@
-import { Button,ColorPicker,Tabs,TabPane,Table,Card,InputNumber,Form,FormItem,Input,Notice,Menu,MenuItem,MenuGroup,Submenu ,Icon ,Row,Col ,Upload ,Breadcrumb,BreadcrumbItem,Divider,Drawer,Switch,Poptip,Modal,RadioGroup,Radio,Page,Select,Option } from 'view-design'
-import 'view-design/dist/styles/iview.css'
+import { Button,ColorPicker,Tabs,TabPane,Table,Card,InputNumber,Form,FormItem,Input,Notice,Menu,MenuItem,MenuGroup,Submenu ,Icon ,Row,Col ,Upload ,Breadcrumb,BreadcrumbItem,Divider,Drawer,Switch,Poptip,Modal,RadioGroup,Radio,Page,Select,Option,Spin,Dropdown,DropdownMenu,DropdownItem,AutoComplete } from 'view-design'
+import '../../assets/less/theme.less'
 export default {
   install(Vue) {
     Vue.component('Button', Button)
@@ -32,6 +32,11 @@ export default {
     Vue.component('Page', Page)
     Vue.component('Select', Select)
     Vue.component('Option', Option)
+    Vue.component('Spin', Spin)
+    Vue.component('DropdownMenu', DropdownMenu)
+    Vue.component('Dropdown', Dropdown)
+    Vue.component('DropdownItem', DropdownItem)
+    Vue.component('AutoComplete', AutoComplete)
     Vue.prototype.$Notice = Notice
     Vue.prototype.$Modal = Modal
   }
