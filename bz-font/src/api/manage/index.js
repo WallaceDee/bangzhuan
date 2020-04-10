@@ -1,5 +1,12 @@
 import axios from '@/libs/api.request'
 
+export const updatePassword = (data) => {
+    return axios.request({
+        data,
+        url: '/users/updatePassword',
+        method: 'post'
+    })
+}
 export const createUser = (data) => {
     return axios.request({
         data,

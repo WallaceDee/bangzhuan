@@ -27,13 +27,26 @@ module.exports = {
         })
     },
     updatePassword: (req, res) => {
-        query($sql.updatePassword,req.body).then(result => {
-            print.success(res, {
-                userInfo:req.body,
-                message: '修改成功！'
-            })
-        }).catch(e => {
-            print.error(res, e)
+        const {
+            userId,
+            isAdmin
+        } = req.userInfo
+        query($sql.validatePassword,{password:req.body.old,userId}).then(response=>{
+            if(response.length){
+                query($sql.updatePassword,{password:req.body.new,userId}).then(result => {
+                    print.success(res, {
+                        message: '修改成功！'
+                    })
+                }).catch(e => {
+                    print.error(res, e)
+                })
+            }else{
+                print.error(res, {
+                    message: '密码错误！'
+                })
+            }
+        }).catch(error => {
+            print.error(res, error)
         })
     },
     create: (req, res) => {

@@ -70,99 +70,103 @@
            <FormItem >
               <Button @click.native="onModalOkClick">修改</Button>
         </FormItem>
-  
       </Form>
     </Modal>
   </div>
 </template>
 <script>
-import { updateUserInfo } from "../../api/manage/";
+import { updateUserInfo,updatePassword } from '../../api/manage/'
+import md5 from 'js-md5'
 export default {
-  name: "UserInfo",
+  name: 'UserInfo',
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入新密码"));
+            if (value.length<6) {
+        callback(new Error('长度必须大于等于6位'))
       } else {
-        console.log(this.passwordForm.newPasswordCheck)
-        if (this.passwordForm.newPasswordCheck !== "") {
+        if (this.passwordForm.newPasswordCheck !== '') {
           // 对第二个密码框单独验证
-          this.$refs.passwordForm.validateField("newPasswordCheck");
+          this.$refs.passwordForm.validateField('newPasswordCheck')
         }
-        callback();
-      }
-    };
+        callback()
+        }
+    }
     const validatePassCheck = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入确认密码"));
-      } else if (value !== this.passwordForm.newPassword) {
-        callback(new Error("两次密码不一致!"));
+     if (value !== this.passwordForm.newPassword) {
+        callback(new Error('两次密码不一致!'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loading:true,
       passwordRules: {
         password: [{ required: true, message: '请输入当前用户密码', trigger: 'blur' }],
-        newPassword: [{ validator: validatePass, trigger: "blur" }],
-        newPasswordCheck: [{ validator: validatePassCheck, trigger: "blur" }]
+        newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' },{ validator: validatePass, trigger: 'blur' }],
+        newPasswordCheck: [{ required: true, message: '请再输入新密码', trigger: 'blur' },{ validator: validatePassCheck, trigger: 'blur' }]
       },
       passwordForm: {
-        password: "",
+        password: '',
         newPassword:'',
-        newPasswordCheck: ""
+        newPasswordCheck: ''
       },
       modalVisible: false,
       emailList: [],
       rules: {},
       form: {
-        avatar: "",
-        nickname: "",
+        avatar: '',
+        nickname: '',
         gender: -1,
-        email: ""
+        email: ''
       }
-    };
+    }
   },
   watch: {
-    "$store.state.userInfo"(val) {
-      let temp = JSON.parse(JSON.stringify(val));
-      this.form = temp;
+    '$store.state.userInfo'(val) {
+      let temp = JSON.parse(JSON.stringify(val))
+      this.form = temp
     }
   },
   methods: {
     onModalOkClick(){
-      this.$refs.passwordForm.validate(valid=>{
+      this.$refs.passwordForm.validate(valid => {
         if(valid){
-          this.modalVisible=false
+          console.log({
+            old:md5('bz'+this.passwordForm.password),
+            new:md5('bz'+this.passwordForm.newPassword)
+          })
+          updatePassword({
+            old:md5('bz'+this.passwordForm.password),
+            new:md5('bz'+this.passwordForm.newPassword)
+          })
         }
       })
     },
     handleSubmit() {
       updateUserInfo(this.form).then(res => {
         if (res.status) {
-          this.$store.commit("setUserInfo", res.data.userInfo);
+          this.$store.commit('setUserInfo', res.data.userInfo)
         }
-      });
+      })
     },
     handleSearch(value) {
       this.emailList =
-        !value || value.indexOf("@") >= 0
+        !value || value.indexOf('@') >= 0
           ? []
           : [
-              value + "@bzwip.com",
-              value + "@qq.com",
-              value + "@sina.com",
-              value + "@163.com"
-            ];
+              value + '@bzwip.com',
+              value + '@qq.com',
+              value + '@sina.com',
+              value + '@163.com'
+            ]
     },
     handleSuccess(res, file) {
-      this.$set(this.form, "avatar", res.url);
+      this.$set(this.form, 'avatar', res.url)
     }
   },
   mounted() {
-    let temp = JSON.parse(JSON.stringify(this.$store.state.userInfo));
-    this.form = temp;
+    let temp = JSON.parse(JSON.stringify(this.$store.state.userInfo))
+    this.form = temp
   }
-};
+}
 </script>

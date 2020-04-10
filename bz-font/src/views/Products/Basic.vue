@@ -1,6 +1,7 @@
 <template>
   <div class="basic">
-    <Title :title="title">
+    <Title :title="title" style="min-height:600px">
+      <Spin fix v-if="loading"></Spin>
       <div
         :id="`item-${index}`"
         class="basic-item"
@@ -8,7 +9,7 @@
         :key="item.id"
         :style="`background-color:${item.backgroundColor}`"
       >
-        <div class="content" :style="`background-image:url(${item.cover})`">
+        <div class="content" :class="{'bg-visible':item.content}" :style="`background-image:url(${item.cover})`">
           <div :class="{'content-only':item.content}">
             <h1>{{item.title}}</h1>
             <p v-if="item.content">{{item.content}}</p>
@@ -23,6 +24,7 @@
                 <p>{{sub.description}}</p>
               </li>
             </ul>
+            <img v-if="!item.content" :src="item.cover" alt="">
           </div>
         </div>
       </div>
@@ -30,66 +32,70 @@
   </div>
 </template>
 <script>
-import { getProductList } from '../../api/'
+import { getProductList } from "../../api/";
 export default {
-  name: 'Basic',
+  name: "Basic",
   data() {
     return {
+      loading:false,
       list: []
-    }
+    };
   },
   watch: {
-    '$route.query.activeId'(val) {
-      if(val){
-      this.scrollIntoView(`item-${val}`)
+    "$route.query.activeId"(val) {
+      if (val) {
+        this.scrollIntoView(`item-${val}`);
       }
     }
   },
   computed: {
     type() {
-      return this.$route.params.type
+      return this.$route.params.type;
     },
     title() {
       if (this.$store.state.productMenu.length) {
-        return this.$store.state.productMenu[this.type - 1]
+        return this.$store.state.productMenu[this.type - 1];
       } else {
-        return {}
+        return {};
       }
     }
   },
   methods: {
     scrollIntoView(id) {
-      document.getElementById(id).scrollIntoView()
+      document.getElementById(id).scrollIntoView();
     },
     isWhiteBg(color) {
       return (
-        color.toLowerCase() === '#fff' || color.toLowerCase() === '#ffffff'
-      )
+        color.toLowerCase() === "#fff" || color.toLowerCase() === "#ffffff"
+      );
     },
     getData() {
+      this.loading=true
       getProductList({
         type: this.type,
         rows: 99
       }).then(res => {
         if (res.status) {
-          this.list = res.data.rows
+          this.loading=false
+          this.list = res.data.rows;
           this.$nextTick(() => {
             if (this.$route.query.activeId) {
-              this.scrollIntoView(`item-${this.$route.query.activeId}`)
+              this.scrollIntoView(`item-${this.$route.query.activeId}`);
             }
-          })
+          });
         }
-      })
+      });
     }
   },
   mounted() {
-    this.getData()
+    this.getData();
   }
-}
+};
 </script>
 <style lang="less" scoped>
 .basic-item {
-  min-width: 1180px;
+
+  position: relative;
   .content {
     h1,
     ul li h2 {
@@ -108,6 +114,7 @@ export default {
 }
 @media screen and (min-width: 641px) {
   .basic-item {
+      min-width: 1180px;
     overflow: hidden;
     .content {
       position: relative;
@@ -134,10 +141,15 @@ export default {
         padding-left: 50px;
         line-height: 120px;
       }
+      >div>img{
+        display: none;
+      }
       ul {
         display: flex;
         padding: 0 20px;
         li {
+          position: relative;
+          border-radius: 3px;
           width: 18%;
           margin-right: 2%;
           min-height: 250px;
@@ -185,5 +197,106 @@ export default {
   }
 }
 @media screen and (max-width: 640px) {
+  .basic-item {
+    width: 100%;
+    min-width: auto;
+    .content {
+         background-size: 50%;
+      background-repeat: no-repeat;
+       background-position: 115% 85%;
+      min-height: 250px;
+      overflow: auto;
+      padding-bottom: 20px;
+      h1 {
+        font-size: 16px;
+  
+        padding-left: 20px;
+        line-height: 70px;
+      }
+      &:not(.bg-visible){
+        background-image: initial!important;
+      }
+      >div>img{
+        display: block;
+        float:right;
+            width: 50%;
+            margin-top: -35px;
+          }
+        ul {
+          margin-left: 15px;
+          margin-right: 15px;
+        li {
+          border-radius: 3px;
+          width: 100%;
+          padding: 10px 0;
+          margin-bottom: 15px;
+          span {
+            position: relative;
+           margin-bottom: -30px;
+            display: block;
+            width: 100%;
+            height: 25px;
+            background-position: 95%;
+            background-repeat: no-repeat;
+            background-size: auto 100%;
+            &:after {
+              content: "";
+              position: absolute;
+              right: 0;
+              display: block;
+              width: 2px;
+              height: 25px;
+              background-color: #0ccada;
+            }
+          }
+          p {
+            padding: 0 15px;
+            letter-spacing: 1px;
+            color: #858585;
+          }
+          h2 {
+                  font-weight: 500;
+            padding: 0 15px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+          }
+        }
+      }
+      .content-only{
+        p{
+          width: 60%;
+          padding: 0 20px;
+             color: #858585;
+        }
+      }
+    }
+  }
+  .basic-item:nth-child(odd) .content {
+    background-position: -15% 85%;
+    >div:not(.content-only){
+      margin-top: 60%;
+      >img{
+      margin-top: 10%;
+        display: block;
+        position: absolute;
+        top: 0;
+      }
+      >h1{    width: 50%;
+    position: absolute;
+    right: 0;
+    top: 20%;}
+
+    }
+    .content-only{
+      >h1{
+        width: 60%;
+         float: right;
+      }
+      >p{
+        float: right;
+      }
+    }
+  }
 }
 </style>

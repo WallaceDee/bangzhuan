@@ -13,5 +13,6 @@ module.exports = {
   updateUserInfo:'UPDATE bz_user SET nickname={{nickname}},avatar={{avatar}},job={{job}},gender={{gender}},email={{email}},isSubscribe={{isSubscribe}} WHERE id={{id}}',
   getUserByUserName: 'SELECT username FROM bz_user WHERE username={{username}}',
   insert:'INSERT INTO bz_user(username,password,nickname) VALUES({{username}},{{password}},{{nickname}})',
-  updatePassword:'UPDATE bz_user SET password={{password}} WHERE id={{id}}'
+  updatePassword:'UPDATE bz_user SET password={{password}} WHERE id={{userId}}',
+  validatePassword:'SELECT username FROM bz_user WHERE id={{userId}} AND password={{password}}'
 }

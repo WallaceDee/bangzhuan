@@ -1,5 +1,6 @@
 <template>
   <Title :title="{label:'专利情报',subTitle:'NEWS'}">
+    <Spin fix v-if="loading"></Spin>  
     <div class="content">
       <div class="top">
         <div class="latest" @click="go2Detail(latest.id)">
@@ -18,7 +19,7 @@
         </div>
       </div>
       <ul>
-        <li v-for="item in list" @click="go2Detail(item.id)">
+        <li v-for="(item,index) in list" @click="go2Detail(item.id)" v-if="index">
           <span :style="`background-image:url(${item.cover})`"></span>
           <div class="info">
             <div>
@@ -31,8 +32,9 @@
           </div>
         </li>
       </ul>
+      <Button v-if="!allLoaded" class="more-btn" @click.native="loadMore">点击加载更多</button>
     </div>
-    <Page :total="total" size="small" @on-change="onPageChange"></Page>
+    <Page :total="total" :current="page" size="small" @on-change="onPageChange"></Page>
   </Title>
 </template>
     <script>
@@ -42,10 +44,12 @@ export default {
   name: 'List',
   data() {
     return {
+      loading:false,
       page: 1,
       pageSize: 10,
       list: [],
-      total: 0
+      total: 0,
+      allLoaded:false
     }
   },
   computed: {
@@ -61,6 +65,10 @@ export default {
     }
   },
   methods: {
+    loadMore(){
+      this.page++
+      this.getData(1)
+    },
     go2Detail(id) {
       this.$router.push({
         name: 'NewsDetail',
@@ -74,14 +82,26 @@ export default {
       this.getData()
     },
     getDate,
-    getData() {
+    getData(type) {
+      this.loading=true
       getNewsList({
         page: this.page,
         rows: this.pageSize
       }).then(res => {
         if (res.status) {
-          this.list = res.data.rows
-          this.total = res.data.total
+          this.loading=false
+            if(!res.data.rows.length){
+             this.allLoaded=true
+           }else{
+               this.total = res.data.total
+                if(type){
+                this.list = this.list.concat(res.data.rows)
+                this.allLoaded=this.list.length>=this.total
+                }else{
+                  this.list = res.data.rows
+                   document.getElementById('title').scrollIntoView()
+                }
+          }
         }
       })
     }
@@ -185,6 +205,9 @@ export default {
   }
 }
 @media screen and (min-width: 641px) {
+  .more-btn{
+    display: none;
+  }
   .ivu-page {
     position: absolute;
     margin-left: 50%;
@@ -347,6 +370,10 @@ export default {
   }
 }
 @media screen and (max-width: 640px) {
+  .more-btn{
+    margin: 15px auto;
+    display: block;
+  }
   .ivu-page {
       display: none;
     }

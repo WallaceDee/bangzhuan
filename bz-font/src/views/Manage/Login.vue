@@ -39,8 +39,6 @@ import { login } from '@/api/manage/'
             }).then(res => {
               if(res.status){
                 localStorage.setItem('token',res.data.token)
-                localStorage.setItem('rawUserInfo',JSON.stringify(res.data))
-                this.$store.commit('setUserInfo',res.data)
                 this.$router.replace({
                   name:'Workbench'
                 })
@@ -55,13 +53,16 @@ import { login } from '@/api/manage/'
       }
     }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .login{
  background:#eee;height:100%;
  overflow: hidden;
-}
-.ivu-card{
+ .ivu-card{
   width: 500px;
   margin: 100px auto;
+}
+}
+#app{
+  height: 100vh;
 }
 </style>

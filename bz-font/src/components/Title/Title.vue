@@ -1,6 +1,6 @@
 <template>
 <div class="title-index">
-  <div class="title">
+  <div class="title" id="title">
     <h2>{{title.subTitle}}</h2>
   <h1>{{title.label}}</h1>
   </div>
@@ -20,6 +20,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .title-index{
+  position: relative;
 .title{
   width: 100%;
    color: #c9c9c9;

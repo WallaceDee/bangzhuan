@@ -1,5 +1,6 @@
 <template>
   <Title :title="{label:'专利情报',subTitle:'NEWS'}">
+    <Spin fix v-if="loading"></Spin>
     <div class="news-detail">
       <div class="content">
       <div class="left">
@@ -22,6 +23,7 @@ export default{
   name:'NewsDetail',
   data(){
     return {
+      loading:false,
       data:{}
     }
   },
@@ -33,11 +35,13 @@ export default{
   methods:{
     getDate,
     getData(){
+      this.loading=true
       getNewsDetail({
         id:this.id
       }).then(res => {
         if(res.status){
           this.data=res.data
+            this.loading=false
         }
       })
     }

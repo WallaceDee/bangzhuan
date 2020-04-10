@@ -9,5 +9,6 @@ router.post('/login',userDao.login)
 router.get('/getUserInfo',util.ensureAuthorized,userDao.getUserInfoById)
 router.post('/updateUserInfo',util.ensureAuthorized,userDao.updateUserInfo)
 router.get('/getUserAvailable',util.ensureAuthorized,userDao.getUserAvailable)
+router.post('/updatePassword',util.ensureAuthorized,userDao.updatePassword)
 
 module.exports = router
