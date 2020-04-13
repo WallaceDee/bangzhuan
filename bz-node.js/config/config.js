@@ -1,6 +1,6 @@
 module.exports = {
-  baseUrl: 'http://bangzhuan.chenguohua.com.cn/',
-  manageBaseUrl: 'http://manage.chenguohua.com.cn/',
+  baseUrl: 'http://localhost',
+  manageBaseUrl: 'http://manage.chenguohua.com.cn',
   HOMEPAGE_PREFIX: 'http://www.chenguohua.com.cn',
   WEIBO_CONSUMER_KEY: '4197904860',
   WEIBO_CONSUMER_SECRET: '44d250f22cc7cf9930c57ad316ae4eeb',

@@ -27,5 +27,27 @@ module.exports = {
         }).catch(error => {
             print.error(res, error)
         })
+    },
+    setImagesSortList: (req, res) => {
+        query($sql.updateImagesSortList,req.body).then(result => {
+            print.success(res,{message:'修改成功'})
+        }).catch(error => {
+            print.error(res, error)
+        })
+    },
+    getImagesSortList: (req, res) => {
+        query($sql.getImagesSortList,req.query).then(result => {
+            let list=[]
+            if(result[0].images.length){
+            result[0].images.split(',').map(url=>{
+                list.push({
+                    url
+                })
+            })
+        }
+            print.success(res,list)
+        }).catch(error => {
+            print.error(res, error)
+        })
     }
 }

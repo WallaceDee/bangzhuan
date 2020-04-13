@@ -51,6 +51,14 @@ router.use("/", ueditor(path.join(__dirname, '../../public'), function(req, res,
         var dir_url = '/upload/file'; // 要展示给客户端的文件夹路径
         res.ue_list(dir_url) // 客户端会列出 dir_url 目录下的所有图片
     }
+        //  客户端发起图片列表请求
+    else if (req.query.action === 'deletefile') {
+        let fileUrl = ''
+        if (req.query.path) {
+            fileUrl = req.query.path;
+        }
+        res.ue_delete(fileUrl) // 客户端会列出 dir_url 目录下的所有图片
+    }
     // 客户端发起其它请求
     else {
         res.setHeader('Content-Type', 'application/json');
