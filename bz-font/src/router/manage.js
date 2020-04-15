@@ -88,6 +88,20 @@ const routes = [
         title: '用户信息'
       },
       component: resolve => require(['@/views/Manage/UserInfo'], resolve)
+    },{
+      path: 'Partner',
+      name: 'Partner',
+      meta: {
+        title: '合作伙伴'
+      },
+      component: resolve => require(['@/views/Manage/Partner'], resolve)
+    },{
+      path: 'Flag',
+      name: 'Flag',
+      meta: {
+        title: '国旗'
+      },
+      component: resolve => require(['@/views/Manage/Flag'], resolve)
     }]
   }
 ]

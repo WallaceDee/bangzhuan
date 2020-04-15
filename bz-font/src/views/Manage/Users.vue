@@ -9,21 +9,17 @@
     <Button type="primary" @click="openModal">新建用户</Button>
     <Divider />
     <Table :row-class-name="rowClassName" :columns="columns" :data="data" :loading="loading" stripe></Table>
-      <Modal
-        title="新建用户"
-        v-model="modalVisible"
-        @on-ok="onModalOkClick"
-      >
+    <Modal title="新建用户" v-model="modalVisible" @on-ok="onModalOkClick">
       <Form :model="form" :rules="rules" ref="form">
-         <FormItem prop="username" label="用户名">
-             <Input v-model="form.username"></Input>
-         </FormItem>
+        <FormItem prop="username" label="用户名">
+          <Input v-model="form.username"></Input>
+        </FormItem>
       </Form>
     </Modal>
   </div>
 </template>
 <script>
-import { userList,getUserAvailable,createUser } from '@/api/manage/'
+import { userList, getUserAvailable, createUser } from '@/api/manage/'
 export default {
   name: 'Users',
   data() {
@@ -31,21 +27,21 @@ export default {
       if (!value) {
         return callback(new Error('请输入用户名'))
       }
-     getUserAvailable({
-       username:value
-     }).then(res => {
-        if(res.status&&!res.data.exist){
-           return callback()
-        }else{
-           return callback(new Error('该用户已存在'))
+      getUserAvailable({
+        username: value
+      }).then(res => {
+        if (res.status && !res.data.exist) {
+          return callback()
+        } else {
+          return callback(new Error('该用户已存在'))
         }
-     })
+      })
     }
     return {
-      form:{
-        username:''
+      form: {
+        username: ''
       },
-      modalVisible:false,
+      modalVisible: false,
       rules: {
         username: [{ validator: validateUsername, trigger: 'blur' }]
       },
@@ -115,11 +111,11 @@ export default {
     this.getData()
   },
   methods: {
-    onModalOkClick(){
+    onModalOkClick() {
       createUser(this.form)
     },
     openModal() {
-      this.modalVisible=true
+      this.modalVisible = true
     },
     rowClassName(row, index) {
       if (row.isSubscribe === 1) {

@@ -1,9 +1,9 @@
 <template>
   <div class="news">
     <div class="banner"></div>
-        <keep-alive>
-         <router-view />
-             </keep-alive>
+    <keep-alive>
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 <style lang="less" scoped>
@@ -19,18 +19,19 @@
 @media screen and (min-width: 641px) {
   .news {
     padding-bottom: 100px;
-    overflow: auto;
+    overflow: hidden;
     min-width: 1180px;
     .banner {
       min-width: 1180px;
       height: 500px;
-    }}
     }
-    @media screen and (max-width: 640px) {
-.news{
-  .banner{
-    height: 200px;
   }
 }
+@media screen and (max-width: 640px) {
+  .news {
+    .banner {
+      height: 200px;
+    }
+  }
 }
 </style>

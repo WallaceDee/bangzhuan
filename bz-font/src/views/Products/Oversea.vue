@@ -28,37 +28,37 @@
   </div>
 </template>
 <script>
-import { getProductList } from "../../api/";
+import { getProductList } from '../../api/'
 export default {
-  name: "Oversea",
+  name: 'Oversea',
   data() {
     return {
       loading:false,
       list: []
-    };
+    }
   },
   watch: {
-    "$route.query.activeId"(val) {
-      if (val) {
-        this.scrollIntoView(`item-${val}`);
-      }
+    '$route.query.activeId'(val) {
+        this.scrollIntoView(`item-${val}`)
     }
   },
   computed: {
     type() {
-      return this.$route.params.type;
+      return this.$route.params.type
     },
     title() {
       if (this.$store.state.productMenu.length) {
-        return this.$store.state.productMenu[this.type - 1];
+        return this.$store.state.productMenu[this.type - 1]
       } else {
-        return {};
+        return {}
       }
     }
   },
   methods: {
     scrollIntoView(id) {
-      document.getElementById(id).scrollIntoView();
+      if(document.getElementById(id)){
+        document.getElementById(id).scrollIntoView()
+      }
     },
     getData() {
       this.loading=true
@@ -68,20 +68,22 @@ export default {
       }).then(res => {
         if (res.status) {
            this.loading=false
-          this.list = res.data.rows;
+          this.list = res.data.rows
           this.$nextTick(() => {
-            if (this.$route.query.activeId) {
-              this.scrollIntoView(`item-${this.$route.query.activeId}`);
+           if (this.$route.query.activeId!==undefined) {
+              this.scrollIntoView(`item-${this.$route.query.activeId}`)
+            }else{
+              document.scrollingElement.scrollTop = 0
             }
-          });
+          })
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getData();
+    this.getData()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .oversea-item {
@@ -193,7 +195,7 @@ export default {
           height: 35px;line-height: 35px;
           padding-left: 20px;
         }
-        
+
       }
             > div:nth-child(2) {
               padding:  20px;

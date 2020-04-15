@@ -77,3 +77,11 @@ export const getConsult = (data) => {
       method: 'post'
   })
 }
+
+export const getImagesSortList= (params) => {
+  return axios.request({
+    params,
+      url: '/setting/images',
+      method: 'get'
+  })
+}

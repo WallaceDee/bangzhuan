@@ -18,7 +18,7 @@
             :format="['jpg','jpeg','png','svg']"
             :max-size="2048"
             type="drag"
-            action="api/ue?action=uploadimage&path=upload/cases"
+            :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/cases`"
             :on-success="handleSuccess"
             style="display: inline-block;width:200px;"
           >
@@ -62,285 +62,286 @@ import {
   deleteCases,
   setCasesEnable,
   setCasesUpdateTime
-} from "@/api/manage/";
-import { getDate } from "@/libs/tools.js";
+} from '@/api/manage/'
+import { getDate } from '@/libs/tools.js'
 export default {
-  name: "Cases",
+  name: 'Cases',
   data() {
     return {
       loading:true,
       form: {
-        cover: "",
-        title: "",
-        subTitle: "",
-        content: "",
+        cover: '',
+        title: '',
+        subTitle: '',
+        content: '',
         enable: 1
       },
       rules: {
-        cover: [{ required: true, message: "请上传图片", trigger: "blur" }],
-        title: [{ required: true, message: "请上输入标题", trigger: "blur" }],
-        content: [{ required: true, message: "请输入内容", trigger: "blur" }]
+        cover: [{ required: true, message: '请上传图片', trigger: 'blur' }],
+        title: [{ required: true, message: '请上输入标题', trigger: 'blur' }],
+        content: [{ required: true, message: '请输入内容', trigger: 'blur' }]
       },
       popupMode: 0,
       popupVisible: false,
       columns: [
         {
-          title: "序号",
-          type: "index",
+          title: '序号',
+          type: 'index',
           width: 80,
-          align: "center"
+          align: 'center'
         },
         {
-          title: "图片",
+          title: '图片',
           width: 150,
-          align: "center",
+          align: 'center',
           render: function(h, params) {
-            return h("img", {
+            return h('img', {
               style: {
-                display: "block",
-                padding: "10px"
+                display: 'block',
+                padding: '10px'
               },
               domProps: {
                 height: 90,
                 src: params.row.cover
               }
-            });
+            })
           }
         },
         {
-          title: "标题",
-          align: "center",
-          key: "title",
+          title: '标题',
+          align: 'center',
+          key: 'title',
           minWidth: 150
         },
         {
           minWidth: 150,
-          title: "小标题",
-          align: "center",
-          key: "subTitle"
+          title: '小标题',
+          align: 'center',
+          key: 'subTitle'
         },
         {
-          title: "状态",
-          align: "center",
-          key: "enable",
+          title: '状态',
+          align: 'center',
+          key: 'enable',
           width: 100,
           render: function(h, params) {
-            return h("span", params.row.enable ? "启用" : "禁用");
+            return h('span', params.row.enable ? '启用' : '禁用')
           }
         },
         {
-          title: "创建时间",
-          align: "center",
+          title: '创建时间',
+          align: 'center',
           width: 170,
-          key: "updateTime",
+          key: 'updateTime',
           render: function(h, params) {
-            return h("span", getDate(params.row.createTime, "yyyymmddhhmmss"));
+            return h('span', getDate(params.row.createTime, 'yyyymmddhhmmss'))
           }
         },
         {
-          title: "修改时间",
-          align: "center",
+          title: '修改时间',
+          align: 'center',
           width: 170,
-          key: "updateTime",
+          key: 'updateTime',
           render: function(h, params) {
-            return h("span", getDate(params.row.updateTime, "yyyymmddhhmmss"));
+            return h('span', getDate(params.row.updateTime, 'yyyymmddhhmmss'))
           }
         },
         {
-          title: "操作",
-          align: "center",
+          title: '操作',
+          align: 'center',
           width: 250,
           fixed:'right',
           render: (h, params) => {
             return [
               h(
-                "Poptip",
+                'Poptip',
                 {
                   props: {
-                    placement: "bottom",
+                    placement: 'bottom',
                     transfer: true,
                     confirm: true,
                     title: `您确认要${
-                      params.row.enable === 0 ? "启用" : "禁用"
+                      params.row.enable === 0 ? '启用' : '禁用'
                     }这个案例吗？`
                   },
                   on: {
-                    "on-ok": () => {
-                      this.setCasesEnable(params.row);
+                    'on-ok': () => {
+                      this.setCasesEnable(params.row)
                     }
                   }
                 },
                 [
                   h(
-                    "Button",
+                    'Button',
                     {
                       props: {
-                        size: "small"
+                        size: 'small'
                       }
                     },
-                    params.row.enable === 0 ? "启用" : "禁用"
+                    params.row.enable === 0 ? '启用' : '禁用'
                   )
                 ]
               ),
               h(
-                "Poptip",
+                'Poptip',
                 {
                   props: {
-                    placement: "bottom",
+                    placement: 'bottom',
                     transfer: true,
                     confirm: true,
                     title: `您确认要删除这个案例吗？`
                   },
                   on: {
-                    "on-ok": () => {
-                      this.deleteCases(params.row);
+                    'on-ok': () => {
+                      this.deleteCases(params.row)
                     }
                   }
                 },
                 [
                   h(
-                    "Button",
+                    'Button',
                     {
                       props: {
-                        size: "small"
+                        size: 'small'
                       }
                     },
-                    "删除"
+                    '删除'
                   )
                 ]
               ),
               h(
-                "Button",
+                'Button',
                 {
                   props: {
-                    size: "small"
+                    size: 'small'
                   },
                   on: {
                     click: () => {
-                      this.openUpdatePopup(params.row);
+                      this.openUpdatePopup(params.row)
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "Poptip",
+                'Poptip',
                 {
                   props: {
-                    placement: "bottom",
+                    placement: 'bottom',
                     transfer: true,
                     confirm: true,
                     title: `您确认要置顶这个案例吗？`
                   },
                   on: {
-                    "on-ok": () => {
-                      this.set2Top(params.row);
+                    'on-ok': () => {
+                      this.set2Top(params.row)
                     }
                   }
                 },
                 [
                   h(
-                    "Button",
+                    'Button',
                     {
                       props: {
-                        size: "small"
+                        size: 'small'
                       }
                     },
-                    "置顶"
+                    '置顶'
                   )
                 ]
               )
-            ];
+            ]
           }
         }
       ],
       data: []
-    };
+    }
   },
   computed: {
     drawerTitle() {
-      return `${this.popupMode ? "编辑" : "添加"}案例`;
+      return `${this.popupMode ? '编辑' : '添加'}案例`
     }
   },
   mounted() {
-    this.getData();
+    this.getData()
   },
   methods: {
     set2Top(banner) {
       setCasesUpdateTime(banner).then(res => {
         if (res.status) {
           this.$Notice.success({
-            title: "提示",
+            title: '提示',
             desc: res.data.message
-          });
-          this.getData();
+          })
+          this.getData()
         }
-      });
+      })
     },
     openCreatePopup() {
-      this.popupMode = 0;
+      this.popupMode = 0
       this.form = {
-        cover: "",
-        title: "",
-        subTitle: "",
-        content: "",
+        cover: '',
+        title: '',
+        subTitle: '',
+        content: '',
         enable: 1
-      };
-      this.$refs.form.resetFields();
-      this.handelPopupVisible(true);
+      }
+      this.$refs.form.resetFields()
+      this.handelPopupVisible(true)
     },
     openUpdatePopup(banner) {
-      this.popupMode = 1;
-      this.form = JSON.parse(JSON.stringify(banner));
-      this.handelPopupVisible(true);
+      this.popupMode = 1
+      this.form = JSON.parse(JSON.stringify(banner))
+      this.handelPopupVisible(true)
     },
     setCasesEnable(params) {
-      params.enable = !params.enable ? 1 : 0;
-      setCasesEnable(params);
+      params.enable = !params.enable ? 1 : 0
+      setCasesEnable(params)
     },
     deleteCases(data) {
       deleteCases(data).then(res => {
         if (res.status) {
+          this.getData()
           this.$Notice.success({
-            title: "提示",
+            title: '提示',
             desc: res.data.message
-          });
+          })
         }
-      });
+      })
     },
     doSumbit() {
       this.$refs.form.validate(valid => {
         if (valid) {
           publicCases(this.form).then(res => {
             if (res.status) {
-              this.handelPopupVisible(false);
-              this.getData();
+              this.handelPopupVisible(false)
+              this.getData()
               this.$Notice.success({
-                title: "提示",
+                title: '提示',
                 desc: res.data.message
-              });
+              })
             }
-          });
+          })
         }
-      });
+      })
     },
     handleSuccess(res, file) {
-      this.$set(this.form, "cover", res.url);
+      this.$set(this.form, 'cover', res.url)
     },
     handelPopupVisible(status) {
-      this.popupVisible = status;
+      this.popupVisible = status
     },
     getData() {
       this.loading=true
       getCasesList().then(res => {
         if (res.status) {
            this.loading=false
-          this.data = res.data;
+          this.data = res.data
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style>
 .drawer-footer {

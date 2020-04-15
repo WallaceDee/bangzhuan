@@ -17,7 +17,7 @@
                 {{item.title}}
                 <span>{{getDate(item.createTime,'mmdd','-')}}</span>
               </h3>
-              <p class="article" v-html="latest.content"></p>
+              <p class="article" v-html="item.content"></p>
             </li>
           </ul>
         </div>
@@ -45,7 +45,9 @@ export default {
       if (this.list.length) {
         return this.list[0]
       } else {
-        return {}
+        return {
+          content:''
+        }
       }
     }
   },
@@ -229,7 +231,7 @@ export default {
           margin-bottom: 10px;
         }
         p {
-          height: 42px;
+          height: 44px;
           position: relative;
           padding-left: 20px;
 
@@ -330,7 +332,7 @@ export default {
           margin-bottom: 10px;
         }
         p {
-          height: 42px;
+          height: 44px;
           position: relative;
           padding-left: 20px;
           &::before {
@@ -350,7 +352,7 @@ export default {
       li {
         padding: 15px 15px 15px 0;
         > p {
-          height: 42px;
+          height: 44px;
           padding-right: 50px;
           &:after {
             bottom: 10px;

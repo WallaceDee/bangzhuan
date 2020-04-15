@@ -214,7 +214,7 @@ export default {
 @media screen and (min-width: 641px) {
   .header {
     position: absolute;
-    z-index: 999999;
+    z-index: 999;
     top: 0;
     left: 0;
     width: 100%;
@@ -342,7 +342,7 @@ export default {
     position: fixed;
     width: 100%;
     min-width: auto;
-    z-index: 99999;
+    z-index: 999;
 
     &:after {
       position: absolute;

@@ -1,7 +1,7 @@
 <template>
   <div class="about-us">
     <div class="banner"></div>
-    <Title :title="{label:'认识帮专',subTitle:'OUR COMPANY'}">
+    <Title id="item-0" :title="{label:'认识帮专',subTitle:'OUR COMPANY'}">
       <div class="content">
         <p class="description" v-for="p in description.split('\n')">{{p}}</p>
         <ul class="data">
@@ -15,7 +15,7 @@
         </ul>
       </div>
     </Title>
-    <Title :title="{label:'专业团队',subTitle:'OUR TEAM'}">
+    <Title id="item-1" :title="{label:'专业团队',subTitle:'OUR TEAM'}">
       <div class="content team">
         <div class="member" v-for="item in mainMember">
           <div class="description" :style="`background-image:url(${item.photo})`">
@@ -116,6 +116,9 @@ export default {
     }
   },
   watch:{
+    '$route.query.activeId'(val){
+      this.scrollIntoView(`item-${val}`)
+    },
     '$store.state.width'(val){
       if(val>640){
         this.mainMember=this.list.filter(item => { return item.status })
@@ -145,6 +148,9 @@ export default {
     }
   },
   methods: {
+    scrollIntoView(id) {
+      document.getElementById(id).scrollIntoView()
+    },
     getData() {
       getTeamList({
         page: 1,
@@ -176,6 +182,9 @@ export default {
   },
   mounted() {
     this.getData()
+    if (this.$route.query.activeId!==undefined) {
+      this.scrollIntoView(`item-${this.$route.query.activeId}`)
+    }
   }
 }
 </script>

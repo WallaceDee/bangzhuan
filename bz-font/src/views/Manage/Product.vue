@@ -53,7 +53,7 @@
             :format="['jpg','jpeg','png','svg']"
             :max-size="2048"
             type="drag"
-            action="api/ue?action=uploadimage&path=upload/product"
+            :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/product`"
             :on-success="handleSuccess"
             style="display: inline-block;width:200px;"
           >
@@ -74,7 +74,7 @@
             :format="['jpg','jpeg','png','svg']"
             :max-size="2048"
             type="drag"
-            action="api/ue?action=uploadimage&path=upload/productIcon"
+           :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/productIcon`"
             :on-success="handleBgIconSuccess"
             style="display: inline-block;width:100px;"
           >
@@ -114,7 +114,7 @@
                   :format="['jpg','jpeg','png','svg']"
                   :max-size="2048"
                   type="drag"
-                  action="api/ue?action=uploadimage&path=upload/productIcon"
+                  :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/productIcon`"
                   :on-success="(res,file)=>{
               handleIconSuccess(res,file,index)
             }"
@@ -352,7 +352,7 @@ export default {
     setProduct2Top(id){
       setProduct2Top({
         id
-      }).then(res=>{
+      }).then(res => {
         if (res.status) {
             this.$Notice.success({
             title: '提示',
@@ -453,6 +453,7 @@ export default {
       this.$set(this.form, 'icon', res.url)
     },
     handleSearch(isRest) {
+      this.page=1
       if (isRest === true) {
         this.searchForm = this.searchRule = {
           title: '',

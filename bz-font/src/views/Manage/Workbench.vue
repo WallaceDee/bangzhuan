@@ -17,7 +17,7 @@
     </div>
     <div class="wrapper-container">
       <Row style="height:100%;">
-        <Col span="7" :sm="6" :md="5" :lg="4" :xl="3"  style="height:100%;overflow:auto;">
+        <Col span="7" :sm="6" :md="5" :lg="4" :xl="3" style="height:100%;overflow:auto;">
           <Menu width="auto" :active-name="activeName" @on-select="onSelect" style="height:100%;">
             <MenuGroup title="基础设置">
               <MenuItem name="Setting">
@@ -46,6 +46,9 @@
               <MenuItem name="Product">
                 <Icon type="logo-codepen" />产品与服务
               </MenuItem>
+                      <MenuItem name="Partner">
+              <Icon type="ios-people" />合作伙伴
+              </MenuItem>
             </MenuGroup>
           </Menu>
         </Col>
@@ -64,47 +67,47 @@
   </div>
 </template>
 <script>
-import { getUserInfo } from "../../api/manage/";
+import { getUserInfo } from '../../api/manage/'
 export default {
-  name: "Workbench",
+  name: 'Workbench',
   data() {
-    return {};
+    return {}
   },
   methods: {
     onDropdownClick(name) {
-      if (name === "exit") {
-        localStorage.removeItem("token");
+      if (name === 'exit') {
+        localStorage.removeItem('token')
         this.$router.push({
-          name: "Login"
-        });
+          name: 'Login'
+        })
       } else {
         this.$router.push({
           name
-        });
+        })
       }
     },
     getUserInfo() {
       getUserInfo().then(res => {
         if (res.status) {
-          this.$store.commit("setUserInfo", res.data);
+          this.$store.commit('setUserInfo', res.data)
         }
-      });
+      })
     },
     onSelect(name) {
       this.$router.push({
         name
-      });
+      })
     }
   },
   computed: {
     activeName() {
-      return this.$route.name;
+      return this.$route.name
     }
   },
   mounted() {
-    this.getUserInfo();
+    this.getUserInfo()
   }
-};
+}
 </script>
 <style lang="less" >
 .ivu-breadcrumb {

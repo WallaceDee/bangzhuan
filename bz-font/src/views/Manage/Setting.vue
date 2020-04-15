@@ -51,7 +51,7 @@
           :format="['jpg','jpeg','png','svg']"
           :max-size="2048"
           type="drag"
-          action="api/ue?action=uploadimage&path=upload/qrCode"
+          :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/qrCode`"
           :on-success="(res, file)=>{
             handleSuccess(res, file,'wechatMiniProgramQrCode')
           }"
@@ -75,7 +75,7 @@
           :format="['jpg','jpeg','png','svg']"
           :max-size="2048"
           type="drag"
-          action="api/ue?action=uploadimage&path=upload/qrCode"
+          :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/qrCode`"
           :on-success="(res, file)=>{
             handleSuccess(res, file,'wechatQrCode')
           }"
@@ -168,109 +168,109 @@
   </div>
 </template>
 <script>
-import { getSetting, updateSetting } from "@/api/manage/";
+import { getSetting, updateSetting } from '@/api/manage/'
 export default {
-  name: "Setting",
+  name: 'Setting',
   data() {
     return {
       rules: {
         copyright: [
-          { required: true, message: `Copyright不能为空`, trigger: "blur" }
+          { required: true, message: `Copyright不能为空`, trigger: 'blur' }
         ],
         description: [
-          { required: true, message: `认识帮专不能为空`, trigger: "blur" }
+          { required: true, message: `认识帮专不能为空`, trigger: 'blur' }
         ],
         serviceHours: [
-          { required: true, message: `服务时间不能为空`, trigger: "blur" }
+          { required: true, message: `服务时间不能为空`, trigger: 'blur' }
         ],
-        tel: [{ required: true, message: `联系电话不能为空`, trigger: "blur" }]
+        tel: [{ required: true, message: `联系电话不能为空`, trigger: 'blur' }]
       },
       loading: false,
       form: {
-        description: "",
-        name: "",
-        copyright: "",
-        tel: "",
+        description: '',
+        name: '',
+        copyright: '',
+        tel: '',
         linkItems: [],
         addressItems: [],
         dataItems: []
       }
-    };
+    }
   },
   methods: {
     getData() {
-      this.loading = true;
+      this.loading = true
       getSetting().then(res => {
         if (res.status) {
-          this.loading = false;
+          this.loading = false
           let temp = JSON.parse(
             JSON.stringify(Object.assign(this.form, res.data))
-          );
-          this.form = temp;
-          this.$set(this.form, "addressItems", temp.address);
-          this.$set(this.form, "dataItems", temp.data);
-          this.$set(this.form, "linkItems", temp.relatedLinks);
+          )
+          this.form = temp
+          this.$set(this.form, 'addressItems', temp.address)
+          this.$set(this.form, 'dataItems', temp.data)
+          this.$set(this.form, 'linkItems', temp.relatedLinks)
         }
-      });
+      })
     },
     handleSuccess(res, file, type) {
-      this.$set(this.form, type, res.url);
+      this.$set(this.form, type, res.url)
     },
     addLink() {
       this.form.linkItems.push({
-        protocol: "http://",
-        last: ".com",
-        value: "",
+        protocol: 'http://',
+        last: '.com',
+        value: '',
         index: this.form.linkItems.length
-      });
+      })
     },
     addAddress() {
       this.form.addressItems.push({
-        value: "",
+        value: '',
         index: this.form.addressItems.length
-      });
+      })
     },
     addData() {
       this.form.dataItems.push({
         number: 0,
-        unit: "",
-        description: "",
+        unit: '',
+        description: '',
         index: this.form.dataItems.length
-      });
+      })
     },
     removeData(index) {
-      this.form.dataItems.splice(index, 1);
+      this.form.dataItems.splice(index, 1)
     },
     removeLink(index) {
-      this.form.linkItems.splice(index, 1);
+      this.form.linkItems.splice(index, 1)
     },
     removeAddress(index) {
-      this.form.addressItems.splice(index, 1);
+      this.form.addressItems.splice(index, 1)
     },
     handleSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          let param = Object.assign({}, this.form);
-          param.address = JSON.stringify(param.addressItems);
-          delete param.addressItems;
-          param.relatedLinks = JSON.stringify(param.linkItems);
-          delete param.linkItems;
-          param.data = JSON.stringify(param.dataItems);
-          delete param.dataItems;
+          let param = Object.assign({}, this.form)
+          param.address = JSON.stringify(param.addressItems)
+          delete param.addressItems
+          param.relatedLinks = JSON.stringify(param.linkItems)
+          delete param.linkItems
+          param.data = JSON.stringify(param.dataItems)
+          delete param.dataItems
           updateSetting(param).then(res => {
             if (res.status) {
               this.$Notice.success({
-                title: "提示",
+                title: '提示',
                 desc: res.data.message
-              });
+              })
             }
-          });
+          })
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getData();
+    this.getData()
   }
-};
+}
 </script>

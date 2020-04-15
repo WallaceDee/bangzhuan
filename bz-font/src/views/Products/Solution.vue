@@ -27,60 +27,62 @@
   </div>
 </template>
 <script>
-import { getProductList } from "../../api/";
+import { getProductList } from '../../api/'
 export default {
-  name: "Solution",
+  name: 'Solution',
   data() {
     return {
       list: [],
       loading: false
-    };
+    }
   },
   watch: {
-    "$route.query.activeId"(val) {
-      if (val) {
-        this.scrollIntoView(`item-${val}`);
-      }
+    '$route.query.activeId'(val) {
+        this.scrollIntoView(`item-${val}`)
     }
   },
   computed: {
     type() {
-      return this.$route.params.type;
+      return this.$route.params.type
     },
     title() {
       if (this.$store.state.productMenu.length) {
-        return this.$store.state.productMenu[this.type - 1];
+        return this.$store.state.productMenu[this.type - 1]
       } else {
-        return {};
+        return {}
       }
     }
   },
   methods: {
     scrollIntoView(id) {
-      document.getElementById(id).scrollIntoView();
+      if(document.getElementById(id)){
+        document.getElementById(id).scrollIntoView()
+      }
     },
     getData() {
-      this.loading = true;
+      this.loading = true
       getProductList({
         type: this.type,
         rows: 99
       }).then(res => {
         if (res.status) {
-          this.loading = false;
-          this.list = res.data.rows;
+          this.loading = false
+          this.list = res.data.rows
           this.$nextTick(() => {
-            if (this.$route.query.activeId) {
-              this.scrollIntoView(`item-${this.$route.query.activeId}`);
+            if (this.$route.query.activeId !== undefined) {
+              this.scrollIntoView(`item-${this.$route.query.activeId}`)
+            } else {
+              document.scrollingElement.scrollTop = 0
             }
-          });
+          })
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getData();
+    this.getData()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .solution-item {
@@ -175,6 +177,7 @@ export default {
         }
       }
       > div:last-child {
+              transition: .2s all;
         width: 60%;
         float: right;
         height: 0;
@@ -202,6 +205,11 @@ export default {
               height: 24px;
             }
           }
+        }
+      }
+      &:hover{
+        >div:last-child{
+          background-size: 125%;
         }
       }
     }
@@ -291,15 +299,15 @@ export default {
       > div:first-child {
         padding: 20px;
         font-size: 14px;
-        h1{
+        h1 {
           font-size: 16px;
           margin-top: 5px;
           margin-bottom: 5px;
         }
-        p{
+        p {
           letter-spacing: 1px;
         }
-        img{
+        img {
           width: 15%;
         }
         .bg {

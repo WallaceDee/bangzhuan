@@ -32,42 +32,42 @@
   </div>
 </template>
 <script>
-import { getProductList } from "../../api/";
+import { getProductList } from '../../api/'
 export default {
-  name: "Basic",
+  name: 'Basic',
   data() {
     return {
       loading:false,
       list: []
-    };
+    }
   },
   watch: {
-    "$route.query.activeId"(val) {
-      if (val) {
-        this.scrollIntoView(`item-${val}`);
-      }
+    '$route.query.activeId'(val) {
+        this.scrollIntoView(`item-${val}`)
     }
   },
   computed: {
     type() {
-      return this.$route.params.type;
+      return this.$route.params.type
     },
     title() {
       if (this.$store.state.productMenu.length) {
-        return this.$store.state.productMenu[this.type - 1];
+        return this.$store.state.productMenu[this.type - 1]
       } else {
-        return {};
+        return {}
       }
     }
   },
   methods: {
-    scrollIntoView(id) {
-      document.getElementById(id).scrollIntoView();
+     scrollIntoView(id) {
+      if(document.getElementById(id)){
+        document.getElementById(id).scrollIntoView()
+      }
     },
     isWhiteBg(color) {
       return (
-        color.toLowerCase() === "#fff" || color.toLowerCase() === "#ffffff"
-      );
+        color.toLowerCase() === '#fff' || color.toLowerCase() === '#ffffff'
+      )
     },
     getData() {
       this.loading=true
@@ -77,20 +77,22 @@ export default {
       }).then(res => {
         if (res.status) {
           this.loading=false
-          this.list = res.data.rows;
+          this.list = res.data.rows
           this.$nextTick(() => {
-            if (this.$route.query.activeId) {
-              this.scrollIntoView(`item-${this.$route.query.activeId}`);
+           if (this.$route.query.activeId!==undefined) {
+              this.scrollIntoView(`item-${this.$route.query.activeId}`)
+            }else{
+              document.scrollingElement.scrollTop = 0
             }
-          });
+          })
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getData();
+    this.getData()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .basic-item {
@@ -209,7 +211,7 @@ export default {
       padding-bottom: 20px;
       h1 {
         font-size: 16px;
-  
+
         padding-left: 20px;
         line-height: 70px;
       }

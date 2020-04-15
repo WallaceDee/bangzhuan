@@ -35,7 +35,7 @@
             :format="['jpg','jpeg','png','svg']"
             :max-size="2048"
             type="drag"
-            action="api/ue?action=uploadimage&path=upload/team"
+             :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/team`"
             :on-success="handleSuccess"
             style="display: inline-block;width:192px;"
           >
@@ -67,7 +67,7 @@
           ></Input>
         </FormItem>
         <FormItem label="服务客户">
-          <div class="demo-upload-list" v-for="item in uploadList">
+          <div class="demo-upload-list" v-for="item in uploadList" :key="item.url">
             <template v-if="item.status === 'finished'">
               <img :src="item.url" />
               <div class="demo-upload-list-cover">
@@ -89,7 +89,7 @@
             :on-exceeded-size="handleMaxSize"
             :before-upload="handleBeforeUpload"
             type="drag"
-            action="api/ue?action=uploadimage&path=upload/team"
+           :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/team`"
             style="display: inline-block;width:120px;"
           >
             <div style="width: 120px;height:42.5px;line-height:15px;">
@@ -287,7 +287,7 @@ export default {
     setMember2Top(id){
       setMember2Top({
         id
-      }).then(res=>{
+      }).then(res => {
         if (res.status) {
             this.$Notice.success({
             title: '提示',

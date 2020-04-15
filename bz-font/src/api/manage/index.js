@@ -276,3 +276,33 @@ export const setProduct2Top = (data) => {
         method: 'post'
     })
 }
+
+export const deleteFile = (params) => {
+    return axios.request({
+        params,
+        url: '/ue?action=deletefile',
+        method: 'get'
+    })
+  }
+
+export const getImages = (params) => {
+    return axios.request({
+      params,
+        url: '/ue?action=listimage&start=0&size=9999',
+        method: 'get'
+    })
+  }
+  export const setImagesSortList= (data) => {
+    return axios.request({
+        data,
+        url: '/setting/images',
+        method: 'post'
+    })
+  }
+  export const getImagesSortList= (params) => {
+    return axios.request({
+      params,
+        url: '/setting/images',
+        method: 'get'
+    })
+  }

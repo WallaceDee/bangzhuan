@@ -4,6 +4,7 @@ import BzFooter from './BzFooter/'
 import Block from './Block/'
 import Arrow from './Arrow/'
 import Title from './Title/'
+import Previewer from './Previewer/'
 import '../assets/less/theme.less'
 export default {
   install(Vue) {
@@ -24,6 +25,7 @@ export default {
     Vue.component('Card', Card)
     Vue.component('Input', Input)
     Vue.component('Spin', Spin)
+    Vue.component('Previewer', Previewer)
     Vue.prototype.$Modal = Modal
   }
 }

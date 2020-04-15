@@ -16,7 +16,7 @@
           :format="['jpg','jpeg','png','svg']"
           :max-size="2048"
           type="drag"
-          action="api/ue?action=uploadimage&path=upload/avatar"
+          :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/avatar`"
           :on-success="(res, file)=>{
             handleSuccess(res, file)
           }"
@@ -48,7 +48,7 @@
           </Radio>
         </RadioGroup>
       </FormItem>
-            <FormItem>
+      <FormItem>
         <Button type="primary" @click="modalVisible=true">修改密码</Button>
       </FormItem>
       <FormItem>
@@ -67,21 +67,21 @@
         <FormItem prop="newPasswordCheck" label="确认密码">
           <Input v-model="passwordForm.newPasswordCheck" type="password"></Input>
         </FormItem>
-           <FormItem >
-              <Button @click.native="onModalOkClick">修改</Button>
+        <FormItem>
+          <Button @click.native="onModalOkClick">修改</Button>
         </FormItem>
       </Form>
     </Modal>
   </div>
 </template>
 <script>
-import { updateUserInfo,updatePassword } from '../../api/manage/'
+import { updateUserInfo, updatePassword } from '../../api/manage/'
 import md5 from 'js-md5'
 export default {
   name: 'UserInfo',
   data() {
     const validatePass = (rule, value, callback) => {
-            if (value.length<6) {
+      if (value.length < 6) {
         callback(new Error('长度必须大于等于6位'))
       } else {
         if (this.passwordForm.newPasswordCheck !== '') {
@@ -89,25 +89,33 @@ export default {
           this.$refs.passwordForm.validateField('newPasswordCheck')
         }
         callback()
-        }
+      }
     }
     const validatePassCheck = (rule, value, callback) => {
-     if (value !== this.passwordForm.newPassword) {
+      if (value !== this.passwordForm.newPassword) {
         callback(new Error('两次密码不一致!'))
       } else {
         callback()
       }
     }
     return {
-      loading:true,
+      loading: true,
       passwordRules: {
-        password: [{ required: true, message: '请输入当前用户密码', trigger: 'blur' }],
-        newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' },{ validator: validatePass, trigger: 'blur' }],
-        newPasswordCheck: [{ required: true, message: '请再输入新密码', trigger: 'blur' },{ validator: validatePassCheck, trigger: 'blur' }]
+        password: [
+          { required: true, message: '请输入当前用户密码', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        newPasswordCheck: [
+          { required: true, message: '请再输入新密码', trigger: 'blur' },
+          { validator: validatePassCheck, trigger: 'blur' }
+        ]
       },
       passwordForm: {
         password: '',
-        newPassword:'',
+        newPassword: '',
         newPasswordCheck: ''
       },
       modalVisible: false,
@@ -128,16 +136,20 @@ export default {
     }
   },
   methods: {
-    onModalOkClick(){
+    onModalOkClick() {
       this.$refs.passwordForm.validate(valid => {
-        if(valid){
-          console.log({
-            old:md5('bz'+this.passwordForm.password),
-            new:md5('bz'+this.passwordForm.newPassword)
-          })
+        if (valid) {
           updatePassword({
-            old:md5('bz'+this.passwordForm.password),
-            new:md5('bz'+this.passwordForm.newPassword)
+            old: md5('bz' + this.passwordForm.password),
+            new: md5('bz' + this.passwordForm.newPassword)
+          }).then(res => {
+            this.modalVisible = false
+            if (res.status) {
+              this.$Notice.success({
+                title: '提示',
+                desc: res.data.message
+              })
+            }
           })
         }
       })
@@ -145,6 +157,10 @@ export default {
     handleSubmit() {
       updateUserInfo(this.form).then(res => {
         if (res.status) {
+          this.$Notice.success({
+            title: '提示',
+            desc: res.data.message
+          })
           this.$store.commit('setUserInfo', res.data.userInfo)
         }
       })

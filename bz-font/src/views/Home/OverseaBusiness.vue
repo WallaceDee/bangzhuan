@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import { getImages } from '../../api/'
+import { getImagesSortList } from '../../api/'
 export default {
   name: 'OverseaBusiness',
   data() {
@@ -44,10 +44,10 @@ export default {
   },
   methods: {
     getImages() {
-      getImages({
-        path: '/images/flag'
+      getImagesSortList({
+        name: 'flag'
       }).then(res => {
-        this.list = res.list
+        this.list = res.data
       })
     }
   },

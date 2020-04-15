@@ -8,7 +8,7 @@
           <div class="info">
             <h2>{{getDate(latest.createTime,'mmdd','-')}}</h2>
             <h1>{{latest.title}}</h1>
-            <p class="article" v-html="latest.content"></p>
+            <p class="article" v-html="latest.content.replace(/style/ig,'data-style')"></p>
           </div>
         </div>
         <div class="qr-code">
@@ -24,7 +24,7 @@
           <div class="info">
             <div>
               <h1>{{item.title}}</h1>
-              <p class="article" v-html="item.content"></p>
+              <p class="article" v-html="item.content.replace(/style/ig,'data-style')"></p>
             </div>
             <div>
               <span>{{getDate(item.createTime,'mmdd','-')}}</span>
@@ -60,7 +60,9 @@ export default {
       if (this.list.length) {
         return this.list[0]
       } else {
-        return {}
+        return {
+          content:''
+        }
       }
     }
   },
@@ -113,7 +115,10 @@ export default {
 </script>
 <style lang="less">
  .article {
-    line-height: 21px;
+   >*{
+     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;
+     background: transparent!important;}
+    line-height: 22px;
     font-weight: normal !important;
     color: #858585 !important;
     font-size: 14px !important;
@@ -135,9 +140,11 @@ export default {
 </style>
 <style lang="less" scoped>
 .content {
+  overflow: auto;
   > ul {
     list-style: none;
     li {
+      border-radius: 3px;
       background-color: #fff;
       > span {
         display: block;
@@ -149,11 +156,19 @@ export default {
         float: left;
         h1 {
           color: #202020;
+                        white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
         }
         > div {
           float: left;
           p {
             overflow: hidden;
+                text-overflow: ellipsis;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    position: relative;
           }
           &:last-child {
             > span {
@@ -179,6 +194,7 @@ export default {
             float: right;
             h1 {
               text-align: right;
+
             }
             &:last-child {
               > span {
@@ -191,6 +207,7 @@ export default {
     }
   }
   .latest {
+    border-radius: 3px;
     .info {
       &::after {
         position: absolute;
@@ -200,6 +217,18 @@ export default {
         content: "→MORE";
         text-align: right;
         color: #858585;
+      }
+      h1{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      p.article{
+                        text-overflow: ellipsis;
+    -webkit-line-clamp:8;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    position: relative;
       }
     }
   }
@@ -268,8 +297,18 @@ export default {
             line-height: 24px;
           }
         }
+        &:hover{
+          box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+          h1{
+            color: @mainColor;
+          }
+          .info::after{
+           color: @mainColor;
+          }
+        }
       }
       .qr-code {
+        border-radius: 3px;
         width: 290px;
         flex-shrink: 0;
         padding: 50px 60px 30px 60px;
@@ -324,7 +363,7 @@ export default {
             p {
               height: 100px;
               overflow: hidden;
-              line-height: 24px;
+              line-height: 24px; 
             }
             &:last-child {
               width: 35%;
@@ -335,6 +374,7 @@ export default {
                 padding-right: 20px;
                 color: #858585;
                 &:after {
+                  transition: .5s all;
                   display: block;
                   content: "→";
                   line-height: 100px;
@@ -364,6 +404,17 @@ export default {
               }
             }
           }
+        }
+        &:hover{
+          box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+          h1{
+            color: @mainColor;
+          }
+           .info > div:last-child > span:after {
+              color: @mainColor;
+              padding-right: 0;
+                     padding-left: 20px;
+           }
         }
       }
     }
@@ -423,6 +474,7 @@ export default {
           }
           p.article {
             height: 44px;
+                 -webkit-line-clamp: 2;
           }
         }
           &:nth-child(odd) {
@@ -469,6 +521,7 @@ export default {
           margin-bottom: 5px;
         }
         p.article {
+              -webkit-line-clamp:2;
           height: 50px;
           overflow: hidden;
           height: 44px;
