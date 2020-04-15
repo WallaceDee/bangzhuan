@@ -110,6 +110,10 @@ export default {
 }
 </script>
 <style lang="less" >
+.tips{
+      font-size: 12px;
+    color: #bdbdbd;
+}
 .ivu-breadcrumb {
   margin-top: 10px;
 }

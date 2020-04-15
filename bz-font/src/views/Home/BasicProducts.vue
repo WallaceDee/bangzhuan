@@ -2,7 +2,7 @@
     <Block :value="blockInfo">
       <div class="basic-products">
         <ul>
-          <li v-for="item in list" :key="item.id">
+          <li v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
             <span :style="`background-image:url(${item.icon})`"></span>
             <h3>{{item.label}}</h3>
             <pre>{{item.description}}</pre>
@@ -30,6 +30,19 @@ export default {
       }
     }
   },
+  methods:{
+    go2Product(index){
+      this.$router.push({
+        name:'Products',
+        params:{
+          type:'1'
+        },
+        query:{
+          activeId:index
+        }
+      })
+    }
+  },
   mounted() {}
 }
 </script>
@@ -44,6 +57,7 @@ export default {
 
   li {
     cursor: pointer;
+    border-radius:3px;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;

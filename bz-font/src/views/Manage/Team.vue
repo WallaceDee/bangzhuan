@@ -49,11 +49,11 @@
         </FormItem>
         <FormItem label="称谓" prop="title">
           <Input v-model="form.title"></Input>
-          <p>多个称谓用英文逗号 , 分隔</p>
+          <p class="tips">多个称谓用英文逗号 , 分隔</p>
         </FormItem>
         <FormItem label="教育背景" prop="education">
           <Input v-model="form.education"></Input>
-          <p>多个教育背景用英文逗号 , 分隔</p>
+          <p class="tips">多个教育背景用英文逗号 , 分隔</p>
         </FormItem>
         <FormItem label="从业年限" prop="years">
           <InputNumber :max="99" :min="0" v-model="form.years"></InputNumber>

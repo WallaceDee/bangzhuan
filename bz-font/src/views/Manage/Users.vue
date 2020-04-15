@@ -15,6 +15,7 @@
           <Input v-model="form.username"></Input>
         </FormItem>
       </Form>
+      <p class="tips">默认密码为123456</p>
     </Modal>
   </div>
 </template>

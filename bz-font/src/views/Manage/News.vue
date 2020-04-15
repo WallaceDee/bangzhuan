@@ -46,7 +46,7 @@
             <div style="width: 192px;height:90px;line-height: 90px;">
               <img v-if="form.cover" :src="form.cover" alt="封面图片" style="width:192px;" />
               <template v-else>
-                <Icon type="ios-image" size="20"></Icon>(size:1920px*900px)
+                <Icon type="ios-image" size="20"></Icon>
               </template>
             </div>
           </Upload>

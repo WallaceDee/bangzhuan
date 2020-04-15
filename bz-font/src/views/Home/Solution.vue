@@ -10,7 +10,7 @@
       </ul>
       <div class="swiper-container solution-swiper">
         <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(item,index) in list" :key="item.id">
+          <div class="swiper-slide" v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
             <span class="cover" :style=" `background-image:url(${item.cover})`"></span>
                <em></em>
             <transition name="fade">
@@ -29,7 +29,7 @@
         </div>
       </div>
       <ul class="solution-list">
-        <li v-for="(item,index) in list" :key="item.id">
+        <li v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
           <span class="cover" :style=" `background-image:url(${item.cover})`"></span>
           <div class="info" :style="`height:${height}px`">
             <img :src="item.icon" alt />
@@ -73,6 +73,17 @@ export default {
     }
   },
   methods: {
+        go2Product(index){
+      this.$router.push({
+        name:'Products',
+        params:{
+          type:'1'
+        },
+        query:{
+          activeId:index
+        }
+      })
+    },
     slideTo(index) {
       this.swiper.slideTo(index)
     },
@@ -179,6 +190,12 @@ export default {
         margin-top: 5px;
         margin-bottom: 10px;
       }
+      >p:after{
+          content:"→MORE";
+          display: block;
+          font-size: 12px;
+          margin-top: 5px;
+        }
       > p,
       h1 {
         position: relative;
