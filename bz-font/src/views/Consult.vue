@@ -39,32 +39,32 @@
   </div>
 </template>
 <script>
-import { getConsult } from "../api/";
+import { getConsult } from '../api/'
 export default {
-  name: "Consult",
+  name: 'Consult',
   data() {
     return {
       loading:false,
       success:false,
       form: {
-        name: "",
-        phone: "",
-        content: ""
+        name: '',
+        phone: '',
+        content: ''
       },
       formRule: {
-        name: { required: true, message: "请输入您的姓名", trigger: "blur" },
+        name: { required: true, message: '请输入您的姓名', trigger: 'blur' },
         phone: {
           required: true,
-          message: "请输入您的手机号码",
-          trigger: "blur"
+          message: '请输入您的手机号码',
+          trigger: 'blur'
         },
         content: {
           required: true,
-          message: "请输入您的要咨询的内容",
-          trigger: "blur"
+          message: '请输入您的要咨询的内容',
+          trigger: 'blur'
         }
       }
-    };
+    }
   },
   methods: {
     doSubmit() {
@@ -76,12 +76,12 @@ export default {
               this.success=true
               this.loading=false
             }
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style lang="less">
 .consult {

@@ -72,15 +72,15 @@
   </div>
 </template>
 <script>
-import draggable from "vuedraggable";
+import draggable from 'vuedraggable'
 import {
   getImages,
   setImagesSortList,
   getImagesSortList,
   deleteFile
-} from "../../api/manage/";
+} from '../../api/manage/'
 export default {
-  name: "Partner",
+  name: 'Partner',
   components: {
     draggable
   },
@@ -91,30 +91,30 @@ export default {
       result: [],
       pool: [],
       loading:false
-    };
+    }
   },
   computed: {
     resultStr() {
-      let temp = [];
+      let temp = []
       this.result.map(item => {
-        temp.push(item.url);
-      });
-      return temp.join(",");
+        temp.push(item.url)
+      })
+      return temp.join(',')
     },
     dragOptions() {
       return {
         animation: 200,
-        group: "description",
+        group: 'description',
         disabled: false,
-        ghostClass: "ghost"
-      };
+        ghostClass: 'ghost'
+      }
     }
   },
   methods: {
     handleSuccess(res, file) {
       this.pool.push({
         url: res.url
-      });
+      })
     },
     doDelete(path, index) {
       this.loading=true
@@ -123,58 +123,58 @@ export default {
       }).then(res => {
         if (res.status) {
           this.loading=false
-          this.pool.splice(index, 1);
+          this.pool.splice(index, 1)
         }
-      });
+      })
     },
     getAllImages() {
         this.loading=true
       getImages({
-        path: "/upload/logo"
+        path: '/upload/logo'
       }).then(res => {
-        this.all = res.list;
-        this.getSelectedImages();
-      });
+        this.all = res.list
+        this.getSelectedImages()
+      })
     },
     getSelectedImages() {
       getImagesSortList({
-        name: "partner"
+        name: 'partner'
       }).then(res => {
         if (res.status) {
           this.loading=false
-          this.result = res.data;
+          this.result = res.data
           this.pool = this.all.filter(item => {
-            let temp = true;
+            let temp = true
             res.data.map(i => {
               if (i.url === item.url) {
-                temp = false;
+                temp = false
               }
-            });
-            return temp;
-          });
+            })
+            return temp
+          })
         }
-      });
+      })
     },
     doSubmit() {
        this.loading=true
       setImagesSortList({
         images: this.resultStr,
-        name: "partner"
+        name: 'partner'
       }).then(res => {
         if (res.status) {
            this.loading=false
           this.$Notice.success({
-            title: "提示",
+            title: '提示',
             desc: res.data.message
-          });
+          })
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getAllImages();
+    this.getAllImages()
   }
-};
+}
 </script>
 <style lang="less">
 .list-group {

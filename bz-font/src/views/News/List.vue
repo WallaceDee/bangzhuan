@@ -1,6 +1,6 @@
 <template>
   <Title :title="{label:'专利情报',subTitle:'NEWS'}">
-    <Spin fix v-if="loading"></Spin>  
+    <Spin fix v-if="loading"></Spin>
     <div class="content">
       <div class="top">
         <div class="latest" @click="go2Detail(latest.id)">
@@ -8,7 +8,7 @@
           <div class="info">
             <h2>{{getDate(latest.createTime,'mmdd','-')}}</h2>
             <h1>{{latest.title}}</h1>
-            <p class="article" v-html="latest.content.replace(/style/ig,'data-style')"></p>
+            <p class="article" v-html="latest.content.replace(/<.*?>/g,'')"></p>
           </div>
         </div>
         <div class="qr-code">
@@ -24,7 +24,7 @@
           <div class="info">
             <div>
               <h1>{{item.title}}</h1>
-              <p class="article" v-html="item.content.replace(/style/ig,'data-style')"></p>
+              <p class="article" v-html="item.content.replace(/<.*?>/g,'')"></p>
             </div>
             <div>
               <span>{{getDate(item.createTime,'mmdd','-')}}</span>
@@ -113,31 +113,6 @@ export default {
   }
 }
 </script>
-<style lang="less">
- .article {
-   >*{
-     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;
-     background: transparent!important;}
-    line-height: 22px;
-    font-weight: normal !important;
-    color: #858585 !important;
-    font-size: 14px !important;
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    b,span ,strong{
-      color: #858585 !important;
-      font-size: 14px !important;
-      font-weight: normal!important;
-    }
-    img {
-      display: none!important;
-    }
-  }
-</style>
 <style lang="less" scoped>
 .content {
   overflow: auto;
@@ -363,7 +338,7 @@ export default {
             p {
               height: 100px;
               overflow: hidden;
-              line-height: 24px; 
+              line-height: 24px;
             }
             &:last-child {
               width: 35%;

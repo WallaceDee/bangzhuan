@@ -35,7 +35,7 @@ export default {
       this.$router.push({
         name:'Products',
         params:{
-          type:'1'
+          type:'2'
         },
         query:{
           activeId:index

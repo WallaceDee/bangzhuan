@@ -54,7 +54,7 @@
         <div class="swiper-container member-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(item,index) in otherMember" :key="item.id">
-                <em v-if="activeIndex===index"></em>
+              <em v-if="activeIndex===index"></em>
               <span @click="activeIndex=index" :style="`background-image:url(${item.photo})`"></span>
               <h1>{{item.name}}</h1>
               <h2 v-for="title in item.title.split(',')" :key="title">{{title}}</h2>
@@ -66,39 +66,38 @@
       </div>
     </div>
     <div class="current-info">
-       <transition name="fade">
-      <div v-if="current.education">
-        <h2>教育背景</h2>
-        <div>  <h4 v-for="edu in current.education.split(',')" :key="edu">{{edu}}</h4></div>
-      </div>
-       </transition>
-         <transition name="fade">
-
-      <div  v-if="current.experience">
-        <div>
-          <h2>工作经历</h2>
-          <p>
-            <span>{{current.years}}</span>年从业年限
-          </p>
+      <transition name="fade">
+        <div v-if="current.education">
+          <h2>教育背景</h2>
+          <div>
+            <h4 v-for="edu in current.education.split(',')" :key="edu">{{edu}}</h4>
+          </div>
         </div>
-        <div>
-        {{current.experience}}
+      </transition>
+      <transition name="fade">
+        <div v-if="current.experience">
+          <div>
+            <h2>工作经历</h2>
+            <p>
+              <span>{{current.years}}</span>年从业年限
+            </p>
+          </div>
+          <div>{{current.experience}}</div>
         </div>
-      </div>
-         </transition>
-          <transition name="fade">
-      <div v-if="current.customer">
-        <h2>服务客户</h2>
-        <div>
-          <span
-            class="customer"
-            v-for="(img,index) in current.customer.split(',')"
-            :style="`background-image:url(${img})`"
-            :key="index"
-          ></span>
+      </transition>
+      <transition name="fade">
+        <div v-if="current.customer">
+          <h2>服务客户</h2>
+          <div>
+            <span
+              class="customer"
+              v-for="(img,index) in current.customer.split(',')"
+              :style="`background-image:url(${img})`"
+              :key="index"
+            ></span>
+          </div>
         </div>
-      </div>
-          </transition>
+      </transition>
     </div>
   </div>
 </template>
@@ -112,34 +111,38 @@ export default {
     return {
       activeIndex: 0,
       list: [],
-      mainMember:[]
+      mainMember: []
     }
   },
-  watch:{
-    '$route.query.activeId'(val){
+  watch: {
+    '$route.query.activeId'(val) {
       this.scrollIntoView(`item-${val}`)
     },
-    '$store.state.width'(val){
-      if(val>640){
-        this.mainMember=this.list.filter(item => { return item.status })
-      }else{
-        this.mainMember=JSON.parse(JSON.stringify(this.list))
+    '$store.state.width'(val) {
+      if (val > 640) {
+        this.mainMember = this.list.filter(item => {
+          return item.status
+        })
+      } else {
+        this.mainMember = JSON.parse(JSON.stringify(this.list))
+      }
     }
-}
   },
   computed: {
-        otherMember(){
-        return this.list.filter(item => { return !item.status })
-      },
-      current(){
-        if(this.otherMember.length){
+    otherMember() {
+      return this.list.filter(item => {
+        return !item.status
+      })
+    },
+    current() {
+      if (this.otherMember.length) {
         return this.otherMember[this.activeIndex]
-        }else{
-          return {
-            customer:''
-          }
+      } else {
+        return {
+          customer: ''
         }
-      },
+      }
+    },
     description() {
       return this.$store.state.description
     },
@@ -158,10 +161,12 @@ export default {
       }).then(res => {
         if (res.status) {
           this.list = res.data.rows
-          if(this.$store.state.width>640){
-          this.mainMember=this.list.filter(item => { return item.status })
-          }else{
-            this.mainMember=JSON.parse(JSON.stringify(this.list))
+          if (this.$store.state.width > 640) {
+            this.mainMember = this.list.filter(item => {
+              return item.status
+            })
+          } else {
+            this.mainMember = JSON.parse(JSON.stringify(this.list))
           }
           this.initSwiper()
         }
@@ -182,7 +187,7 @@ export default {
   },
   mounted() {
     this.getData()
-    if (this.$route.query.activeId!==undefined) {
+    if (this.$route.query.activeId !== undefined) {
       this.scrollIntoView(`item-${this.$route.query.activeId}`)
     }
   }
@@ -350,26 +355,26 @@ export default {
       margin-right: auto;
       margin-left: auto;
       width: 1050px;
-      p{
+      p {
         font-size: 12px;
-        >span{
+        > span {
           font-size: 30px;
           color: @mainColor;
           font-weight: bold;
           margin-right: 5px;
         }
       }
-      h4{
+      h4 {
         font-weight: normal;
       }
-         .customer {
-            display: block;
-            width: 160px;
-            height: 56.66px;
-            background-size: cover;
-            background-position: center;
-            float: left;
-          }
+      .customer {
+        display: block;
+        width: 160px;
+        height: 56.66px;
+        background-size: cover;
+        background-position: center;
+        float: left;
+      }
       > div {
         display: flex;
         align-items: center;
@@ -482,11 +487,12 @@ export default {
 }
 @media screen and (max-width: 640px) {
   .about-us {
-    .other-member,.current-info {
+    .other-member,
+    .current-info {
       display: none;
     }
     .banner {
-      height: 200px;
+      height: 160px;
     }
     .content {
       padding: 0 20px;

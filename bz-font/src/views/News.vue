@@ -30,7 +30,7 @@
 @media screen and (max-width: 640px) {
   .news {
     .banner {
-      height: 200px;
+      height: 160px;
     }
   }
 }

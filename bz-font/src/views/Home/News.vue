@@ -5,7 +5,7 @@
           <div class="inner">
             <h4>{{getDate(latest.createTime,'mmdd','-')}}</h4>
             <h3>{{latest.title}}</h3>
-            <p class="article" v-html="latest.content"></p>
+            <p class="article" v-html="latest.content.replace(/<.*?>/g,'')"></p>
             <span :style="`background-image:url(${latest.cover})`"></span>
             <em class="more">→ MORE</em>
           </div>
@@ -17,7 +17,7 @@
                 {{item.title}}
                 <span>{{getDate(item.createTime,'mmdd','-')}}</span>
               </h3>
-              <p class="article" v-html="item.content"></p>
+              <p class="article" v-html="item.content.replace(/<.*?>/g,'')"></p>
             </li>
           </ul>
         </div>
@@ -77,28 +77,6 @@ export default {
   }
 }
 </script>
-<style lang="less">
- .article {
-    line-height: 21px;
-    font-weight: normal !important;
-    color: #858585 !important;
-    font-size: 14px !important;
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    b,span ,strong{
-      color: #858585 !important;
-      font-size: 14px !important;
-      font-weight: normal!important;
-    }
-    img {
-      display: none!important;
-    }
-  }
-</style>
 <style lang="less" scoped>
 .news {
   .latest {

@@ -18,87 +18,87 @@
   </Title>
 </template>
 <script>
-import { getNewsDetail } from "../../api/";
-import { getDate } from "../../libs/tools";
+import { getNewsDetail } from '../../api/'
+import { getDate } from '../../libs/tools'
 export default {
-  name: "NewsDetail",
+  name: 'NewsDetail',
   data() {
     return {
       loading: false,
       data: {},
       previewerList: []
-    };
+    }
   },
   computed: {
     id() {
-      return this.$route.params.id;
+      return this.$route.params.id
     }
   },
   watch: {
-    "$store.state.width"(val) {
+    '$store.state.width'(val) {
       if (val < 640) {
-        document.querySelector(".main").classList.add("mobile");
+        document.querySelector('.main').classList.add('mobile')
       } else {
-        document.querySelector(".main").classList.remove("mobile");
+        document.querySelector('.main').classList.remove('mobile')
       }
     }
   },
   methods: {
     getArticleImages(content) {
-      let imgReg = /<img.*?(?:>|\/>)/gi; //匹配图片中的img标签
-      let srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i; // 匹配图片中的src
-      let arr = content.match(imgReg); //筛选出所有的img
-      let srcArray = [];
+      let imgReg = /<img.*?(?:>|\/>)/gi //匹配图片中的img标签
+      let srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i // 匹配图片中的src
+      let arr = content.match(imgReg) //筛选出所有的img
+      let srcArray = []
       for (let i = 0; i < arr.length; i++) {
-        let src = arr[i].match(srcReg);
+        let src = arr[i].match(srcReg)
         srcArray.push({
           src: src[1]
-        });
+        })
       }
-      return srcArray;
+      return srcArray
     },
     getDate,
     getData() {
-      this.loading = true;
+      this.loading = true
       getNewsDetail({
         id: this.id
       }).then(res => {
         if (res.status) {
-          this.data = res.data;
-          this.loading = false;
+          this.data = res.data
+          this.loading = false
           this.$nextTick(() => {
-            let previewerList = [];
+            let previewerList = []
             document
-              .querySelector(".main")
-              .querySelectorAll("img")
+              .querySelector('.main')
+              .querySelectorAll('img')
               .forEach((item, index) => {
                 previewerList.push({
                   src: item.src
-                });
+                })
                 item.addEventListener(
-                  "click",
+                  'click',
                   () => {
-                    this.$refs.previewer.show(index);
+                    this.$refs.previewer.show(index)
                   },
                   false
-                );
-              });
-            this.previewerList = previewerList;
-          });
+                )
+              })
+            this.previewerList = previewerList
+          })
         }
-      });
+      })
     }
   },
   activated() {
-    this.getData();
+    this.getData()
     if (document.body.clientWidth < 640) {
-      document.querySelector(".main").classList.add("mobile");
+      document.querySelector('.main').classList.add('mobile')
     } else {
-      document.querySelector(".main").classList.remove("mobile");
+      document.querySelector('.main').classList.remove('mobile')
     }
-    document.scrollingElement.scrollTop = 0;
+    document.scrollingElement.scrollTop = 0
   }
-};
+}
 </script>
 <style lang="less" >
 .main.mobile {

@@ -33,11 +33,9 @@ export default {
     background-image: url(../assets/images/products_bg.jpg);
   }
 }
-
 @media screen and (min-width: 641px) {
 .products{
   .banner{
-
     min-width: 1180px;
     height: 500px;
   }
@@ -46,7 +44,7 @@ export default {
 @media screen and (max-width: 640px) {
 .products{
   .banner{
-    height: 200px;
+    height: 160px;
   }
 }
 }

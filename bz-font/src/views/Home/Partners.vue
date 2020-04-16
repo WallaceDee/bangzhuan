@@ -2,8 +2,9 @@
   <div>
     <Block :value="blockInfo">
       <div class="partners">
-        <Row v-for="(row,rowIndex) in Math.ceil(list.length/col)">
+        <Row :key="'row'+rowIndex" v-for="(row,rowIndex) in Math.ceil(list.length/col)">
           <Col
+            :key="'col'+index"
             :span="span"
             v-for="(item,index) in list"
             v-if="index>=rowIndex*col&&index<(rowIndex+1)*col"

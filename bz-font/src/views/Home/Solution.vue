@@ -11,10 +11,10 @@
       <div class="swiper-container solution-swiper">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
-            <span class="cover" :style=" `background-image:url(${item.cover})`"></span>
+            <span class="cover swiper-no-swiping" :style=" `background-image:url(${item.cover})`"></span>
                <em></em>
             <transition name="fade">
-              <div class="info">
+              <div class="info swiper-no-swiping">
                 <img :src="item.icon" alt />
                 <h1>{{item.label}}</h1>
                 <p>{{item.description}}</p>
@@ -96,6 +96,9 @@ export default {
         let solutionSwiper
         this.swiper = solutionSwiper = new Swiper('.solution-swiper', {
           centeredSlides: true,
+          preventInteractionOnTransition : true,
+          noSwiping : true,
+           autoplay:true,//等同于以下设置
           // loop: true,
           slidesPerView: 3,
           pagination: {
@@ -103,9 +106,9 @@ export default {
           },
           on: {
             init: function() {
-              setTimeout(() => {
-                this.slideTo(1)
-              }, 0)
+              // setTimeout(() => {
+              //   this.slideTo(1)
+              // }, 0)
             },
             slideChange: () => {
               this.activeIndex = solutionSwiper.activeIndex
@@ -157,6 +160,7 @@ export default {
   margin: 12px 0;
 
   .swiper-slide {
+    cursor: pointer;
     > .cover {
       position: relative;
       transition: all 0.5s;

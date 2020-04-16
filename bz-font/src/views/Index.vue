@@ -44,5 +44,32 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
+ .article {
+   >*{
+     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;
+     background-color:transparent!important;
+        font-size: 14px !important;
+         color: #858585 !important;
+             line-height: 22px;
+     }
+    line-height: 22px;
+    font-weight: normal !important;
+    color: #858585 !important;
+    font-size: 14px !important;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    b,span ,strong{
+      color: #858585 !important;
+      font-size: 14px !important;
+      font-weight: normal!important;
+    }
+    img {
+      display: none!important;
+    }
+  }
 </style>
