@@ -14,7 +14,7 @@ module.exports = {
     index: `src/${platform}.js`
   },
   outputDir: outputDir,
-  publicPath: './',
+  publicPath: '/bz-home/',
   // publicPath: isProduction ? '/' : '/',
   productionSourceMap: false,
   css: {

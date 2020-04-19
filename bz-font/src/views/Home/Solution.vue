@@ -183,7 +183,7 @@ export default {
       height: 100%;
       overflow: hidden;
       opacity: 0;
-      padding: 30px;
+      padding:10px 20px 0 20px;
       background-repeat: no-repeat;
       img {
         height: 40%;
@@ -191,8 +191,8 @@ export default {
       h1 {
         color: #212121;
         font-size: 16px;
-        margin-top: 5px;
-        margin-bottom: 10px;
+        // margin-top: 2px;
+        margin-bottom: 5px;
       }
       >p:after{
           content:"→MORE";
@@ -333,16 +333,19 @@ export default {
         left: 0;
         width: 50%;
         background-repeat: no-repeat;
-        padding: 5%;
+        padding: 5px 15px;
         img {
-          height: 45%;
+          height: 35%;
         }
         h1 {
           white-space: nowrap;
           color: #212121;
           font-size: 14px;
-          margin-top: 3px;
+          // margin-top: 3px;
           margin-bottom: 3px;
+        }
+        >p{
+          font-size: 12px;
         }
         > p,
         h1 {
@@ -365,8 +368,8 @@ export default {
           z-index: 0;
           opacity: 0.2;
           background-repeat: no-repeat;
-background-position: 200% 120%;
-    background-size: 70%;
+          background-position: 200% 120%;
+          background-size: 70%;
         }
       }
     }

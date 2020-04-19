@@ -39,7 +39,7 @@
             :format="['jpg','jpeg','png','svg']"
             :max-size="2048"
             type="drag"
-            :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/banner`"
+            :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/news`"
             :on-success="handleSuccess"
             style="display: inline-block;width:192px;"
           >

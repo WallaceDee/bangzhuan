@@ -85,6 +85,9 @@ export default {
     h3 {
       color: #212121;
       margin-top: 10px;
+      white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     }
     pre {
       font-size: 16px;
@@ -171,7 +174,8 @@ export default {
           margin-top: 5px;
         }
         > pre {
-          line-height: 24px;
+          font-size: 14px;
+          line-height: 20px;
           margin: 10px 0;
         }
       }

@@ -23,7 +23,7 @@
             style="display: inline-block;width:192px;"
           >
             <div style="width: 192px;height:90px;line-height: 90px;">
-              <img v-if="form.url" :src="form.url" alt="微信二维码" style="width:192px;" />
+              <img v-if="form.url" :src="form.url" alt="轮播图片" style="width:192px;" />
               <template v-else>
                 <Icon type="ios-image" size="20"></Icon>(size:1920px*900px)
               </template>
