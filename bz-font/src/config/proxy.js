@@ -1,6 +1,6 @@
 module.exports = {
   '/nodejs/api/': {
-      target: 'http://localhost/',
+      target: 'https://www.bangzhuanwang.com/nodejs/',
       changeOrigin: true,
       pathRewrite: {
         '^/nodejs': ''

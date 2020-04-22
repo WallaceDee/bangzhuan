@@ -9,7 +9,7 @@
         :key="item.id"
         :style="`background-color:${item.backgroundColor}`"
       >
-        <div class="content" :class="{'bg-visible':item.content}" :style="`background-image:url(${item.cover})`">
+        <div class="content" :class="{'bg-visible':item.content}" v-lazy:background-image="item.cover">
           <div :class="{'content-only':item.content}">
             <h1>{{item.title}}</h1>
             <p v-if="item.content">{{item.content}}</p>
@@ -19,7 +19,7 @@
                 :key="sub.index"
                 :class="{'gray':isWhiteBg(item.backgroundColor)}"
               >
-                <span :style="`background-image:url(${sub.icon})`"></span>
+                <span v-lazy:background-image="sub.icon"></span>
                 <h2>{{sub.title}}</h2>
                 <p>{{sub.description}}</p>
               </li>

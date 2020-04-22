@@ -5,8 +5,8 @@
           <div class="inner">
             <h4>{{getDate(latest.createTime,'mmdd','-')}}</h4>
             <h3>{{latest.title}}</h3>
-            <p class="article" v-html="latest.content.replace(/<.*?>/g,'')"></p>
-            <span :style="`background-image:url(${latest.cover})`"></span>
+            <p class="article" v-html="latest.content.replace(/<.*?>/g,'').substr(0,200)"></p>
+            <span v-lazy:background-image="latest.cover"></span>
             <em class="more">→ MORE</em>
           </div>
         </div>
@@ -17,7 +17,7 @@
                 {{item.title}}
                 <span>{{getDate(item.createTime,'mmdd','-')}}</span>
               </h3>
-              <p class="article" v-html="item.content.replace(/<.*?>/g,'')"></p>
+              <p class="article" v-html="item.content.replace(/<.*?>/g,'').substr(0,200)"></p>
             </li>
           </ul>
         </div>
@@ -187,6 +187,7 @@ export default {
       background-position: top left;
       background-repeat: no-repeat;
       .inner {
+        border-radius: 3px;
         position: relative;
         z-index: 2;
         background-color: #f8f8f8;
@@ -197,6 +198,7 @@ export default {
         transition: all 0.5s;
         padding: 50px 40px 10px 40px;
         > span {
+          border-radius: 3px;
           transition: all 0.5s;
           height: 150px;
           margin-top: 10px;
@@ -212,12 +214,12 @@ export default {
           height: 44px;
           position: relative;
           padding-left: 20px;
-
         }
       }
       &:hover {
         background-position: 5px 5px;
         .inner {
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
           margin-top: 20px;
           margin-left: 20px;
           h3,
@@ -257,8 +259,8 @@ export default {
         }
         > p {
           padding-right: 100px;
-                   overflow: hidden;
-                   height: 44px;
+          overflow: hidden;
+          height: 44px;
           &:after {
             content: "→";
             position: absolute;
@@ -275,6 +277,7 @@ export default {
           }
         }
         &:hover {
+           color: @mainColor;
           > h3 {
             color: @mainColor;
           }
@@ -299,6 +302,7 @@ export default {
           transition: all 0.5s;
           height: 150px;
           margin-top: 10px;
+          border-radius: 3px;
         }
         h4 {
           font-size: 14px;

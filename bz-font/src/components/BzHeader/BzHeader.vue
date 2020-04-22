@@ -292,7 +292,7 @@ export default {
       }
       .sub-list {
         position: absolute;
-        width: 540px;
+        width: 560px;
         display: flex;
         justify-content: space-between;
         left: 80px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="footer" v-show="visible">
+  <div class="footer" v-show="visible" v-lazy:background-image="require('../../assets/images/footer_bg.jpg')">
     <div class="contact-us">
       <div class="content">
         <div class="form-wrapper">
@@ -36,13 +36,13 @@
         </div>
         <div class="info">
           <div class="tel">
-            <img src="../../assets/images/icon_tel.svg" width="32px" alt />
+            <img v-lazy="require('../../assets/images/icon_tel.svg')" width="32px" alt />
             <h1>{{value.tel}}</h1>
           </div>
           <p class="service-time">{{value.serviceHours}}</p>
           <div class="address">
             <div>
-              <img src="../../assets/images/icon_location.svg" width="32px" alt />
+              <img v-lazy="require('../../assets/images/icon_location.svg')" width="32px" alt />
             </div>
             <ul>
               <li v-for="item in value.address" :key="item.index">{{item.value}}</li>
@@ -73,11 +73,11 @@
         </div>
         <div class="qr-code">
           <div>
-            <img :src="value.wechatQrCode" alt />
+            <img v-lazy="value.wechatQrCode" alt="帮专网公众号" />
             <p>帮专网公众号</p>
           </div>
           <div>
-            <img :src="value.wechatMiniProgramQrCode" alt />
+            <img v-lazy="value.wechatMiniProgramQrCode" alt="帮专网小程序" />
             <p>帮专网小程序</p>
           </div>
         </div>
@@ -260,7 +260,7 @@ export default {
 }
 </script>
 <style lang="less" >
-.footer{  
+.footer{
   .copyright {
      a {
       color: #fff;
@@ -286,7 +286,7 @@ a {
   color: #fff;
   width: 100%;
   min-width: 1180px;
-  background-image: url(../../assets/images/footer_bg.jpg);
+  // background-image: url(../../assets/images/footer_bg.jpg);
   overflow: auto;
   .contact-us .content {
     .info {
@@ -538,6 +538,7 @@ label {
         img {
           width: 150px;
           height: 150px;
+          border-radius: 3px;
         }
       }
     }
@@ -605,6 +606,7 @@ label {
         margin-top: 20px;
         justify-content: space-around;
         img {
+          border-radius: 3px;
           width: 100px;
           height: 100px;
         }

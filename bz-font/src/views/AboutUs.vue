@@ -2,6 +2,7 @@
   <div class="about-us">
     <div class="banner"></div>
     <Title id="item-0" :title="{label:'认识帮专',subTitle:'OUR COMPANY'}">
+      <Spin fix v-if="loading"></Spin>
       <div class="content">
         <p class="description" v-for="p in description.split('\n')">{{p}}</p>
         <ul class="data">
@@ -16,10 +17,11 @@
       </div>
     </Title>
     <Title id="item-1" :title="{label:'专业团队',subTitle:'OUR TEAM'}">
+      <Spin fix v-if="loading"></Spin>
       <div class="content team">
         <div class="member" v-for="item in mainMember">
-          <div class="description" :style="`background-image:url(${item.photo})`">
-            <span class="avatar" :style="`background-image:url(${item.photo})`"></span>
+          <div class="description" v-lazy:background-image="item.photo">
+            <span class="avatar" v-lazy:background-image="item.photo"></span>
             <h1>{{item.name}}</h1>
             <h2 v-for="title in item.title.split(',')">{{title}}</h2>
             <p>
@@ -41,7 +43,7 @@
                 <span
                   class="customer"
                   v-for="img in item.customer.split(',')"
-                  :style="`background-image:url(${img})`"
+                  v-lazy:background-image="img"
                 ></span>
               </div>
             </template>
@@ -55,7 +57,7 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(item,index) in otherMember" :key="item.id">
               <em v-if="activeIndex===index"></em>
-              <span @click="activeIndex=index" :style="`background-image:url(${item.photo})`"></span>
+              <span @click="activeIndex=index" v-lazy:background-image="item.photo"></span>
               <h1>{{item.name}}</h1>
               <h2 v-for="title in item.title.split(',')" :key="title">{{title}}</h2>
             </div>
@@ -92,7 +94,7 @@
             <span
               class="customer"
               v-for="(img,index) in current.customer.split(',')"
-              :style="`background-image:url(${img})`"
+              v-lazy:background-image="img"
               :key="index"
             ></span>
           </div>
@@ -109,6 +111,7 @@ export default {
   name: 'AboutUs',
   data() {
     return {
+      loading:false,
       activeIndex: 0,
       list: [],
       mainMember: []
@@ -155,11 +158,13 @@ export default {
       document.getElementById(id).scrollIntoView()
     },
     getData() {
+      this.loading=true
       getTeamList({
         page: 1,
         rows: 99
       }).then(res => {
         if (res.status) {
+          this.loading=false
           this.list = res.data.rows
           if (this.$store.state.width > 640) {
             this.mainMember = this.list.filter(item => {
@@ -260,6 +265,7 @@ export default {
       margin-left: auto;
       margin-right: auto;
       padding-left: 250px;
+      min-height: 250px;
       > .description {
         color: #858585;
         padding: 0 50px;
@@ -267,7 +273,7 @@ export default {
         line-height: 24px;
       }
       ul.data {
-        padding: 0 50px;
+        // padding: 0 50px;
         justify-content: space-between;
         margin-top: 50px;
       }
@@ -496,6 +502,7 @@ export default {
     }
     .content {
       padding: 0 20px;
+      min-height: 200px;
       ul.data {
         margin-top: 50px;
         margin-bottom: 50px;

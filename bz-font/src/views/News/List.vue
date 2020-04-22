@@ -8,7 +8,7 @@
           <div class="info">
             <h2>{{getDate(latest.createTime,'mmdd','-')}}</h2>
             <h1>{{latest.title}}</h1>
-            <p class="article" v-html="latest.content.replace(/<.*?>/g,'')"></p>
+            <p class="article" v-html="latest.content.replace(/<.*?>/g,'').substr(0,300)"></p>
           </div>
         </div>
         <div class="qr-code">
@@ -24,7 +24,7 @@
           <div class="info">
             <div>
               <h1>{{item.title}}</h1>
-              <p class="article" v-html="item.content.replace(/<.*?>/g,'')"></p>
+              <p class="article" v-html="item.content.replace(/<.*?>/g,'').substr(0,200)"></p>
             </div>
             <div>
               <span>{{getDate(item.createTime,'mmdd','-')}}</span>
@@ -32,7 +32,7 @@
           </div>
         </li>
       </ul>
-      <Button v-if="!allLoaded" class="more-btn" @click.native="loadMore">点击加载更多</button>
+      <Button v-if="!allLoaded" class="more-btn" @click.native="loadMore">点击加载更多</Button>
     </div>
     <Page :total="total" :current="page" size="small" @on-change="onPageChange"></Page>
   </Title>
@@ -44,12 +44,12 @@ export default {
   name: 'List',
   data() {
     return {
-      loading:false,
+      loading: false,
       page: 1,
       pageSize: 10,
       list: [],
       total: 0,
-      allLoaded:false
+      allLoaded: false
     }
   },
   computed: {
@@ -61,13 +61,13 @@ export default {
         return this.list[0]
       } else {
         return {
-          content:''
+          content: ''
         }
       }
     }
   },
   methods: {
-    loadMore(){
+    loadMore() {
       this.page++
       this.getData(1)
     },
@@ -85,24 +85,26 @@ export default {
     },
     getDate,
     getData(type) {
-      this.loading=true
+      this.loading = true
       getNewsList({
         page: this.page,
         rows: this.pageSize
       }).then(res => {
         if (res.status) {
-          this.loading=false
-            if(!res.data.rows.length){
-             this.allLoaded=true
-           }else{
-               this.total = res.data.total
-                if(type){
-                this.list = this.list.concat(res.data.rows)
-                this.allLoaded=this.list.length>=this.total
-                }else{
-                  this.list = res.data.rows
-                   document.getElementById('title').scrollIntoView()
-                }
+          this.loading = false
+          if (!res.data.rows.length) {
+            this.allLoaded = true
+          } else {
+            this.total = res.data.total
+            if (type) {
+              this.list = this.list.concat(res.data.rows)
+              this.$nextTick(() => {
+              this.allLoaded = this.list.length >= this.total
+              })
+            } else {
+              this.list = res.data.rows
+              document.getElementById('title').scrollIntoView()
+            }
           }
         }
       })
@@ -126,24 +128,25 @@ export default {
         background-size: cover;
         background-position: center;
         float: left;
+        border-radius: 3px;
       }
       > .info {
         float: left;
         h1 {
           color: #202020;
-                        white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         > div {
           float: left;
           p {
             overflow: hidden;
-                text-overflow: ellipsis;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    position: relative;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            position: relative;
           }
           &:last-child {
             > span {
@@ -169,7 +172,6 @@ export default {
             float: right;
             h1 {
               text-align: right;
-
             }
             &:last-child {
               > span {
@@ -193,23 +195,23 @@ export default {
         text-align: right;
         color: #858585;
       }
-      h1{
+      h1 {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      p.article{
-                        text-overflow: ellipsis;
-    -webkit-line-clamp:8;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    position: relative;
+      p.article {
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 8;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        position: relative;
       }
     }
   }
 }
 @media screen and (min-width: 641px) {
-  .more-btn{
+  .more-btn {
     display: none;
   }
   .ivu-page {
@@ -234,6 +236,7 @@ export default {
         display: flex;
         padding: 20px;
         > span {
+          border-radius: 3px;
           display: block;
           height: 309px;
           width: 55%;
@@ -272,13 +275,13 @@ export default {
             line-height: 24px;
           }
         }
-        &:hover{
-          box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-          h1{
+        &:hover {
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+          h1 {
             color: @mainColor;
           }
-          .info::after{
-           color: @mainColor;
+          .info::after {
+            color: @mainColor;
           }
         }
       }
@@ -349,7 +352,7 @@ export default {
                 padding-right: 20px;
                 color: #858585;
                 &:after {
-                  transition: .5s all;
+                  transition: 0.5s all;
                   display: block;
                   content: "→";
                   line-height: 100px;
@@ -380,29 +383,29 @@ export default {
             }
           }
         }
-        &:hover{
-          box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-          h1{
+        &:hover {
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+          h1 {
             color: @mainColor;
           }
-           .info > div:last-child > span:after {
-              color: @mainColor;
-              padding-right: 0;
-                     padding-left: 20px;
-           }
+          .info > div:last-child > span:after {
+            color: @mainColor;
+            padding-right: 0;
+            padding-left: 20px;
+          }
         }
       }
     }
   }
 }
 @media screen and (max-width: 640px) {
-  .more-btn{
+  .more-btn {
     margin: 15px auto;
     display: block;
   }
   .ivu-page {
-      display: none;
-    }
+    display: none;
+  }
   .content {
     .qr-code {
       display: none;
@@ -419,47 +422,47 @@ export default {
         > .info {
           width: 74%;
           padding-left: 15px;
-         > div {
-          width: calc(~"100% - 70px");
-          &:last-child {
-            width:70px;
-            font-size: 16px;
-            span{
-              display: block;
-              width: 100%;
-            }
-            span:after{
-                   display: block;
-              content: "→MORE";
-                  float: right;
-    font-size: 12px;
-    background-color: #c9c9c9;
-    width: 50px;
-    white-space: nowrap;
-    color: #fff;
-    margin-top: 24px;
-    height: 16px;
-    line-height: 16px;
+          > div {
+            width: calc(~"100% - 70px");
+            &:last-child {
+              width: 70px;
+              font-size: 16px;
+              span {
+                display: block;
+                width: 100%;
+              }
+              span:after {
+                display: block;
+                content: "→MORE";
+                float: right;
+                font-size: 12px;
+                background-color: #c9c9c9;
+                width: 50px;
+                white-space: nowrap;
+                color: #fff;
+                margin-top: 24px;
+                height: 16px;
+                line-height: 16px;
+              }
             }
           }
-        }
           h1 {
             font-size: 16px;
             font-weight: normal;
           }
           p.article {
             height: 44px;
-                 -webkit-line-clamp: 2;
+            -webkit-line-clamp: 2;
           }
         }
-          &:nth-child(odd) {
-        > .info {
-           padding-right: 15px;
-             > div:last-child span:after{
-                float: left;
-             }
+        &:nth-child(odd) {
+          > .info {
+            padding-right: 15px;
+            > div:last-child span:after {
+              float: left;
+            }
+          }
         }
-      }
       }
     }
     .latest {
@@ -496,7 +499,7 @@ export default {
           margin-bottom: 5px;
         }
         p.article {
-              -webkit-line-clamp:2;
+          -webkit-line-clamp: 2;
           height: 50px;
           overflow: hidden;
           height: 44px;

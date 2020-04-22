@@ -1,7 +1,7 @@
 <template>
   <div>
     <Block :value="blockInfo">
-      <div class="oversea-business">
+      <div class="oversea-business" v-lazy:background-image="col===8?require('../../assets/images/oversea_business_bg.png'):''">
         <Row :key="'row'+rowIndex" v-for="(row,rowIndex) in Math.ceil(list.length/col)">
           <Col
           :key="'col'+index"
@@ -9,7 +9,7 @@
             v-for="(item,index) in list"
             v-if="index>=rowIndex*col&&index<(rowIndex+1)*col"
           >
-            <span :key="item.name" :style="`background-image:url(${item.url})`"></span>
+            <span :key="item.name" v-if="item.url" v-lazy:background-image="item.url"></span>
           </Col>
         </Row>
       </div>
@@ -63,9 +63,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.oversea-business {
-}
-
 span {
   display: block;
   margin-right: auto;
@@ -78,7 +75,7 @@ span {
   .oversea-business {
     padding-top: 40px;
     overflow: auto;
-    background-image: url(../../assets/images/oversea_business_bg.png);
+    // background-image: url(../../assets/images/oversea_business_bg.png);
     background-size: cover;
     height: 400px;
     background-position: center bottom;

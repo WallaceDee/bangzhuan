@@ -8,16 +8,16 @@
             <img :src="item.icon" alt />
             <h1>{{item.title}}</h1>
             <p>{{item.content}}</p>
-            <div class="bg" :style="`background-image:url(${item.icon})`"></div>
+            <div class="bg" v-lazy:background-image="item.icon"></div>
           </div>
-          <div :style="`background-image:url(${item.cover})`">
+          <div v-lazy:background-image="item.cover">
             <div v-for="sub in item.subItems">
               <span class="icon">
-                <i :style="`background-image:url(${sub.icon})`"></i>
+                <i v-lazy:background-image="sub.icon"></i>
               </span>
               <span>{{sub.description}}</span>
               <span class="icon">
-                <i :style="`background-image:url(${sub.icon})`"></i>
+                <i v-lazy:background-image="sub.icon"></i>
               </span>
             </div>
           </div>
@@ -101,7 +101,6 @@ export default {
       > p {
         color: #858585;
       }
-
       .bg {
         position: absolute;
         left: 0;
@@ -149,6 +148,7 @@ export default {
     margin-bottom: 50px;
     overflow: hidden;
     .content {
+      min-height: 264px;
       float: left;
       width: 80%;
       > div:first-child {

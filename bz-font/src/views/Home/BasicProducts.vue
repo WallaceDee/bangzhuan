@@ -1,12 +1,12 @@
 <template>
     <Block :value="blockInfo">
-      <div class="basic-products">
+      <div class="basic-products" v-lazy:background-image="$store.state.width>640?require('../../assets/images/basic_products_bg.png'):require('../../assets/images/basic_products_bg_m.png')">
         <ul>
           <li v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
-            <span :style="`background-image:url(${item.icon})`"></span>
+            <span v-lazy:background-image="item.icon"></span>
             <h3>{{item.label}}</h3>
             <pre>{{item.description}}</pre>
-            <div class="bg" :style="`background-image:url(${item.icon})`"></div>
+            <div class="bg" v-lazy:background-image="item.icon"></div>
           </li>
         </ul>
       </div>
@@ -100,7 +100,7 @@ export default {
 
 @media screen and (min-width: 641px) {
   .basic-products {
-    background-image: url(../../assets/images/basic_products_bg.png);
+    // background-image: url(../../assets/images/basic_products_bg.png);
     background-position: right;
     height: 650px;
     ul {
@@ -145,7 +145,7 @@ export default {
 
 @media screen and (max-width: 640px) {
   .basic-products {
-    background-image: url(../../assets/images/basic_products_bg_m.png);
+    // background-image: url(../../assets/images/basic_products_bg_m.png);
     background-position: bottom;
     ul {
       width: 370px;

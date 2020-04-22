@@ -7,7 +7,7 @@
       </div>
       <div :id="`item-${index}`" class="oversea-item" v-for="(item,index) in list" :key="item.id">
         <div class="content">
-          <div class="m-cover" :style="`background-image:url(${item.cover});`">
+          <div class="m-cover" v-lazy:background-image="item.cover">
             <h1>
               <span>
                 <b>{{item.description[0]}}</b>
@@ -21,7 +21,7 @@
             </h2>
           </div>
           <div>{{item.content}}</div>
-          <div class="cover" :style="`background-image:url(${item.cover});`"></div>
+          <div class="cover" v-lazy:background-image="item.cover"></div>
         </div>
       </div>
     </Title>

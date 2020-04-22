@@ -9,7 +9,7 @@
             v-for="(item,index) in list"
             v-if="index>=rowIndex*col&&index<(rowIndex+1)*col"
           >
-            <span :key="item.name" :style="`background-image:url(${item.url})`"></span>
+            <span :key="item.name" v-if="item.url" v-lazy:background-image="item.url"></span>
           </Col>
         </Row>
       </div>
@@ -61,16 +61,10 @@ export default {
     } else {
       this.col = 3
     }
-    window.addEventListener('resize', () => {
-      this.width = document.body.clientWidth
-    })
   }
 }
 </script>
 <style lang="less" scoped>
-.partners {
-}
-
 span {
   display: block;
   margin-right: auto;
@@ -91,7 +85,7 @@ span {
 
   span {
 width: 180px;
-    height: 69px;
+    height: 65px;
     margin-bottom: 45px;
   }
 }

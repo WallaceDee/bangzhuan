@@ -13,7 +13,7 @@
                 :key="item.id"
                 class="swiper-slide"
                 v-for="item in list"
-                :style="`background-image:url(${item.cover})`"
+                v-lazy:background-image="item.cover"
               ></div>
             </div>
             <div class="case-pagination">
@@ -30,7 +30,7 @@
         <div class="thumbnail">
           <ul>
             <li @click="slideTo(index)" :key="'thumbnail'+item.id" v-for="(item,index) in list" :class="{'active':activeIndex===index}">
-              <span :style="`background-image:url(${item.cover})`"></span>
+              <span v-lazy:background-image="item.cover"></span>
               <em></em>
             </li>
           </ul>
@@ -127,6 +127,7 @@ export default {
         z-index: 999;
         bottom: 0;
         right: 0;
+               border-top-left-radius: 3px;
         > span {
           color: @mainColor;
           font-size: 16px;
@@ -173,10 +174,9 @@ export default {
     }
     li {
       position: relative;
-
       span{
         display: block;
-                  background-size: cover;
+        background-size: cover;
         background-position: center;
       }
       &.active{
@@ -234,10 +234,9 @@ export default {
         height: 360px;
         float: right;
         .swiper-slide {
-          height: 450px;
-          width: 360px;
           background-position: center;
           background-size: cover;
+          border-radius: 3px;
         }
         .case-pagination {
           background-color: #fff;
@@ -286,11 +285,13 @@ export default {
           margin-top: 5px;
         }
         p {
-          padding-right: 100px;
+          margin-right: 100px;
           font-size: 16px;
           color: #858585;
           line-height: 26px;
+          max-height: 186px;
           letter-spacing: 1px;
+          overflow: auto;
         }
       }
     }
@@ -357,8 +358,9 @@ export default {
     margin-top: 15px;
     padding-bottom: 15px;
     ul{
+      overflow: auto;
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
     }
     li {
       cursor: pointer;

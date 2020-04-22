@@ -1,45 +1,50 @@
 <template>
-    <Block :value="blockInfo">
-      <ul class="solution-title-list">
-        <li
-          @click="slideTo(index)"
+  <Block :value="blockInfo">
+    <ul class="solution-title-list">
+      <li
+        @click="slideTo(index)"
+        v-for="(item,index) in list"
+        :class="{'active':activeIndex===index}"
+        :key="item.id"
+      >{{item.label}}</li>
+    </ul>
+    <div class="swiper-container solution-swiper">
+      <div class="swiper-wrapper">
+        <div
+          class="swiper-slide"
           v-for="(item,index) in list"
-          :class="{'active':activeIndex===index}"
           :key="item.id"
-        >{{item.label}}</li>
-      </ul>
-      <div class="swiper-container solution-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
-            <span class="cover swiper-no-swiping" :style=" `background-image:url(${item.cover})`"></span>
-               <em></em>
-            <transition name="fade">
-              <div class="info swiper-no-swiping">
-                <img :src="item.icon" alt />
-                <h1>{{item.label}}</h1>
-                <p>{{item.description}}</p>
-                <em class="bg" :style="`background-image:url(${item.icon})`"></em>
-                <div class="solution-pagination">
-                  <span>{{formatZero(activeIndex+1,2)}}</span>
-                  <div class="swiper-pagination"></div>
-                </div>
+           @click="go2Product(index)"
+        >
+          <span class="cover swiper-no-swiping" :style="`background-image:url(${item.cover})`"></span>
+          <em class="swiper-no-swiping"></em>
+          <transition name="fade">
+            <div class="info swiper-no-swiping">
+              <img v-lazy="item.icon" alt />
+              <h1>{{item.label}}</h1>
+              <p>{{item.description}}</p>
+              <em class="bg swiper-no-swiping" :style="`background-image:url(${item.icon})`"></em>
+              <div class="solution-pagination">
+                <span>{{formatZero(index+1,2)}}</span>
+                <div class="swiper-pagination"></div>
               </div>
-            </transition>
-          </div>
+            </div>
+          </transition>
         </div>
       </div>
-      <ul class="solution-list">
-        <li v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
-          <span class="cover" :style=" `background-image:url(${item.cover})`"></span>
-          <div class="info" :style="`height:${height}px`">
-            <img :src="item.icon" alt />
-            <h1>{{item.label}}</h1>
-            <p>{{item.description}}</p>
-            <em class="bg" :style="`background-image:url(${item.icon})`"></em>
-          </div>
-        </li>
-      </ul>
-    </Block>
+    </div>
+    <ul class="solution-list">
+      <li v-for="(item,index) in list" :key="item.id" @click="go2Product(index)">
+        <span class="cover" v-lazy:background-image="item.cover"></span>
+        <div class="info" :style="`height:${height}px`">
+          <img v-lazy="item.icon" alt />
+          <h1>{{item.label}}</h1>
+          <p>{{item.description}}</p>
+          <em class="bg" v-lazy:background-image="item.icon"></em>
+        </div>
+      </li>
+    </ul>
+  </Block>
 </template>
 <script>
 import Swiper from 'swiper'
@@ -53,8 +58,8 @@ export default {
     }
   },
   computed: {
-    height(){
-      return this.$store.state.width/2
+    height() {
+      return this.$store.state.width / 2
     },
     blockInfo() {
       return this.$store.state.productMenu[0]
@@ -73,19 +78,22 @@ export default {
     }
   },
   methods: {
-        go2Product(index){
+    go2Product(index) {
       this.$router.push({
-        name:'Products',
-        params:{
-          type:'1'
+        name: 'Products',
+        params: {
+          type: '1'
         },
-        query:{
-          activeId:index
+        query: {
+          activeId: index
         }
       })
     },
     slideTo(index) {
-      this.swiper.slideTo(index)
+      this.swiper.slideToLoop(index)
+      setTimeout(() => {
+        this.swiper.autoplay.start()
+      }, 3000)
     },
     formatZero(num, len) {
       if (String(num).length > len) return num
@@ -96,22 +104,22 @@ export default {
         let solutionSwiper
         this.swiper = solutionSwiper = new Swiper('.solution-swiper', {
           centeredSlides: true,
-          preventInteractionOnTransition : true,
-          noSwiping : true,
+          preventInteractionOnTransition: true,
+          noSwiping: true,
            autoplay:true,//等同于以下设置
-          // loop: true,
+          loop: true,
           slidesPerView: 3,
           pagination: {
             el: '.solution-swiper .swiper-pagination'
           },
           on: {
-            init: function() {
+            // init: function() {
               // setTimeout(() => {
               //   this.slideTo(1)
               // }, 0)
-            },
+            // },
             slideChange: () => {
-              this.activeIndex = solutionSwiper.activeIndex
+              this.activeIndex = solutionSwiper.realIndex
             }
           }
         })
@@ -119,7 +127,7 @@ export default {
     }
   },
   mounted() {
-        this.init()
+    this.init()
   }
 }
 </script>
@@ -183,8 +191,14 @@ export default {
       height: 100%;
       overflow: hidden;
       opacity: 0;
-      padding:10px 20px 0 20px;
+      padding: 10px 20px 0 20px;
       background-repeat: no-repeat;
+     &:after {
+        content: "→MORE";
+        display: block;
+        font-size: 12px;
+        margin-top: 5px;
+      }
       img {
         height: 40%;
       }
@@ -194,12 +208,16 @@ export default {
         // margin-top: 2px;
         margin-bottom: 5px;
       }
-      >p:after{
-          content:"→MORE";
-          display: block;
-          font-size: 12px;
-          margin-top: 5px;
-        }
+      > p{
+        height: 66px;
+           overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        position: relative;
+
+      }
       > p,
       h1 {
         position: relative;
@@ -230,17 +248,17 @@ export default {
   .swiper-slide-duplicate-active {
     z-index: 99;
     transform: translateX(-28%);
-    >em{
-    display: block;
-    position: absolute;
-    width: 65%;
-    height: 0;
-    padding-bottom: 60%;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    background-image: linear-gradient(45deg, #0099ff, #07cbd4);
-    opacity: .5;
+    > em {
+      display: block;
+      position: absolute;
+      width: 65%;
+      height: 0;
+      padding-bottom: 60%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      background-image: linear-gradient(45deg, #0099ff, #07cbd4);
+      opacity: 0.5;
     }
     > div {
       opacity: 1;
@@ -289,7 +307,7 @@ export default {
 }
 
 @media screen and (min-width: 641px) {
-  .solution-list{
+  .solution-list {
     display: none;
   }
 }
@@ -299,6 +317,7 @@ export default {
     display: none;
   }
   .solution-list {
+    min-height: 100vh;
     li {
       overflow: auto;
       position: relative;
@@ -334,6 +353,12 @@ export default {
         width: 50%;
         background-repeat: no-repeat;
         padding: 5px 15px;
+        &:after {
+          content: "→MORE";
+          display: block;
+          font-size: 12px;
+          margin-top: 5px;
+        }
         img {
           height: 35%;
         }
@@ -344,19 +369,15 @@ export default {
           // margin-top: 3px;
           margin-bottom: 3px;
         }
-        >p{
+        > p {
           font-size: 12px;
+         height: 40%;
+         overflow: auto;
         }
         > p,
         h1 {
           position: relative;
           z-index: 1;
-        }
-        >p::after{
-          content:"→MORE";
-          display: block;
-          font-size: 12px;
-          margin-top: 5px;
         }
         em.bg {
           display: block;
