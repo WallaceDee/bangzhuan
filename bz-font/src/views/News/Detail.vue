@@ -10,7 +10,7 @@
         <div class="main">
           <h1>{{data.title}}</h1>
           <Divider />
-          <div v-html="data.content"></div>
+          <div v-html="data.content" class="article-container"></div>
         </div>
       </div>
     </div>
@@ -105,6 +105,9 @@ export default {
   img {
     width: 100%;
     display: block;
+  }
+  .article-container *{
+    word-break: break-all;
   }
 }
 </style>
