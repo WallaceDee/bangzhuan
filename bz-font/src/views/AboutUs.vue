@@ -179,8 +179,7 @@ export default {
     },
     initSwiper() {
       this.$nextTick(() => {
-        let memberSwiper
-        this.swiper = memberSwiper = new Swiper('.member-swiper', {
+      this.swiper = new Swiper('.member-swiper', {
           navigation: {
             nextEl: '.next',
             prevEl: '.prev'
@@ -273,9 +272,10 @@ export default {
         line-height: 24px;
       }
       ul.data {
-        // padding: 0 50px;
-        justify-content: space-between;
         margin-top: 50px;
+        li{
+          margin-bottom: 10px;
+        }
       }
       .member {
         display: flex;

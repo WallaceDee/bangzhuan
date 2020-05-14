@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name: "Block",
+  name: 'Block',
   props:{
     size:{
       type:Number,

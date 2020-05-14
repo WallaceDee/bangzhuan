@@ -30,6 +30,12 @@ module.exports = {
       patterns: [path.resolve(__dirname, 'src/assets/less/variable.less')] // 引入全局样式变量
     }
 },
+transpileDependencies:[
+  'dom7',
+  '_dom7@2.1.3@dom7',
+  '_swiper@5.3.8@swiper',
+  'swiper'
+],
   configureWebpack: config => {
     if (isProduction) {
       config.plugins.push(

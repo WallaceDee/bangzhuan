@@ -119,7 +119,9 @@ export default {
               // }, 0)
             // },
             slideChange: () => {
+              if(solutionSwiper){
               this.activeIndex = solutionSwiper.realIndex
+              }
             }
           }
         })
