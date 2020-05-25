@@ -4,3 +4,4 @@
 /bz-node.js/logs
 /bz-node.js/public/upload
 /bz-font/package-lock.json
+/bz-node.js/lib../logs/*.log
