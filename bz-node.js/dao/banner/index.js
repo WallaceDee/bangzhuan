@@ -5,6 +5,13 @@ const {
 const $sql = require('./sqlMapping')
 
 module.exports = {
+    listAll: (req, res) => {
+        query($sql.listAll).then(result => {
+            print.success(res, result)
+        }).catch(error => {
+            print.error(res, error)
+        })
+    },
     list: (req, res) => {
         query($sql.list).then(result => {
             print.success(res, result)

@@ -65,7 +65,7 @@
 </template>
 <script>
 import { getDate } from '@/libs/tools.js'
-import { getNewsList, deleteNews, publicNews } from '@/api/manage/'
+import { getNewsList, deleteNews, publicNews,setNews2Top } from '@/api/manage/'
 import '@/libs/UE/ueditor.config.js'
 import '@/libs/UE/ueditor.all.js'
 import '@/libs/UE/lang/zh-cn/zh-cn.js'
@@ -215,10 +215,24 @@ export default {
         {
           title: '操作',
           align: 'center',
-          width:150,
+          width:200,
           fixed:'right',
           render: (h, params) => {
             return [
+              h(
+                'Button',
+                {
+                  props: {
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.setNews2Top(params.row.id)
+                    }
+                  }
+                },
+                '置顶'
+              ),
               h(
                 'Button',
                 {
@@ -278,6 +292,19 @@ export default {
     this.getData()
   },
   methods: {
+    setNews2Top(id){
+      setNews2Top({
+        id
+      }).then(res => {
+        if (res.status) {
+            this.$Notice.success({
+            title: '提示',
+            desc: res.data.message
+          })
+          this.getData()
+        }
+      })
+    },
     openUpdateDrawer(news) {
       this.popupMode = 1
       this.form = JSON.parse(JSON.stringify(news))

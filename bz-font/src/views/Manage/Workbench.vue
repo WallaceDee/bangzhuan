@@ -27,7 +27,18 @@
                 <Icon type="md-person" />用户管理
               </MenuItem>
               <MenuItem name="Banner">
-                <Icon type="md-images" />Banner管理
+                <Icon type="md-images" />Banner
+              </MenuItem>
+              </MenuGroup>
+            <MenuGroup title="图片设置">
+              <MenuItem name="Images/certificate" :to="{name:'Images',params:{type:'certificate'}}">
+                <Icon type="md-trophy" />帮专荣誉
+              </MenuItem>
+                <MenuItem name="Images/partner" :to="{name:'Images',params:{type:'partner'}}">
+                <Icon type="ios-people" />合作伙伴
+              </MenuItem>
+                <MenuItem name="Images/flag" :to="{name:'Images',params:{type:'flag'}}">
+               <Icon type="md-flag" />涉外业务
               </MenuItem>
             </MenuGroup>
             <MenuGroup title="资源管理">
@@ -45,9 +56,6 @@
               </MenuItem>
               <MenuItem name="Product">
                 <Icon type="logo-codepen" />产品与服务
-              </MenuItem>
-                      <MenuItem name="Partner">
-              <Icon type="ios-people" />合作伙伴
               </MenuItem>
             </MenuGroup>
           </Menu>
@@ -101,7 +109,11 @@ export default {
   },
   computed: {
     activeName() {
-      return this.$route.name
+      if(this.$route.name==='Images'){
+        return this.$route.path.replace('/Workbench/','')
+      }else{
+        return this.$route.name
+      }
     }
   },
   mounted() {

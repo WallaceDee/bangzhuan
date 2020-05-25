@@ -4,6 +4,7 @@ const bannerDao = require("../../dao/banner/index")
 const util = require('../../lib/util.js')
 
 router.get("/", bannerDao.list)
+router.get("/all", util.ensureAuthorized,bannerDao.listAll)
 router.post("/",util.ensureAuthorized,bannerDao.insertOrUpdate)
 router.delete("/",util.ensureAuthorized,bannerDao.delete)
 router.post("/setEnable",util.ensureAuthorized,bannerDao.setEnable)

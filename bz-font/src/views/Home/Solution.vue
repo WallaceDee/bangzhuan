@@ -137,7 +137,7 @@ export default {
 .solution-title-list {
   position: relative;
   list-style: none;
-  overflow: auto;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
@@ -148,6 +148,7 @@ export default {
     display: block;
     height: 1px;
     width: 80%;
+    left: 10%;
     top: 0;
     background-color: #c9c9c9;
   }

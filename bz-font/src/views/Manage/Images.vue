@@ -2,8 +2,8 @@
   <div>
     <Breadcrumb>
       <BreadcrumbItem to="/">首页</BreadcrumbItem>
-      <BreadcrumbItem>资源管理</BreadcrumbItem>
-      <BreadcrumbItem>国旗图片</BreadcrumbItem>
+      <BreadcrumbItem>图片管理</BreadcrumbItem>
+      <BreadcrumbItem>{{title}}</BreadcrumbItem>
     </Breadcrumb>
     <Divider />
     <Card>
@@ -14,7 +14,7 @@
         :show-upload-list="false"
         :format="['jpg','jpeg','png','svg']"
         :max-size="2048"
-        :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/flag`"
+        :action="`${$config.baseUrl}/ue?action=uploadimage&path=upload/${type}`"
         :on-success="(res, file)=>{
             handleSuccess(res, file)
           }"
@@ -80,7 +80,7 @@ import {
   deleteFile
 } from '../../api/manage/'
 export default {
-  name: 'Flag',
+  name: 'Images',
   components: {
     draggable
   },
@@ -93,7 +93,21 @@ export default {
       loading:false
     }
   },
+  watch:{
+    type(val){
+        this.pool=[]
+        this.result=[]
+        this.all=[]
+        this.getAllImages()
+    }
+  },
   computed: {
+    title(){
+     return this.type==='flag'?'国旗图片':this.type==='partner'?'合作伙伴':this.type==='certificate'?'帮专荣誉':''
+    },
+    type(){
+      return this.$route.params.type
+    },
     resultStr() {
       let temp = []
       this.result.map(item => {
@@ -130,7 +144,7 @@ export default {
     getAllImages() {
         this.loading=true
       getImages({
-        path: '/upload/flag'
+        path: '/upload/'+this.type
       }).then(res => {
         this.all = res.list
         this.getSelectedImages()
@@ -138,7 +152,7 @@ export default {
     },
     getSelectedImages() {
       getImagesSortList({
-        name: 'flag'
+        name: this.type
       }).then(res => {
         if (res.status) {
           this.loading=false
@@ -159,7 +173,7 @@ export default {
        this.loading=true
       setImagesSortList({
         images: this.resultStr,
-        name: 'flag'
+        name: this.type
       }).then(res => {
         if (res.status) {
            this.loading=false

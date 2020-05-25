@@ -71,7 +71,7 @@ export const updateSetting = (data) => {
 export const getBannerList = (params) => {
     return axios.request({
         params,
-        url: '/banner',
+        url: '/banner/all',
         method: 'get'
     })
 }
@@ -147,7 +147,7 @@ export const setSubscribeStatus = (data) => {
 export const getCasesList = (data) => {
     return axios.request({
         data,
-        url: '/cases',
+        url: '/cases/all',
         method: 'get'
     })
 }
@@ -206,7 +206,13 @@ export const deleteNews = (data) => {
         method: 'delete'
     })
 }
-
+export const setNews2Top = (data) => {
+    return axios.request({
+        data,
+        url: '/news/top',
+        method: 'post'
+    })
+}
 export const getTeamList = (params) => {
     return axios.request({
         params,
@@ -230,6 +236,7 @@ export const deleteTeam = (data) => {
         method: 'delete'
     })
 }
+
 export const setMember2Top = (data) => {
     return axios.request({
         data,

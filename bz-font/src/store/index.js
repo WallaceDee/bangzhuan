@@ -10,9 +10,13 @@ export default new Vuex.Store({
     tel:'',
     serviceHours:'',
     width:document.body.clientWidth,
-    wechatQrCode:''
+    wechatQrCode:'',
+    newsList:[]
   },
   mutations: {
+    setNewsList(state, payload) {
+      state.newsList=payload
+    },
     setProductMenu(state, payload) {
       state.productMenu=payload
     },

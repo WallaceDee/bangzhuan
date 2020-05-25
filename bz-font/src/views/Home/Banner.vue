@@ -89,7 +89,7 @@ export default {
   }
   button {
     transition: all 0.2s;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.5);
     border: none;
     position: absolute;
     z-index: 2;

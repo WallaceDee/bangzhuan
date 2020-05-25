@@ -16,7 +16,21 @@
         </ul>
       </div>
     </Title>
-    <Title id="item-1" :title="{label:'专业团队',subTitle:'OUR TEAM'}">
+    <Title id="item-1" :title="{label:'帮专荣誉',subTitle:'OUR HORNOR'}" v-show="$store.state.width<=640">
+      <!-- <Spin fix v-if="loading"></Spin> -->
+      <div class="content certificate">
+          <div class="swiper-container certificate-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item,index) in certificates" :key="item.id">
+              <div v-lazy:background-image="item.url"></div>
+            </div>
+          </div>
+          <Arrow class="prev" type="left" :size="28"></Arrow>
+          <Arrow class="next" :size="28"></Arrow>
+        </div>
+      </div>
+    </Title>
+    <Title id="item-2" :title="{label:'专业团队',subTitle:'OUR TEAM'}">
       <Spin fix v-if="loading"></Spin>
       <div class="content team">
         <div class="member" v-for="item in mainMember">
@@ -106,7 +120,7 @@
 <script>
 import Swiper from 'swiper'
 import 'swiper/css/swiper.min.css'
-import { getTeamList } from '../api/'
+import { getTeamList,getImagesSortList } from '../api/'
 export default {
   name: 'AboutUs',
   data() {
@@ -114,7 +128,8 @@ export default {
       loading:false,
       activeIndex: 0,
       list: [],
-      mainMember: []
+      mainMember: [],
+      certificates:[]
     }
   },
   watch: {
@@ -154,6 +169,25 @@ export default {
     }
   },
   methods: {
+    getCertificatesImages() {
+      getImagesSortList({
+        name: 'certificate'
+      }).then(res => {
+        this.certificates = res.data
+        this.$nextTick(() => {
+        this.swiper = new Swiper('.certificate-swiper', {
+          loop:true,
+          autoplay: {
+            delay: 5000 //1秒切换一次
+          },
+            navigation: {
+              nextEl: '.certificate-swiper .next',
+              prevEl: '.certificate-swiper .prev'
+            }
+          })
+        })
+      })
+    },
     scrollIntoView(id) {
       document.getElementById(id).scrollIntoView()
     },
@@ -181,8 +215,8 @@ export default {
       this.$nextTick(() => {
       this.swiper = new Swiper('.member-swiper', {
           navigation: {
-            nextEl: '.next',
-            prevEl: '.prev'
+            nextEl: '.member-swiper .next',
+            prevEl: '.member-swiper .prev'
           },
           slidesPerView: 4
         })
@@ -191,6 +225,7 @@ export default {
   },
   mounted() {
     this.getData()
+    this.getCertificatesImages()
     if (this.$route.query.activeId !== undefined) {
       this.scrollIntoView(`item-${this.$route.query.activeId}`)
     }
@@ -199,6 +234,13 @@ export default {
 </script>
 <style lang="less" scoped>
 .about-us {
+   .certificate-swiper{
+      display: none;
+      .swiper-slide>div{
+        background-size: cover;
+        background-position: center;
+      }
+    }
   .banner {
     width: 100%;
     background-size: cover;
@@ -357,6 +399,7 @@ export default {
         }
       }
     }
+
     .current-info {
       margin-right: auto;
       margin-left: auto;
@@ -416,6 +459,7 @@ export default {
         }
       }
     }
+
     .other-member {
       background-color: #f8f8f8;
       overflow: auto;
@@ -493,6 +537,26 @@ export default {
 }
 @media screen and (max-width: 640px) {
   .about-us {
+    .certificate-swiper{
+      display: block;
+      .arrow{
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        transform: translateY(-50%);
+        &.prev.left{
+           left: 15px;
+        }
+       &.next.right{
+           right: 15px;
+        }
+      }
+      .swiper-slide>div{
+        height: 300px;
+        width: 100%;
+
+      }
+    }
     .other-member,
     .current-info {
       display: none;
@@ -503,6 +567,9 @@ export default {
     .content {
       padding: 0 20px;
       min-height: 200px;
+      &.certificate{
+        padding: 0;
+      }
       ul.data {
         margin-top: 50px;
         margin-bottom: 50px;

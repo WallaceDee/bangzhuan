@@ -19,7 +19,7 @@
         </div>
       </div>
       <ul>
-        <li v-for="(item,index) in list" @click="go2Detail(item.id)" v-if="index">
+        <li :id="`item-${index}`" v-for="(item,index) in list" @click="go2Detail(item.id)" v-if="index">
           <span :style="`background-image:url(${item.cover})`"></span>
           <div class="info">
             <div>
@@ -65,8 +65,18 @@ export default {
         }
       }
     }
-  },
+    },
+    watch:{
+          '$route.query.activeId'(val) {
+        this.scrollIntoView(`item-${val}`)
+}
+    },
   methods: {
+    scrollIntoView(id) {
+      if(document.getElementById(id)){
+        document.getElementById(id).scrollIntoView()
+      }
+    },
     loadMore() {
       this.page++
       this.getData(1)

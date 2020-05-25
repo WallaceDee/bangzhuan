@@ -7,5 +7,6 @@ router.get('/',newsDao.list)
 router.get('/detail',newsDao.getNewsById)
 router.post('/',util.ensureAuthorized, newsDao.insertOrUpdate)
 router.delete('/',util.ensureAuthorized, newsDao.delete)
+router.post('/top',util.ensureAuthorized, newsDao.top)
 
 module.exports = router

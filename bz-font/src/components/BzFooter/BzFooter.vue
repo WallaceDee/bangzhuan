@@ -56,13 +56,14 @@
         <div class="site-list">
           <h1>SITEMAP</h1>
           <div>
-            <div v-for="item in sitemap" :key="item.label">
+            <div v-for="item in sitemap" :key="item.label" :title="item.label">
               <h2 :class="{'underline':item.children}">
                 <a @click="onTitleClick(item)" href="javascript:void 0">{{item.label}}</a>
               </h2>
               <ul v-if="item.children">
                 <li v-for="(site,index) in item.children" :key="site.label">
                   <a
+                    :title="site.label"
                     @click.stop="onSubItmeClick(site,index)"
                     href="javascript:void 0"
                   >{{site.label}}</a>
@@ -90,6 +91,7 @@
           <template v-for="(item,index) in value.relatedLinks">
             <Divider :key="`d${item.index}`" v-if="index" type="vertical" />
             <a
+              :title="item.value"
               target="_blank"
               :key="`a${item.index}`"
               :href="item.protocol+item.url+item.last"
@@ -102,7 +104,7 @@
   </div>
 </template>
 <script>
-import { getConsult } from '../../api/'
+import { getConsult,getNewsList } from '../../api/'
 export default {
   name: 'BzFooter',
   props: {
@@ -151,25 +153,52 @@ export default {
               label: '公司简介',
               activeId: 0
             },
+           {
+              name: 'AboutUs',
+              label: '帮专荣誉',
+              activeId:1
+            },
             {
               name: 'AboutUs',
               label: '团队介绍',
-              activeId: 1
+              activeId: 2
             }
           ]
         }
       ]
     }
   },
+  // watch:{
+  //   list(val){
+  //     this.$set(this.defaultSitemap,0,val)
+  //     this.sitemap=this.productMenu.concat(this.defaultSitemap)
+  // }
+  // },
   computed: {
     visible() {
       return (this.$store.state.width > 640 || this.$route.name === 'Home')&&!this.$route.meta.hideFooter
     },
     sitemap() {
+      this.$set(this.defaultSitemap[0],'children',this.$store.state.newsList)
       return this.productMenu.concat(this.defaultSitemap)
     }
   },
   methods: {
+  getNewsList() {
+      getNewsList({
+        page: 1,
+        rows: 6
+      }).then(res => {
+        if (res.status) {
+          res.data.rows.map(item => {
+            item.label=item.title
+            item.name='NewsList'
+          })
+          this.list = res.data.rows
+          this.$store.commit('setNewsList', this.list)
+        }
+      })
+    },
     onValidate(prop, status, error) {
       if (!status && !this.hasModalOpen) {
         this.hasModalOpen = true
@@ -221,7 +250,7 @@ export default {
         this.$router.push({
           name: item.name,
           query: {
-            activeId: item.activeId
+            activeId: item.activeId||index
           }
         })
       } else {
@@ -238,6 +267,7 @@ export default {
     }
   },
   mounted() {
+    this.getNewsList()
     this.$nextTick(() => {
       document.querySelectorAll('.footer input').forEach(function(inputEl) {
         if (inputEl.value !== '') {
@@ -523,6 +553,13 @@ label {
         li {
           list-style: none;
           line-height: 30px;
+        }
+        li a{
+          display: block;
+          max-width: 130px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         font-size: 14px;
         > div {

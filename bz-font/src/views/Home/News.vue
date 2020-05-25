@@ -12,7 +12,7 @@
         </div>
         <div class="list">
           <ul>
-            <li @click="go2Detail(item.id)" v-for="(item,index) in list" v-if="index" :key="item.id">
+            <li @click="go2Detail(item.id)" v-for="(item,index) in list" v-if="index&&index<4" :key="item.id">
               <h3>
                 {{item.title}}
                 <span>{{getDate(item.createTime,'mmdd','-')}}</span>
@@ -25,7 +25,6 @@
     </Block>
 </template>
 <script>
-import { getNewsList } from '../../api/'
 import { getDate } from '../../libs/tools'
 export default {
   name: 'News',
@@ -35,12 +34,13 @@ export default {
         subTitle: 'PATENT INFORMATION',
         label: '专利情报',
         description: '从权威专利数据获取竞争、市场情报'
-      },
-      list: []
+      }
     }
   },
-  watch: {},
   computed: {
+    list(){
+      return this.$store.state.newsList
+    },
     latest() {
       if (this.list.length) {
         return this.list[0]
@@ -52,7 +52,7 @@ export default {
     }
   },
   methods: {
-        go2Detail(id) {
+    go2Detail(id) {
       this.$router.push({
         name: 'NewsDetail',
         params: {
@@ -60,20 +60,9 @@ export default {
         }
       })
     },
-    getDate,
-    getNewsList() {
-      getNewsList({
-        page: 1,
-        rows: 4
-      }).then(res => {
-        if (res.status) {
-          this.list = res.data.rows
-        }
-      })
-    }
+    getDate
   },
   mounted() {
-    this.getNewsList()
   }
 }
 </script>

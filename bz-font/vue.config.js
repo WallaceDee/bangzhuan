@@ -77,6 +77,13 @@ transpileDependencies:[
     config.resolve.alias.set('@', resolve('src'))
 
     config.module
+    .rule('view-design') //  我目前用的是新版本的iview ,旧版本的iview，用iview代替view-design
+    .test(/view-design.src.*?js$/)
+    .use('babel')
+    .loader('babel-loader')
+    .end()
+
+    config.module
       .rule('vue')
       .use('iview')
       .loader('iview-loader')

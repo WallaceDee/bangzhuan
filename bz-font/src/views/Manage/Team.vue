@@ -211,7 +211,7 @@ export default {
           width:200,
           render: (h, params) => {
             return [
-                           h(
+                h(
                 'Button',
                 {
                   props: {
