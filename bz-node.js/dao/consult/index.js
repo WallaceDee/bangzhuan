@@ -13,6 +13,7 @@ module.exports = {
             name: '',
             phone:'',
             content:'',
+            city:'',
             remark:'',
             status:'',
             page: 1,
@@ -50,7 +51,6 @@ module.exports = {
             }).catch(e => {
             print.error(res, e)
         })
-
         }).catch(error => {
             print.error(res, error)
         })
@@ -87,5 +87,5 @@ module.exports = {
         }).catch(error => {
             print.error(res, error)
         })
-    },
+    }
 }

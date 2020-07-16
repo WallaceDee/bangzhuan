@@ -16,18 +16,24 @@
         </ul>
       </div>
     </Title>
-    <Title id="item-1" :title="{label:'帮专荣誉',subTitle:'OUR HORNOR'}" v-show="$store.state.width<=640">
+    <Title id="item-1" :title="{label:'帮专荣誉',subTitle:'OUR HORNOR'}" >
       <!-- <Spin fix v-if="loading"></Spin> -->
       <div class="content certificate">
-          <div class="swiper-container certificate-swiper">
+        <ul class="preview-list" v-show="!zoomStatus">
+          <li v-for="(item,index) in certificates" @click="onPreviewItemClick(index)">
+            <div class="surface" v-lazy:background-image="item.url"></div>
+            <div class="mask"></div>
+          </li>
+        </ul>
+          <div class="swiper-container certificate-swiper" :class="{'show':zoomStatus}">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(item,index) in certificates" :key="item.id">
+            <div class="swiper-slide" v-for="(item,index) in certificates" :key="item.id" @click="onSwiperItemClick">
               <div v-lazy:background-image="item.url"></div>
             </div>
           </div>
-          <Arrow class="prev" type="left" :size="28"></Arrow>
-          <Arrow class="next" :size="28"></Arrow>
         </div>
+          <Arrow v-show="zoomStatus" class="prev" type="left" :size="28"></Arrow>
+          <Arrow v-show="zoomStatus" class="next" :size="28"></Arrow>
       </div>
     </Title>
     <Title id="item-2" :title="{label:'专业团队',subTitle:'OUR TEAM'}">
@@ -129,7 +135,9 @@ export default {
       activeIndex: 0,
       list: [],
       mainMember: [],
-      certificates:[]
+      certificates:[],
+      zoomStatus:0,
+      certificateSwiper:null
     }
   },
   watch: {
@@ -169,20 +177,25 @@ export default {
     }
   },
   methods: {
+    onSwiperItemClick(){
+       this.zoomStatus=0
+    },
+    onPreviewItemClick(index){
+      this.zoomStatus=1
+      this.certificateSwiper.slideTo(index)
+    },
     getCertificatesImages() {
       getImagesSortList({
         name: 'certificate'
       }).then(res => {
         this.certificates = res.data
         this.$nextTick(() => {
-        this.swiper = new Swiper('.certificate-swiper', {
-          loop:true,
-          autoplay: {
-            delay: 5000 //1秒切换一次
-          },
+       this.certificateSwiper=new Swiper('.certificate-swiper', {
+            // loop:true,
+            observer:true,
             navigation: {
-              nextEl: '.certificate-swiper .next',
-              prevEl: '.certificate-swiper .prev'
+              nextEl: '.certificate.content .next',
+              prevEl: '.certificate.content .prev'
             }
           })
         })
@@ -213,7 +226,7 @@ export default {
     },
     initSwiper() {
       this.$nextTick(() => {
-      this.swiper = new Swiper('.member-swiper', {
+      new Swiper('.member-swiper', {
           navigation: {
             nextEl: '.member-swiper .next',
             prevEl: '.member-swiper .prev'
@@ -234,11 +247,35 @@ export default {
 </script>
 <style lang="less" scoped>
 .about-us {
-   .certificate-swiper{
-      display: none;
+   .certificate.content{
+     position: relative;
+          .arrow{
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        transform: translateY(-50%);
+        &.left{
+            transform: translateY(-50%) rotate(180deg);
+        }
+      }
+  }
+    .certificate-swiper{
+      display: block;
+      width: 100%;
+      position: absolute;
+      z-index: -99;
+      opacity: 0;
+      visibility: hidden;
       .swiper-slide>div{
-        background-size: cover;
+       background-size: cover;
         background-position: center;
+        width: 100%;
+      }
+      &.show{
+      position: relative;
+      z-index: 1;
+      opacity: 1;
+      visibility:visible;
       }
     }
   .banner {
@@ -294,6 +331,88 @@ export default {
 }
 @media screen and (min-width: 641px) {
   .about-us {
+    .preview-list{
+      width: 100%;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap ;
+      height: 600px;
+    overflow: auto;
+        &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    &::-webkit-scrollbar-button {
+        display: none;
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 15px;
+        background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 0;
+        border-style: dashed;
+        background-color: #b3b9b9;
+        border-color: transparent;
+        border-width: 1.5px;
+        background-clip: padding-box;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        height: 13px !important;
+        width: 13px !important;
+        background: rgba(117, 96, 145, 0.5);
+    }
+    &::-webkit-scrollbar-corner {
+        display: none;
+    }
+      >li{
+        width: calc(~"33.33% - 30px");
+        position: relative;
+        margin: 15px;
+        cursor: pointer;
+        .mask{
+          display: none;
+        }
+        &:hover{
+          .mask{
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-image: linear-gradient(45deg, #0099ff, #07cbd4);
+    opacity: 0.6;
+          }
+        }
+      }
+      .surface{
+        width: 100%;
+        height: 0;
+        padding-bottom: 65%;
+        background-size: cover;
+        border-radius: 3px;
+      }
+    }
+    .certificate.content{
+        padding-left: 300px;
+      .arrow{
+        &.prev.left{
+           left: 250px;
+           top:85%;
+        }
+       &.next.right{
+           left:250px;
+               top:92%;
+        }
+      }
+    }
+      .certificate-swiper{
+      .swiper-slide>div{
+        height: 600px;
+      }
+    }
     padding-bottom: 100px;
     overflow: auto;
     min-width: 1180px;
@@ -537,13 +656,18 @@ export default {
 }
 @media screen and (max-width: 640px) {
   .about-us {
-    .certificate-swiper{
-      display: block;
-      .arrow{
+    .preview-list{
+      display: none;
+    }
+    .certificate{
+       .arrow{
         position: absolute;
-        z-index: 2;
+        z-index: 99;
         top: 50%;
         transform: translateY(-50%);
+        &.left{
+            transform: translateY(-50%) rotate(180deg);
+        }
         &.prev.left{
            left: 15px;
         }
@@ -551,10 +675,15 @@ export default {
            right: 15px;
         }
       }
+    }
+    .certificate-swiper{
+      position: relative;
+      z-index: 1;
+      opacity: 1;
+      visibility:visible;
       .swiper-slide>div{
         height: 300px;
         width: 100%;
-
       }
     }
     .other-member,

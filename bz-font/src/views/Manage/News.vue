@@ -65,6 +65,7 @@
 </template>
 <script>
 import { getDate } from '@/libs/tools.js'
+import { getNewsDetail } from '../../api/'
 import { getNewsList, deleteNews, publicNews,setNews2Top } from '@/api/manage/'
 import '@/libs/UE/ueditor.config.js'
 import '@/libs/UE/ueditor.all.js'
@@ -307,11 +308,13 @@ export default {
     },
     openUpdateDrawer(news) {
       this.popupMode = 1
-      this.form = JSON.parse(JSON.stringify(news))
-      this.handelDrawerVisible(true)
-      setTimeout(() => {
-        this.ueditor.setContent(this.form.content)
-      }, 500)
+      getNewsDetail({id:news.id}).then(res => {
+          this.form = JSON.parse(JSON.stringify(res.data))
+          this.handelDrawerVisible(true)
+          setTimeout(() => {
+            this.ueditor.setContent(this.form.content)
+          }, 500)
+      })
     },
     openCreateDrawer() {
       this.popupMode = 0

@@ -16,6 +16,9 @@
       <FormItem label="咨询内容">
         <Input v-model="searchForm.content" size="small" style="width:100px"></Input>
       </FormItem>
+      <FormItem label="地区">
+        <Input v-model="searchForm.city" size="small" style="width:100px"></Input>
+      </FormItem>
       <FormItem label="备注">
         <Input v-model="searchForm.remark" size="small" style="width:100px"></Input>
       </FormItem>
@@ -90,14 +93,16 @@ export default {
         name: '',
         phone: '',
         content: '',
-        remark: ''
+        remark: '',
+        city:''
       },
       searchRule: {
         status: '',
         name: '',
         phone: '',
         content: '',
-        remark: ''
+        remark: '',
+        city:''
       },
       columns: [
         { fixed :'left',
@@ -107,21 +112,21 @@ export default {
           title: '序号'
         },
         {
-             fixed :'left',
+          fixed :'left',
           title: '客户名字',
           align: 'center',
           width: 120,
           key: 'name'
         },
         {
-             fixed :'left',
+          fixed :'left',
           title: '电话',
           width: 135,
           align: 'center',
           key: 'phone'
         },
         {
-              fixed :'left',
+          fixed :'left',
           title: '咨询内容',
           key: 'content',
           minWidth:150
@@ -134,6 +139,11 @@ export default {
           render: function(h, params) {
             return h('span', getDate(params.row.createTime, 'yyyymmddhhmmss'))
           }
+        },
+        {
+          title: '地区',
+          key: 'city',
+          minWidth:100
         },
         {
           title: '状态',

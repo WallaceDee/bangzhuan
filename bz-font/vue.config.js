@@ -15,7 +15,7 @@ module.exports = {
   },
   outputDir: outputDir,
   publicPath: '/bz-home/',
-  // publicPath: isProduction ? '/' : '/',
+  // publicPath: isProduction ? './' : './',
   productionSourceMap: false,
   css: {
     loaderOptions: {

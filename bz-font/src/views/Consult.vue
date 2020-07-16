@@ -71,6 +71,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.loading=true
+          this.form.city=(returnCitySN||{}).cname
           getConsult(this.form).then(res => {
             if(res.status){
               this.success=true

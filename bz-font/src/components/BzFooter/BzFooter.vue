@@ -215,6 +215,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.loading=true
+          this.form.city=(returnCitySN||{}).cname
           getConsult(this.form).then(res => {
             if (res.status) {
                this.loading=false
@@ -267,6 +268,13 @@ export default {
     }
   },
   mounted() {
+    let cityInfo=document.createElement('script')
+    cityInfo.src='http://pv.sohu.com/cityjson?ie=utf-8'
+    cityInfo.onload=function () {
+      console.log(returnCitySN)
+    }
+    cityInfo.id='cityInfo'
+    document.body.appendChild(cityInfo)
     this.getNewsList()
     this.$nextTick(() => {
       document.querySelectorAll('.footer input').forEach(function(inputEl) {
@@ -317,6 +325,8 @@ a {
   width: 100%;
   min-width: 1180px;
   // background-image: url(../../assets/images/footer_bg.jpg);
+  background-size: cover;
+  background-position: top center;
   overflow: auto;
   .contact-us .content {
     .info {

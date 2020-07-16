@@ -16,8 +16,12 @@ module.exports = {
         }, req.query)
          params = Object.assign(params, getSqlPageParmas(params.page, params.rows))
         query($sql.list, params).then(result => {
+            let rows=JSON.parse(JSON.stringify(result[0]))
+            rows.map(item => {
+                item.content = item.content.replace(/<.*?>/g,'').substr(0,200)
+            })
             print.success(res,{
-                rows: result[0],
+                rows,
                 ...result[1][0]
             })
         }).catch(error => {
