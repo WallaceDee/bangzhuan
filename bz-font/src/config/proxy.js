@@ -5,5 +5,9 @@ module.exports = {
       pathRewrite: {
         '^/nodejs': ''
       }
-  }
+  },
+  '/api/': {
+    target: 'https://manage.bangzhuanwang.com/',
+    changeOrigin: true
+}
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Notice } from 'view-design'
-import router from '../router/manage.js'
+// import router from '../router/manage.js'
 class HttpRequest {
   constructor (baseUrl = baseURL) {
     this.baseUrl = baseUrl
@@ -11,15 +11,16 @@ class HttpRequest {
     try {
       console.log(response)
         const { status, statusText, config: { url } } = response
-        if (status === 403) {
+        if (status === 403||status === 401) {
           Notice.error({
             title:'错误',
             desc:'登录失效，请重新登录！'
           })
           localStorage.removeItem('token')
-          router.push({
-            name:'Index'
-          })
+          // router.push({
+          //   name:'Index'
+          // })
+          window.location.href='./'
         }
     } catch (e) {
         console.error(e)
