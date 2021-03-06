@@ -1,7 +1,10 @@
-import { Button,Transfer,Tabs,TabPane,Table,Card,InputNumber,Form,FormItem,Input,Notice,Menu,MenuItem,MenuGroup,Submenu ,Icon ,Row,Col ,Upload ,Breadcrumb,BreadcrumbItem,Divider,Drawer,Switch,Poptip,Modal,RadioGroup,Radio,Page,Select,Option,Spin,Dropdown,DropdownMenu,DropdownItem,AutoComplete } from 'view-design'
+import { Tag,Avatar,Cascader,Button,Transfer,Tabs,TabPane,Table,Card,InputNumber,Form,FormItem,Input,Notice,Menu,MenuItem,MenuGroup,Submenu ,Icon ,Row,Col ,Upload ,Breadcrumb,BreadcrumbItem,Divider,Drawer,Switch,Poptip,Modal,RadioGroup,Radio,Page,Select,Option,Spin,Dropdown,DropdownMenu,DropdownItem,AutoComplete } from 'view-design'
 import '../../assets/less/theme.less'
 export default {
   install(Vue) {
+    Vue.component('Tag', Tag)
+    Vue.component('Avatar', Avatar)
+    Vue.component('Cascader', Cascader)
     Vue.component('Button', Button)
     Vue.component('Transfer', Transfer)
     Vue.component('Table', Table)

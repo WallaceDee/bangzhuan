@@ -19,6 +19,57 @@
 
 <body>
     <div id="app"></div>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+      if(window.location.href.indexOf('www.bangzhuanwang.com')!==-1){
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/wxapi/wx-jsapi/getConfigParams', true)
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    xhr.onreadystatechange = function () {
+      if (xhr.responseText) {
+        var res = JSON.parse(xhr.responseText)
+        if (res.code) {
+          wx.config({
+                        debug : false,
+                        appId : res.op.data.appId,
+                        timestamp : res.op.data.timestamp,
+                        nonceStr :  res.op.data.nonceStr,
+                        signature :  res.op.data.signature,
+                        jsApiList : [ 'onMenuShareAppMessage','onMenuShareTimeline' ]
+                    })
+        }
+      }
+    }
+    xhr.send('pageUrl='+encodeURIComponent(location.href.split('#')[0]))
+
+  wx.ready(function() {
+    var title = '帮专网-一站式知识产权智能服务平台'
+    var link = 'https://www.bangzhuanwang.com'
+    var imgUrl='https://www.bangzhuanwang.com/weixin/img/logo.png'
+    var desc='帮专网是基于互联网的一站式知识产权服务平台，让客户与代理人直接对接，实现客户直接挑选自己中意的代理人，免除中间服务机构繁琐流程，沟通更透明，操作更快捷。'
+    wx.onMenuShareAppMessage({
+        title : title,
+        desc :desc,
+        link : link,
+        imgUrl : imgUrl,
+        type : 'link',
+        success : function() {},
+        cancel : function() {}
+    })
+
+    wx.onMenuShareTimeline({
+        title : title,
+        link : link,
+        imgUrl : imgUrl,
+        success : function() {},
+        cancel : function() {}
+    })
+  })
+  wx.error(function(res) {
+          alert(res.errMsg)
+      })
+    }
+    </script>
     <% for (var i in htmlWebpackPlugin.options.cdn
     &&htmlWebpackPlugin.options.cdn.js) { %>
     <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>

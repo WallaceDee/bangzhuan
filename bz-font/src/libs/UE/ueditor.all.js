@@ -27976,7 +27976,7 @@ UE.ui = baidu.editor.ui = {};
                                 className:'edui-for-' + cmd,
                                 title:title,
                                 holdScroll: cmd === 'insertimage',
-                                fullscreen: /charts|preview/.test(cmd),
+                                fullscreen: /charts/.test(cmd),
                                 closeDialog:editor.getLang("closeDialog")
                             }, type == 'ok' ? {
                                 buttons:[

@@ -1,15 +1,16 @@
 <template>
   <div>
     <div class="wrapper-header">
-      <img src="../../assets/images/logo.svg" alt="logo" height="20px" />
-      <div>
-        <Dropdown trigger="click" @on-click="onDropdownClick">
+      <img src="../../assets/images/logo.svg" alt="logo" height="20px" style="flex-shrink:0;"/>
+      <div style="width:90%;color:#fff;padding-left:20px;font-size:15px;">专利创新推送中心</div>
+      <div style="width:150px;flex-shrink:0;">
+        <Dropdown trigger="click" @on-click="onDropdownClick" style="float: right;">
           <div class="dropdown-btn">
             <!-- <span class="avatar" :style="`background-image:url(${$store.state.avatar})`"></span> -->
             {{$store.state.nickname}}
           </div>
           <DropdownMenu slot="list">
-            <DropdownItem name="UserInfo">设置</DropdownItem>
+            <!-- <DropdownItem name="UserInfo">设置</DropdownItem> -->
             <DropdownItem name="exit">退出</DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -20,16 +21,22 @@
         <Col span="7" :sm="6" :md="5" :lg="4" :xl="3" style="height:100%;overflow:auto;">
           <Menu width="auto" :active-name="activeName" @on-select="onSelect" style="height:100%;">
             <MenuGroup title="基础设置">
-              <MenuItem name="RealmAndArea">
-                <Icon type="ios-settings" />区域/地域
+              <MenuItem name="Index">
+                <Icon type="ios-people" />用户列表
               </MenuItem>
-              <MenuItem name="Users" v-if="$store.state.userInfo.isAdmin">
-                <Icon type="md-person" />用户管理
+              <MenuItem name="Realm">
+                <Icon type="ios-apps" />领域
+              </MenuItem>
+              <MenuItem name="Area">
+                <Icon type="md-pin" />地域
+              </MenuItem>
+              <MenuItem name="Article">
+                <Icon type="ios-paper" />发布文章
               </MenuItem>
               <MenuItem name="Banner">
-                <Icon type="md-images" />Banner
+                <Icon type="md-images" />轮播图
               </MenuItem>
-              </MenuGroup>
+            </MenuGroup>
           </Menu>
         </Col>
         <Col
@@ -47,7 +54,7 @@
   </div>
 </template>
 <script>
-import { getUserInfo } from '../../api/manage/'
+// import { getUserInfo } from '../../api/manage/'
 export default {
   name: 'Workbench',
   data() {
@@ -81,16 +88,19 @@ export default {
   },
   computed: {
     activeName() {
-      if(this.$route.name==='Images'){
-        return this.$route.path.replace('/Workbench/','')
-      }else{
+      if (this.$route.name === 'Images') {
+        return this.$route.path.replace('/Workbench/', '')
+      } else {
         return this.$route.name
       }
     }
   },
   mounted() {
     // this.getUserInfo()
-      this.$store.commit('setUserInfo', JSON.parse(localStorage.getItem('userInfo')))
+    this.$store.commit(
+      'setUserInfo',
+      JSON.parse(localStorage.getItem('userInfo'))
+    )
   }
 }
 </script>
@@ -105,9 +115,9 @@ export default {
   text-align: right;
   background: #fff;
 }
-.tips{
-      font-size: 12px;
-    color: #bdbdbd;
+.tips {
+  font-size: 12px;
+  color: #bdbdbd;
 }
 .ivu-breadcrumb {
   margin-top: 10px;
