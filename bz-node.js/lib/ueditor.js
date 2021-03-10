@@ -70,17 +70,26 @@ var respond = function (static_url, config = {}, callback) {
                 req.ueditor.filename = filename;
                 req.ueditor.encoding = encoding;
                 req.ueditor.mimetype = mimetype;
-                res.ue_up = function (img_url) {
+                res.ue_up = function (url) {
                     var tmpdir = path.join(os.tmpdir(), path.basename(filename));
                     var name = snowflake.nextId() + path.extname(tmpdir);
-                    var dest = path.join(static_url, img_url, name);
+                    var dest = path.join(static_url, url, req.query.norename?filename:name);
+                    if(req.query.norename){
+                      console.log(dest)
+                      fs.unlink(dest, function(err){
+                        if(err){
+                             throw err;
+                        }
+                        console.log('文件:'+dest+'删除成功！');
+                      })
+                    }
                     var writeStream = fs.createWriteStream(tmpdir);
                     file.pipe(writeStream);
                     writeStream.on("close", function () {
                         fse.move(tmpdir, dest, function (err) {
                             if (err) throw err;
                             res.json({
-                                'url': baseUrl +'/'+ path.join(img_url, name).replace(/\\/g, '/'),
+                                'url': baseUrl +'/'+ path.join(url, name).replace(/\\/g, '/'),
                                 'title': req.body.pictitle,
                                 'original': filename,
                                 'state': 'SUCCESS'

@@ -16,8 +16,6 @@ router.use("/", ueditor(path.join(__dirname, '../../public'), function(req, res,
         console.log(foo.mimetype); // image/png
         // 下面填写你要把图片保存到的路径 （ 以 path.join(__dirname, 'public') 作为根路径）
         var img_url = 'upload/images';
-        console.log(req.body)
-          console.log(req.query)
         if (req.query.path) {
             img_url = req.query.path;
         }
@@ -29,8 +27,11 @@ router.use("/", ueditor(path.join(__dirname, '../../public'), function(req, res,
         console.log(foo.encoding); // 7bit
         console.log(foo.mimetype); // image/png
         // 下面填写你要把图片保存到的路径 （ 以 path.join(__dirname, 'public') 作为根路径）
-        var img_url = 'file';
-        res.ue_up(img_url); //你只要输入要保存的地址 。保存操作交给ueditor来做
+        var url = 'upload/file';
+        if (req.query.path) {
+          url = req.query.path;
+      }
+        res.ue_up(url); //你只要输入要保存的地址 。保存操作交给ueditor来做
     } else if (req.query.action === 'uploadvideo') {
         // 这里你可以获得上传图片的信息
         var foo = req.ueditor;
@@ -48,7 +49,7 @@ router.use("/", ueditor(path.join(__dirname, '../../public'), function(req, res,
     }
     //  客户端发起图片列表请求
     else if (req.query.action === 'listfile') {
-        var dir_url = '/upload/file'; // 要展示给客户端的文件夹路径
+        var dir_url =req.query.path|| '/upload/file'; // 要展示给客户端的文件夹路径
         res.ue_list(dir_url) // 客户端会列出 dir_url 目录下的所有图片
     }
         //  客户端发起图片列表请求
