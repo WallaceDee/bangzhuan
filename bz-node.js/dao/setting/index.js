@@ -1,3 +1,4 @@
+const fs = require('fs')
 const {
     print,
     query,
@@ -24,6 +25,9 @@ module.exports = {
     },
     updateSetting: (req, res) => {
         query($sql.updateSetting,req.body).then(result => {
+           fs.writeFile('ssr/public/tdk.json',req.body.headElements,function(err){
+             console.log(err)
+           })
             print.success(res,{message:'修改成功'})
         }).catch(error => {
             print.error(res, error)

@@ -14,7 +14,8 @@ module.exports = {
     index: `src/${platform}.js`
   },
   outputDir: outputDir,
-  publicPath: '/',
+  publicPath: './',
+  //manage ./
   //mian /bz-home/
   //wechat /
   // publicPath: isProduction ? './' : './',

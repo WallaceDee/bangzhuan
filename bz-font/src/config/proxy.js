@@ -1,6 +1,6 @@
 module.exports = {
   '/api/': {
-    target: 'https://manage.bangzhuanwang.com/',
+    target: 'http://localhost',
     changeOrigin: true
   }
   // ,
