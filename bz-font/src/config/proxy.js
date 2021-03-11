@@ -1,6 +1,6 @@
 module.exports = {
-  '/api/': {
-    target: 'http://localhost',
+  '/nodejs/api/': {
+    target: 'https://www.bangzhuanwang.com',
     changeOrigin: true
   }
   // ,

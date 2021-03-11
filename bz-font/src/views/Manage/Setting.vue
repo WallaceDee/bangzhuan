@@ -182,8 +182,11 @@
           <Col span="6" offset="1">
               <Input type="textarea" v-model="item.keywords" placeholder="输入keywords"></Input>
           </Col>
-        <Col span="20"  v-if="item.path==='index'" style="margin-top:10px;">
+        <Col span="24"  v-if="item.path==='index'" style="margin-bottom:10px;margin-top:10px;">
               <Input type="textarea" v-model="item.script" placeholder="输入script"></Input>
+          </Col>
+          <Col span="20"  v-if="item.path==='index'">
+              <Input type="textarea" v-model="item.externalsScript" placeholder="输入script src回车分割"></Input>
           </Col>
           <Col span="3" offset="1">
             <Button @click="removeHeadElement(index)">删除</Button>
