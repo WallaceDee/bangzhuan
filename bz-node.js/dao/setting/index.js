@@ -13,6 +13,7 @@ module.exports = {
                 setting.address=JSON.parse( setting.address)
                 setting.data=JSON.parse( setting.data)
                 setting.relatedLinks=JSON.parse( setting.relatedLinks)
+                setting.headElements=JSON.parse( setting.headElements)
             } catch (error) {
                 print.error(res, error)
             }
