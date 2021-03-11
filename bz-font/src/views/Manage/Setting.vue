@@ -161,6 +161,62 @@
           </Col>
         </Row>
       </FormItem>
+      <FormItem label="Title/Description/Keywords"></FormItem>
+      <FormItem
+        v-for="(item, index) in form.headElementItems"
+        :key="'headElements'+item.index"
+        :label="`TDK${index+1}`"
+        :prop="'headElements.'+index + '.path'"
+        :rules="{required: true, message: `path${index+1}不能为空`, trigger: 'blur'}"
+      >
+        <Row>
+          <Col span="2">
+            <Input type="text" v-model="item.path" placeholder="path"></Input>
+          </Col>
+          <Col span="3" offset="1">
+              <Input type="text" v-model="item.title" placeholder="输入title"></Input>
+          </Col>
+             <Col span="6" offset="1">
+              <Input type="textarea" v-model="item.description" placeholder="输入description" ></Input>
+          </Col>
+          <Col span="6" offset="1">
+              <Input type="textarea" v-model="item.keywords" placeholder="输入keywords"></Input>
+          </Col>
+        <Col span="20"  v-if="item.path==='index'" style="margin-top:10px;">
+              <Input type="textarea" v-model="item.script" placeholder="输入script"></Input>
+          </Col>
+          <Col span="3" offset="1">
+            <Button @click="removeHeadElement(index)">删除</Button>
+          </Col>
+        </Row>
+         </FormItem>
+               <FormItem>
+        <Row>
+          <Col span="12">
+            <Button type="dashed" long @click="addTDK" icon="md-add">Title/Description/Keywords</Button>
+          </Col>
+        </Row>
+      </FormItem>
+
+      <FormItem label="上传SiteMap.xml/Robot.txt"></FormItem>
+        <FormItem>
+        <Upload
+          ref="upload"
+          :show-upload-list="false"
+          :format="['xml','txt']"
+          :max-size="2048"
+          type="drag"
+          :action="`${$config.baseUrl}/ue?action=uploadfile&norename=1&path=../ssr/dist`"
+          style="display: inline-block;width:220px;"
+          :on-success="(res, file)=>{
+                handleSRSuccess(res, file, type)
+              }"
+        >
+          上传SiteMap.xml/Robot.txt
+        </Upload> <Divider type="vertical" />
+          <a target="_blank" href="https://www.bangzhuanwang.com/Robot.txt">查看当前Robot.txt</a> <Divider type="vertical" />
+          <a target="_blank" href="https://www.bangzhuanwang.com/SiteMap.xml">查看当前SiteMap.xml</a>
+      </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit">修改</Button>
       </FormItem>
@@ -193,7 +249,8 @@ export default {
         tel: '',
         linkItems: [],
         addressItems: [],
-        dataItems: []
+        dataItems: [],
+        headElementItems:[]
       }
     }
   },
@@ -210,8 +267,15 @@ export default {
           this.$set(this.form, 'addressItems', temp.address)
           this.$set(this.form, 'dataItems', temp.data)
           this.$set(this.form, 'linkItems', temp.relatedLinks)
+          this.$set(this.form, 'headElementItems', temp.headElements)
         }
       })
+    },
+    handleSRSuccess(res, file, type) {
+      this.$Notice.success({
+          title: '提示',
+          desc: '上传成功！'
+        })
     },
     handleSuccess(res, file, type) {
       this.$set(this.form, type, res.url)
@@ -238,6 +302,16 @@ export default {
         index: this.form.dataItems.length
       })
     },
+    addTDK(){
+      this.form.headElementItems.push({
+        path:'',
+        title: '',
+        description: '',
+        keywords:'',
+        script:'',
+        index: this.form.headElementItems.length
+      })
+    },
     removeData(index) {
       this.form.dataItems.splice(index, 1)
     },
@@ -246,6 +320,9 @@ export default {
     },
     removeAddress(index) {
       this.form.addressItems.splice(index, 1)
+    },
+    removeHeadElement(index) {
+      this.form.headElementItems.splice(index, 1)
     },
     handleSubmit() {
       this.$refs.form.validate(valid => {
@@ -257,6 +334,8 @@ export default {
           delete param.linkItems
           param.data = JSON.stringify(param.dataItems)
           delete param.dataItems
+          param.headElements = JSON.stringify(param.headElementItems)
+          delete param.headElementItems
           updateSetting(param).then(res => {
             if (res.status) {
               this.$Notice.success({
