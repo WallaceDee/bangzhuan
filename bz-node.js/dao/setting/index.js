@@ -7,6 +7,28 @@ const {
 const $sql = require('./sqlMapping')
 
 module.exports = {
+    saveTdkAndProd:(req, res) => {
+        query($sql.updateSetting,req.body).then(result => {
+            fs.writeFile('ssr/public/tdk.json',req.body.headElements,function(err){
+              console.log(err)
+            })
+            let { spawn }  = require('child_process'); 
+            let code=spawn('npm',['start'])
+            code.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+            });
+            
+            code.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`);
+            });
+            code.on('close', (code) => {
+                print.success(res,{message:'发布成功'})
+                console.log(`子进程退出码：${code}`);
+            });
+         }).catch(error => {
+             print.error(res, error)
+         })
+    },
     getSetting: (req, res) => {
         query($sql.getSetting).then(result => {
             let setting=result[0]

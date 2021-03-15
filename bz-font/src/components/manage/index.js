@@ -1,7 +1,8 @@
-import { Button,ColorPicker,Tabs,TabPane,Table,Card,InputNumber,Form,FormItem,Input,Notice,Menu,MenuItem,MenuGroup,Submenu ,Icon ,Row,Col ,Upload ,Breadcrumb,BreadcrumbItem,Divider,Drawer,Switch,Poptip,Modal,RadioGroup,Radio,Page,Select,Option,Spin,Dropdown,DropdownMenu,DropdownItem,AutoComplete } from 'view-design'
+import { Alert,Button,ColorPicker,Tabs,TabPane,Table,Card,InputNumber,Form,FormItem,Input,Notice,Menu,MenuItem,MenuGroup,Submenu ,Icon ,Row,Col ,Upload ,Breadcrumb,BreadcrumbItem,Divider,Drawer,Switch,Poptip,Modal,RadioGroup,Radio,Page,Select,Option,Spin,Dropdown,DropdownMenu,DropdownItem,AutoComplete } from 'view-design'
 import '../../assets/less/theme.less'
 export default {
   install(Vue) {
+    Vue.component('Alert', Alert)
     Vue.component('Button', Button)
     Vue.component('ColorPicker', ColorPicker)
     Vue.component('Table', Table)

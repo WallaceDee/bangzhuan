@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www",
-    "server": "node ./bin/www"
+    "server": "node ./bin/www",
+    "start":"cd ssr/ && ./prod.sh"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

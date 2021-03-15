@@ -313,3 +313,10 @@ export const getImages = (params) => {
         method: 'get'
     })
   }
+  export const saveTdkAndProd= (data) => {
+    return axios.request({
+        data,
+        url: '/setting/saveTdkAndProd',
+        method: 'post'
+    })
+  }

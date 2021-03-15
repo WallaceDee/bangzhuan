@@ -161,7 +161,9 @@
           </Col>
         </Row>
       </FormItem>
-      <FormItem label="Title/Description/Keywords"></FormItem>
+      <FormItem label="Title/Description/Keywords" :label-width="200">
+        <Switch v-model="tdkSwitch" @on-change="(status)=>{tdkSwitch=status}" />
+      </FormItem>
       <FormItem
         v-for="(item, index) in form.headElementItems"
         :key="'headElements'+item.index"
@@ -171,33 +173,35 @@
       >
         <Row>
           <Col span="2">
-            <Input type="text" v-model="item.path" placeholder="path"></Input>
+            <Input type="text" v-model="item.path" placeholder="path" :disabled="!tdkSwitch"></Input>
           </Col>
           <Col span="3" offset="1">
-              <Input type="text" v-model="item.title" placeholder="输入title"></Input>
+              <Input type="text" v-model="item.title" placeholder="输入title" :disabled="!tdkSwitch"></Input>
           </Col>
              <Col span="6" offset="1">
-              <Input type="textarea" v-model="item.description" placeholder="输入description" ></Input>
+              <Input type="textarea" v-model="item.description" placeholder="输入description" :disabled="!tdkSwitch"></Input>
           </Col>
           <Col span="6" offset="1">
-              <Input type="textarea" v-model="item.keywords" placeholder="输入keywords"></Input>
+              <Input type="textarea" v-model="item.keywords" placeholder="输入keywords" :disabled="!tdkSwitch"></Input>
           </Col>
         <Col span="24"  v-if="item.path==='index'" style="margin-bottom:10px;margin-top:10px;">
-              <Input type="textarea" v-model="item.script" placeholder="输入script"></Input>
+              <Input type="textarea" v-model="item.script" placeholder="输入script"  :autosize="{minRows: 2,maxRows: 10}" :disabled="!tdkSwitch"></Input>
           </Col>
           <Col span="20"  v-if="item.path==='index'">
-              <Input type="textarea" v-model="item.externalsScript" placeholder="输入script src回车分割"></Input>
+              <Input type="textarea" v-model="item.externalsScript" placeholder="输入script src回车分割" :disabled="!tdkSwitch"></Input>
           </Col>
-          <Col span="3" offset="1">
+          <Col span="3" offset="1" v-if="tdkSwitch">
             <Button @click="removeHeadElement(index)">删除</Button>
           </Col>
         </Row>
          </FormItem>
-               <FormItem>
+        <FormItem v-if="tdkSwitch">
+        <Alert type="warning" show-icon>修改Title/Description/Keywords必须发布代码才能生效，点击发布后需要等待1~2分钟，期间会导致官网短暂时间访问不了。如果发布失败，请联系开发人员。</Alert>
         <Row>
           <Col span="12">
             <Button type="dashed" long @click="addTDK" icon="md-add">Title/Description/Keywords</Button>
-          </Col>
+          </Col> <Col span="11" offset="1">
+           <Button @click="saveTdkAndProd" :loading="loading" type="warning">发布</Button>   </Col> 
         </Row>
       </FormItem>
 
@@ -227,11 +231,12 @@
   </div>
 </template>
 <script>
-import { getSetting, updateSetting } from '@/api/manage/'
+import { getSetting, updateSetting,saveTdkAndProd } from '@/api/manage/'
 export default {
   name: 'Setting',
   data() {
     return {
+      tdkSwitch:false,
       rules: {
         copyright: [
           { required: true, message: `Copyright不能为空`, trigger: 'blur' }
@@ -258,6 +263,32 @@ export default {
     }
   },
   methods: {
+    saveTdkAndProd(){
+        this.$refs.form.validate(valid => {
+        if (valid) {
+          this.loading=true
+          let param = Object.assign({}, this.form)
+          param.address = JSON.stringify(param.addressItems)
+          delete param.addressItems
+          param.relatedLinks = JSON.stringify(param.linkItems)
+          delete param.linkItems
+          param.data = JSON.stringify(param.dataItems)
+          delete param.dataItems
+          param.headElements = JSON.stringify(param.headElementItems)
+          delete param.headElementItems
+          saveTdkAndProd(param).then(res => {
+            if (res.status) {
+               this.loading=false
+              this.$Notice.success({
+                title: '提示',
+                desc: res.data.message
+              })
+            }
+          })
+        }
+      })
+
+    },
     getData() {
       this.loading = true
       getSetting().then(res => {
