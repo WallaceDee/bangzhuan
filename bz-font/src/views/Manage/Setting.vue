@@ -201,7 +201,8 @@
           <Col span="12">
             <Button type="dashed" long @click="addTDK" icon="md-add">Title/Description/Keywords</Button>
           </Col> <Col span="11" offset="1">
-           <Button @click="saveTdkAndProd" :loading="loading" type="warning">发布</Button>   </Col> 
+           <Button @click="saveTdkAndProd" :loading="loading" type="warning">发布</Button>
+           </Col>
         </Row>
       </FormItem>
 
@@ -287,7 +288,6 @@ export default {
           })
         }
       })
-
     },
     getData() {
       this.loading = true
