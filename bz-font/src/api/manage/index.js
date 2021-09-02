@@ -320,3 +320,43 @@ export const getImages = (params) => {
         method: 'post'
     })
   }
+
+  
+export const getCategoryList = (params) => {
+    return axios.request({
+        params,
+        url: '/category/all',
+        method: 'get'
+    })
+}
+
+export const publicCategory = (data) => {
+    return axios.request({
+        data,
+        url: '/category',
+        method: 'post'
+    })
+}
+
+export const deleteCategory = (data) => {
+    return axios.request({
+        data,
+        url: '/category',
+        method: 'delete'
+    })
+}
+
+export const setCategoryEnable = (data) => {
+    return axios.request({
+        data,
+        url: '/category/setEnable',
+        method: 'post'
+    })
+}
+export const setCategoryUpdateTime = (data) => {
+    return axios.request({
+        data,
+        url: '/category/setUpdateTime',
+        method: 'post'
+    })
+}

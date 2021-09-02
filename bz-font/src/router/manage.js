@@ -95,6 +95,13 @@ const routes = [
         title: '图片管理'
       },
       component: resolve => require(['@/views/Manage/Images'], resolve)
+    },{
+      path: 'Category',
+      name: 'Category',
+      meta: {
+        title: '专利情报分类'
+      },
+      component: resolve => require(['@/views/Manage/Category'], resolve)
     }]
   }
 ]

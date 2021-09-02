@@ -10,29 +10,59 @@
     <Divider />
     <Form inline>
       <FormItem label="标题">
-        <Input v-model="searchForm.title" size="small" style="width:100px"></Input>
+        <Input
+          v-model="searchForm.title"
+          size="small"
+          style="width:100px"
+        ></Input>
       </FormItem>
 
       <FormItem label="类型">
-        <Select transfer v-model="searchForm.type" style="width:100px" size="small">
+        <Select
+          transfer
+          v-model="searchForm.type"
+          style="width:100px"
+          size="small"
+        >
           <Option value>全部</Option>
-          <Option v-for="item in types" :value="item.type" :key="item.type">{{ item.title }}</Option>
+          <Option v-for="item in types" :value="item.type" :key="item.type">{{
+            item.title
+          }}</Option>
         </Select>
       </FormItem>
       <FormItem label="领域">
-        <Select transfer v-model="searchForm.realmIdsStr" size="small" style="width:100px">
-          <Option v-for="item in realms" :value="item.id" :key="item.id">{{ item.realmName }}</Option>
+        <Select
+          transfer
+          v-model="searchForm.realmIdsStr"
+          size="small"
+          style="width:100px"
+        >
+          <Option v-for="item in realms" :value="item.id" :key="item.id">{{
+            item.realmName
+          }}</Option>
         </Select>
       </FormItem>
       <FormItem label="地域">
-        <Select transfer v-model="searchForm.cityCodesStr" size="small" style="width:100px">
-          <Option v-for="item in citys" :value="item.code" :key="item.code">{{ item.name }}</Option>
+        <Select
+          transfer
+          v-model="searchForm.cityCodesStr"
+          size="small"
+          style="width:100px"
+        >
+          <Option v-for="item in citys" :value="item.code" :key="item.code">{{
+            item.name
+          }}</Option>
         </Select>
       </FormItem>
 
       <span style="display:inline-block;margin-top:38px;">
         <Button size="small" type="primary" @click="handleSearch">搜索</Button>
-        <Button size="small" @click="handleSearch(true)" style="margin-left: 8px">重置</Button>
+        <Button
+          size="small"
+          @click="handleSearch(true)"
+          style="margin-left: 8px"
+          >重置</Button
+        >
       </span>
     </Form>
     <Divider />
@@ -49,7 +79,7 @@
             :headers="uploadHeaders"
             ref="upload"
             :show-upload-list="false"
-            :format="['jpg','jpeg','png','svg']"
+            :format="['jpg', 'jpeg', 'png', 'svg']"
             :max-size="2048"
             type="drag"
             action="https://manage.bangzhuanwang.com/api/tool/chuangwei/file/upload"
@@ -57,7 +87,12 @@
             style="display: inline-block;width:192px;"
           >
             <div style="width: 192px;height:90px;line-height: 90px;">
-              <img v-if="form.articleImg" :src="form.articleImg" alt="封面图片" style="width:192px;" />
+              <img
+                v-if="form.articleImg"
+                :src="form.articleImg"
+                alt="封面图片"
+                style="width:192px;"
+              />
               <template v-else>
                 <Icon type="ios-image" size="20"></Icon>(size:640px*300px)
               </template>
@@ -78,29 +113,50 @@
             :loading="userLoading"
             v-model="form.users"
           >
-            <Option :label="item.nickname" v-for="item in userPool" :value="item.id" :key="item.id">
-              <Avatar :src="item.headImg">{{item.nickname}}</Avatar>
-              {{item.nickname}}
+            <Option
+              :label="item.nickname"
+              v-for="item in userPool"
+              :value="item.id"
+              :key="item.id"
+            >
+              <Avatar :src="item.headImg">{{ item.nickname }}</Avatar>
+              {{ item.nickname }}
             </Option>
           </Select>
         </FormItem>
         <template v-show="!form.precise">
           <FormItem label="类型" v-show="!form.precise">
             <Select transfer v-model="form.type">
-              <Option v-for="item in types" :value="item.type" :key="item.type">{{ item.title }}</Option>
+              <Option
+                v-for="item in types"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.title }}</Option
+              >
             </Select>
           </FormItem>
 
-          <FormItem label="领域" v-if="form.type===1&&!form.precise">
+          <FormItem label="领域" v-if="form.type === 1 && !form.precise">
             <!-- @on-open-change="onRealmSelectOpen" -->
             <Select transfer multiple v-model="form.realmIds">
-              <Option v-for="item in realms" :value="item.id" :key="item.id">{{ item.realmName }}</Option>
+              <Option v-for="item in realms" :value="item.id" :key="item.id">{{
+                item.realmName
+              }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="地域" v-if="form.type===1&&!form.precise" v-show="!form.precise">
+          <FormItem
+            label="地域"
+            v-if="form.type === 1 && !form.precise"
+            v-show="!form.precise"
+          >
             <!-- @on-open-change="onCitySelectOpen" -->
             <Select transfer multiple v-model="form.cityCodes">
-              <Option v-for="item in citys" :value="item.code" :key="item.code">{{ item.name }}</Option>
+              <Option
+                v-for="item in citys"
+                :value="item.code"
+                :key="item.code"
+                >{{ item.name }}</Option
+              >
             </Select>
           </FormItem>
         </template>
@@ -110,7 +166,9 @@
         </FormItem>
       </Form>
       <div class="drawer-footer">
-        <Button style="margin-right: 8px" @click="handelDrawerVisible(false)">取消</Button>
+        <Button style="margin-right: 8px" @click="handelDrawerVisible(false)"
+          >取消</Button
+        >
         <Button type="primary" @click="doSumbit">提交</Button>
       </div>
     </Drawer>
@@ -202,7 +260,7 @@ export default {
           title: '封面',
           width: 129,
           align: 'center',
-          render: function (h, params) {
+          render: function(h, params) {
             return params.row.articleImg
               ? h('img', {
                   style: {
@@ -228,7 +286,7 @@ export default {
           width: 135,
           align: 'center',
           key: 'type',
-          render: function (h, params) {
+          render: function(h, params) {
             return h('span', typeMapping.get(params.row.type))
           }
         },
@@ -237,7 +295,7 @@ export default {
           align: 'center',
           minWidth: 120,
           key: 'realms',
-          render: function (h, params) {
+          render: function(h, params) {
             let str = []
             params.row.realms.map((item) => {
               str.push(item.realmName)
@@ -250,7 +308,7 @@ export default {
           align: 'center',
           minWidth: 120,
           key: 'cities',
-          render: function (h, params) {
+          render: function(h, params) {
             let str = []
             params.row.cities.map((item) => {
               str.push(item.cityName)
@@ -263,7 +321,7 @@ export default {
           key: 'createTime',
           align: 'center',
           width: 170,
-          render: function (h, params) {
+          render: function(h, params) {
             return h('span', getDate(params.row.createTime, 'yyyymmddhhmmss'))
           }
         },
@@ -287,11 +345,15 @@ export default {
                   }
                 },
                 [
-                  create('Button',{
-                props: {
-                    size: 'small'
-                  }
-                  },'推送'),
+                  create(
+                    'Button',
+                    {
+                      props: {
+                        size: 'small'
+                      }
+                    },
+                    '推送'
+                  ),
                   create(
                     'div',
                     { slot: 'content', style: { width: '270px' } },
@@ -310,7 +372,7 @@ export default {
                             width: '270px'
                           },
                           props: {
-                            placeholder:'请输入用户昵称以搜索',
+                            placeholder: '请输入用户昵称以搜索',
                             multiple: true,
                             filterable: true,
                             remote: true,
@@ -324,7 +386,7 @@ export default {
                             }
                           }
                         },
-                        this.userPool.map(function (item) {
+                        this.userPool.map(function(item) {
                           return h(
                             'Option',
                             {
@@ -343,7 +405,7 @@ export default {
                                 },
                                 item.nickname
                               ),
-                              h('span', ' '+item.nickname)
+                              h('span', ' ' + item.nickname)
                             ]
                           )
                         })
@@ -369,9 +431,16 @@ export default {
                               },
                               on: {
                                 click: () => {
-                                  this.$refs[`poptip${params.row.id}`].$children[1].values=[]
-                                  this.$refs[`poptip${params.row.id}`].handleClose()
-                                  this.precisePush(params.row.id,this.currentSelection)
+                                  this.$refs[
+                                    `poptip${params.row.id}`
+                                  ].$children[1].values = []
+                                  this.$refs[
+                                    `poptip${params.row.id}`
+                                  ].handleClose()
+                                  this.precisePush(
+                                    params.row.id,
+                                    this.currentSelection
+                                  )
                                 }
                               }
                             },
@@ -385,7 +454,9 @@ export default {
                               },
                               on: {
                                 click: () => {
-                                  this.$refs[`poptip${params.row.id}`].handleClose()
+                                  this.$refs[
+                                    `poptip${params.row.id}`
+                                  ].handleClose()
                                 }
                               }
                             },
@@ -396,7 +467,8 @@ export default {
                     ]
                   )
                 ]
-              ), h(
+              ),
+              h(
                 'Button',
                 {
                   props: {
@@ -553,24 +625,24 @@ export default {
         articleId,
         loginIds
       }).then((res) => {
-        this.currentSelection=[]
+        this.currentSelection = []
         this.drawerVisible = false
-          if(res.code===80500&&res.msg==='存在已推送的用户'){
-            let users=[]
-            res.data.map(item => {
-              users.push(item.nickname)
-            })
-            this.$Notice['warning']({
-              title: '提示',
-              desc: '推送成功，以下人员已推送过，将不再推送：'+users.join('、'),
-              duration:0
-            })
-          }else{
-            this.$Notice[res.code === 80200 ? 'success' : 'error']({
-              title: '提示',
-              desc: res.msg
-            })
-          }
+        if (res.code === 80500 && res.msg === '存在已推送的用户') {
+          let users = []
+          res.data.map((item) => {
+            users.push(item.nickname)
+          })
+          this.$Notice['warning']({
+            title: '提示',
+            desc: '推送成功，以下人员已推送过，将不再推送：' + users.join('、'),
+            duration: 0
+          })
+        } else {
+          this.$Notice[res.code === 80200 ? 'success' : 'error']({
+            title: '提示',
+            desc: res.msg
+          })
+        }
         this.getData()
       })
     },
@@ -625,7 +697,7 @@ export default {
           type: ''
         }
       } else {
-        this.page=1
+        this.page = 1
         this.searchRule = JSON.parse(JSON.stringify(this.searchForm))
       }
       this.getData()
@@ -665,7 +737,6 @@ export default {
 }
 </script>
 <style lang="less">
-
 .table-popper .ivu-poptip-inner,
 .select-popper .ivu-poptip-inner {
   white-space: initial;

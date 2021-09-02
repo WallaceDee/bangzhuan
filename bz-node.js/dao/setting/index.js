@@ -50,17 +50,17 @@ module.exports = {
            fs.writeFile('ssr/public/tdk.json',req.body.headElements,function(err){
              console.log(err)
            })
-           fs.copyFile('ssr/dist/SiteMap.xml','ssr/public/SiteMap.xml',function(err){
+           fs.copyFile('ssr/dist/sitemap.xml','ssr/public/sitemap.xml',function(err){
             if(err) console.log('something wrong was happened')
             else console.log('copy file succeed');
             })
-            fs.copyFile('ssr/dist/Robot.txt','ssr/public/Robot.txt',function(err){
+            fs.copyFile('ssr/dist/robots.txt','ssr/public/robots.txt',function(err){
             if(err) console.log('something wrong was happened')
             else console.log('copy file succeed');
             }) 
             print.success(res,{message:'修改成功'})
         }).catch(error => {
-            print.error(res, error)
+            print.error(res, error)  
         })
     },
     setImagesSortList: (req, res) => {

@@ -7,6 +7,7 @@
     </Breadcrumb>
     <Divider />
     <Button type="primary" @click="openCreateDrawer">创建专利情报</Button>
+    <router-link :to="{name:'Category'}">分类管理</router-link>
     <Divider />
     <Form inline>
       <FormItem label="标题">

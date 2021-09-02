@@ -1,6 +1,9 @@
 module.exports = {
-  '/nodejs/api/': {
-    target: 'https://www.bangzhuanwang.com',
+  '/nodejs/': {
+    target: 'https://manage.bangzhuanwang.com',
+    pathRewrite: {
+      '/nodejs': ''
+    },
     changeOrigin: true
   }
   // ,

@@ -108,6 +108,7 @@
               <Select v-model="item.last" slot="append" style="width: 70px">
                 <Option value=".com">.com</Option>
                 <Option value=".com.cn">.com.cn</Option>
+                <Option value=".hk">.hk</Option>
                 <Option value="?">&nbsp;</Option>
               </Select>
             </Input>
@@ -206,7 +207,7 @@
         </Row>
       </FormItem>
 
-      <FormItem label="上传SiteMap.xml/Robot.txt"></FormItem>
+      <FormItem label="上传sitemap.xml/robots.txt"></FormItem>
         <FormItem>
         <Upload
           ref="upload"
@@ -214,16 +215,16 @@
           :format="['xml','txt']"
           :max-size="2048"
           type="drag"
-          :action="`${$config.baseUrl}/ue?action=uploadfile&norename=1&path=../ssr/dist`"
+          :action="`${$config.baseUrl}/ue?action=uploadfile&norename=1&path=../ssr/dist/client`"
           style="display: inline-block;width:220px;"
           :on-success="(res, file)=>{
                 handleSRSuccess(res, file, type)
               }"
         >
-          上传SiteMap.xml/Robot.txt
+          上传sitemap.xml/robots.txt
         </Upload> <Divider type="vertical" />
-          <a target="_blank" href="https://www.bangzhuanwang.com/Robot.txt">查看当前Robot.txt</a> <Divider type="vertical" />
-          <a target="_blank" href="https://www.bangzhuanwang.com/SiteMap.xml">查看当前SiteMap.xml</a>
+          <a target="_blank" href="https://www.bangzhuanwang.com/robots.txt">robots.txt</a> <Divider type="vertical" />
+          <a target="_blank" href="https://www.bangzhuanwang.com/sitemap.xml">sitemap.xml</a>
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit">修改</Button>

@@ -15,6 +15,7 @@ const news = require('./routes/api/news')
 const team = require('./routes/api/team')
 const product = require('./routes/api/product')
 const setting = require('./routes/api/setting')
+const category = require('./routes/api/category')
 const app = express()
 const ejs = require('ejs')
 const log4js = require('log4js');
@@ -57,6 +58,7 @@ app.use('/api/news', news)
 app.use('/api/team', team)
 app.use('/api/product', product)
 app.use('/api/setting', setting)
+app.use('/api/category', category)
 
 //前后端分离，没用Express
 // app.get('/index', function(req, res) {
